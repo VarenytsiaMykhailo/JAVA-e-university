@@ -1,4 +1,4 @@
-package varenytsiamykhailo.euniversity.students.logic;
+package com.github.varenytsiamykhailo.euniversity.students.logic;
 
 import java.text.Collator;
 import java.text.DateFormat;
@@ -11,17 +11,20 @@ public class Student implements Comparable {
 
     private String firstName;
 
-    private String surName;
+    private String lastName;
 
     private String patronymic;
 
     private Date dateOfBirth;
 
-    private char sex;
+    private Sex sex;
 
     private int groupId;
 
-    private int educationYear; // год обучения
+    /**
+     * год преподавания
+     */
+    private int educationYear;
 
 
     public int getStudentId() {
@@ -40,12 +43,12 @@ public class Student implements Comparable {
         this.firstName = firstName;
     }
 
-    public String getSurName() {
-        return surName;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setSurName(String surName) {
-        this.surName = surName;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getPatronymic() {
@@ -64,11 +67,11 @@ public class Student implements Comparable {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public char getSex() {
+    public Sex getSex() {
         return sex;
     }
 
-    public void setSex(char sex) {
+    public void setSex(Sex sex) {
         this.sex = sex;
     }
 
@@ -90,7 +93,7 @@ public class Student implements Comparable {
 
     @Override
     public String toString() {
-        return surName + " " + firstName + " " + patronymic + ", "
+        return lastName + " " + firstName + " " + patronymic + ", "
                 + DateFormat.getDateInstance(DateFormat.SHORT).format(dateOfBirth)
                 + ", ИД группы = " + groupId + " Год обучения: " + educationYear;
     }

@@ -1,4 +1,4 @@
-package varenytsiamykhailo.euniversity.students.logic;
+package com.github.varenytsiamykhailo.euniversity.students.logic;
 
 public class Group {
 
@@ -6,7 +6,7 @@ public class Group {
 
     private String groupName;
 
-    private String curator;
+    private Curator curator;
 
     private String speciality;
 
@@ -26,11 +26,11 @@ public class Group {
         this.groupName = groupName;
     }
 
-    public String getCurator() {
+    public Curator getCurator() {
         return curator;
     }
 
-    public void setCurator(String curator) {
+    public void setCurator(Curator curator) {
         this.curator = curator;
     }
 
