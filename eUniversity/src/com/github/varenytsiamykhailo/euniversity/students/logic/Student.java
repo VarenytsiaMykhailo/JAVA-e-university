@@ -95,7 +95,7 @@ public class Student implements Comparable {
     public String toString() {
         return lastName + " " + firstName + " " + patronymic + ", "
                 + DateFormat.getDateInstance(DateFormat.SHORT).format(dateOfBirth)
-                + ", ИД группы = " + groupId + " Год обучения: " + educationYear;
+                + ", ИД группы = " + groupId + ", Год обучения: " + educationYear;
     }
 
     @Override
