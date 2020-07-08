@@ -67,6 +67,46 @@ public class ManagementSystem {
             printString();
         }
 
+        // Вывод списков студентов по группам
+        {
+            printString("Список студентов по группам");
+            printString("***************************");
+            ArrayList<Group> groups = ms.getAllGroups();
+            for (Group g : groups) {
+                printString("---> Группа: " + g.getGroupName());
+                Collection<Student> studentsInGroup = ms.getStudentsFromGroup(g, 2020);
+                for (Student s : studentsInGroup) {
+                    printString("\t" + s);
+                }
+            }
+            printString();
+        }
+
+        // Создаем нового студента и добавляем его в список
+        {
+            Student newStudent = new Student();
+            newStudent.setStudentId(5);
+            newStudent.setFirstName("Иван");
+            newStudent.setLastName("Дубин");
+            newStudent.setPatronymic("Алексеевич");
+            Calendar c = Calendar.getInstance();
+            c.set(1998, Calendar.NOVEMBER,29);
+            newStudent.setDateOfBirth(c.getTime());
+            newStudent.setSex(Sex.MALE);
+            newStudent.setGroupId(1);
+            newStudent.setEducationYear(2020);
+
+            printString("Добавление студента: " + newStudent);
+            printString("********************");
+            ms.insertStudent(newStudent);
+            printString("--->> Полный список студентов после добавления:");
+            Collection<Student> allStudents = ms.getAllStudents();
+            for (Student s : allStudents) {
+                printString(s);
+            }
+            printString();
+        }
+
     }
 
     /**
@@ -121,7 +161,7 @@ public class ManagementSystem {
             s.setFirstName("Марк");
             s.setLastName("Конюхов");
             s.setPatronymic("Сергеевич");
-            c.set(1999, 04, 04);
+            c.set(1999, Calendar.SEPTEMBER, 04);
             s.setDateOfBirth(c.getTime());
             s.setSex(Sex.MALE);
             s.setGroupId(2);
@@ -133,7 +173,7 @@ public class ManagementSystem {
             s.setFirstName("Игорь");
             s.setLastName("Игорев");
             s.setPatronymic("Игоревич");
-            c.set(2000, 05, 03);
+            c.set(2000, Calendar.AUGUST, 03);
             s.setDateOfBirth(c.getTime());
             s.setSex(Sex.MALE);
             s.setGroupId(2);
@@ -148,7 +188,7 @@ public class ManagementSystem {
             s.setFirstName("Татьяна");
             s.setLastName("Пушкина");
             s.setPatronymic("Михайловна");
-            c.set(1999, 01, 02);
+            c.set(1999, Calendar.APRIL, 02);
             s.setDateOfBirth(c.getTime());
             s.setSex(Sex.FAMALE);
             s.setGroupId(1);
@@ -160,13 +200,45 @@ public class ManagementSystem {
             s.setFirstName("Андрей");
             s.setLastName("Володин");
             s.setPatronymic("Птушкинович");
-            c.set(2000, 12, 11);
+            c.set(2000, Calendar.MARCH, 11);
             s.setDateOfBirth(c.getTime());
             s.setSex(Sex.MALE);
             s.setGroupId(1);
             s.setEducationYear(2020);
             allStudents.add(s);
         }
+    }
+
+    /**
+     * получить список студентов для опеределенной группы, определенного года обучения.
+     */
+    public Collection<Student> getStudentsFromGroup(Group group, int year) {
+        Collection<Student> studentsInGroup = new TreeSet<Student>();
+        for (Student s: allStudents) {
+            if (s.getGroupId() == group.getGroupId() && s.getEducationYear() == year) {
+                studentsInGroup.add(s);
+            }
+        }
+        return studentsInGroup;
+    }
+
+    /**
+     * Перевести студентов из одной группы с одним годом обучения в другую группу с другим годом обучения
+     */
+    public void moveStudentsToGroup(Group oldGroup, int oldYear, Group newGroup, int newYear) {
+        for (Student s: allStudents) {
+            if (s.getGroupId() == oldGroup.getGroupId() && s.getEducationYear() == oldYear) {
+                s.setGroupId(newGroup.getGroupId());
+                s.setEducationYear(newYear);
+            }
+        }
+    }
+
+    /**
+     * Добавить студента
+     */
+    public void insertStudent(Student student) {
+        allStudents.add(student);
     }
 
     public ArrayList<Group> getAllGroups() {
