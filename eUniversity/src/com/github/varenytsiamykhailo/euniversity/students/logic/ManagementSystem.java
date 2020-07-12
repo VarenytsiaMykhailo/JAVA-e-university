@@ -3,10 +3,7 @@ package com.github.varenytsiamykhailo.euniversity.students.logic;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.TreeSet;
+import java.util.*;
 
 public class ManagementSystem {
 
@@ -14,7 +11,7 @@ public class ManagementSystem {
 
     private ArrayList<Group> allGroups;
 
-    private Collection<Student> allStudents;
+    private HashSet<Student> allStudents;
 
     /*
     * закрытый конструктор.
@@ -60,7 +57,7 @@ public class ManagementSystem {
         {
             printString("Полный список студентов");
             printString("***************************");
-            Collection<Student> allStudents = ms.getAllStudents();
+            HashSet<Student> allStudents = ms.getAllStudents();
             for (Student s : allStudents) {
                 printString(s);
             }
@@ -74,7 +71,7 @@ public class ManagementSystem {
             ArrayList<Group> groups = ms.getAllGroups();
             for (Group g : groups) {
                 printString("---> Группа: " + g.getGroupName());
-                Collection<Student> studentsInGroup = ms.getStudentsFromGroup(g, 2020);
+                HashSet<Student> studentsInGroup = ms.getStudentsFromGroup(g, 2020);
                 for (Student s : studentsInGroup) {
                     printString("\t" + s);
                 }
@@ -100,14 +97,29 @@ public class ManagementSystem {
             printString("***************************");
             ms.insertStudent(newStudent);
             printString("--->> Полный список студентов после добавления:");
-            Collection<Student> allStudents = ms.getAllStudents();
+            HashSet<Student> allStudents = ms.getAllStudents();
             for (Student s : allStudents) {
                 printString(s);
             }
             printString();
         }
 
-        // Изменяем данные о студенте
+        // Вывод списков студентов по группам
+        {
+            printString("Список студентов по группам");
+            printString("***************************");
+            ArrayList<Group> groups = ms.getAllGroups();
+            for (Group g : groups) {
+                printString("---> Группа: " + g.getGroupName());
+                HashSet<Student> studentsInGroup = ms.getStudentsFromGroup(g, 2020);
+                for (Student s : studentsInGroup) {
+                    printString("\t" + s);
+                }
+            }
+            printString();
+        }
+
+        // Изменяем данные о студенте. Затем удаляем его
         {
             Student newStudent = new Student();
             newStudent.setStudentId(5);
@@ -121,11 +133,22 @@ public class ManagementSystem {
             newStudent.setGroupId(1);
             newStudent.setEducationYear(2020);
 
-            printString("Редактирование данных студента: " + newStudent);
+            printString("Редактирование данных студента по id: " + ms.getStudentById(newStudent.getStudentId()) + " . \nНовые данные студента: " + newStudent);
             printString("***************************");
             ms.updateStudent(newStudent);
             printString("--->> Полный список студентов после редактирования:");
-            Collection<Student> allStudents = ms.getAllStudents();
+            HashSet<Student> allStudents = ms.getAllStudents();
+            for (Student s : allStudents) {
+                printString(s);
+            }
+            printString();
+
+            // Удалим студента
+            printString("Удаление студента: " + newStudent);
+            printString("***************************");
+            ms.deleteStudent(newStudent);
+            printString("--->> Полный список студентов после удаления:");
+            allStudents = ms.getAllStudents();
             for (Student s : allStudents) {
                 printString(s);
             }
@@ -171,7 +194,7 @@ public class ManagementSystem {
      */
     public void loadStudents() {
         if (allStudents == null) {
-            allStudents = new TreeSet<Student>();
+            allStudents = new HashSet<Student>();
         } else {
             allStudents.clear();
         }
@@ -237,8 +260,8 @@ public class ManagementSystem {
     /**
      * Получить список студентов для опеределенной группы, определенного года обучения.
      */
-    public Collection<Student> getStudentsFromGroup(Group group, int year) {
-        Collection<Student> studentsInGroup = new TreeSet<Student>();
+    public HashSet<Student> getStudentsFromGroup(Group group, int year) {
+        HashSet<Student> studentsInGroup = new HashSet<Student>();
         for (Student s: allStudents) {
             if (s.getGroupId() == group.getGroupId() && s.getEducationYear() == year) {
                 studentsInGroup.add(s);
@@ -285,14 +308,40 @@ public class ManagementSystem {
         updStudent.setSex(newStudentData.getSex());
         updStudent.setGroupId(newStudentData.getGroupId());
         updStudent.setEducationYear(newStudentData.getEducationYear());
+    }
 
+    /**
+     * Удаляет студента. Ищет нужного студента по его ИД и удаляет его
+     */
+    public void deleteStudent(Student delStudentData) {
+        // Ищем нужного студента по его ИД и удаляем
+        Student delStudent = null;
+        for (Student s : allStudents) {
+            if (s.getStudentId() == delStudentData.getStudentId()) {
+                delStudent = s;
+                break;
+            }
+        }
+        allStudents.remove(delStudent);
+    }
+
+    /**
+     * Поиск студента по переданному id. Если студента с таким id нет - возвращается null
+     */
+    public Student getStudentById(int id) {
+        for (Student s : allStudents) {
+            if (s.getStudentId() == id) {
+                return s;
+            }
+        }
+        return null;
     }
 
     public ArrayList<Group> getAllGroups() {
         return allGroups;
     }
 
-    public Collection<Student> getAllStudents() {
+    public HashSet<Student> getAllStudents() {
         return allStudents;
     }
 

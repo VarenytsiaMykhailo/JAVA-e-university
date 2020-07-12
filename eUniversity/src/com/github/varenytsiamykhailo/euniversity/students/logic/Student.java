@@ -100,8 +100,10 @@ public class Student implements Comparable {
 
     @Override
     public int compareTo(Object obj) {
-        Collator collator = Collator.getInstance(new Locale("ru"));
+        //Collator collator = Collator.getInstance(new Locale("ru"));
+        Collator collator = Collator.getInstance(new Locale("ru", "RU"));
         collator.setStrength(Collator.PRIMARY);
+        //return this.toString().compareToIgnoreCase(obj.toString());
         return collator.compare(this.toString(), obj.toString());
     }
 }
