@@ -48,7 +48,7 @@ public class ManagementSystem {
         // Просмотр полного списка групп
         {
             printString("Полный список групп");
-            printString("*******************");
+            printString("***************************");
             ArrayList<Group> allGroups = ms.getAllGroups();
             for (Group g : allGroups) {
                 printString(g);
@@ -59,7 +59,7 @@ public class ManagementSystem {
         // Просмотр полного списка студентов
         {
             printString("Полный список студентов");
-            printString("***********************");
+            printString("***************************");
             Collection<Student> allStudents = ms.getAllStudents();
             for (Student s : allStudents) {
                 printString(s);
@@ -97,9 +97,34 @@ public class ManagementSystem {
             newStudent.setEducationYear(2020);
 
             printString("Добавление студента: " + newStudent);
-            printString("********************");
+            printString("***************************");
             ms.insertStudent(newStudent);
             printString("--->> Полный список студентов после добавления:");
+            Collection<Student> allStudents = ms.getAllStudents();
+            for (Student s : allStudents) {
+                printString(s);
+            }
+            printString();
+        }
+
+        // Изменяем данные о студенте
+        {
+            Student newStudent = new Student();
+            newStudent.setStudentId(5);
+            newStudent.setFirstName("новыйИван");
+            newStudent.setLastName("новыйДубин");
+            newStudent.setPatronymic("Алексеевич");
+            Calendar c = Calendar.getInstance();
+            c.set(1998, Calendar.NOVEMBER,29);
+            newStudent.setDateOfBirth(c.getTime());
+            newStudent.setSex(Sex.MALE);
+            newStudent.setGroupId(1);
+            newStudent.setEducationYear(2020);
+
+            printString("Редактирование данных студента: " + newStudent);
+            printString("***************************");
+            ms.updateStudent(newStudent);
+            printString("--->> Полный список студентов после редактирования:");
             Collection<Student> allStudents = ms.getAllStudents();
             for (Student s : allStudents) {
                 printString(s);
@@ -110,7 +135,7 @@ public class ManagementSystem {
     }
 
     /**
-     * создает две группы и помещает их в коллекцию для групп
+     * Создает две группы и помещает их в коллекцию для групп
      */
     public void loadGroups() {
         if (allGroups == null)
@@ -120,7 +145,7 @@ public class ManagementSystem {
 
         Group g = null;
 
-        // создаем первую группу
+        // Создаем первую группу
         {
             g = new Group();
             g.setGroupId(1);
@@ -130,7 +155,7 @@ public class ManagementSystem {
             allGroups.add(g);
         }
 
-        // создаем вторую группу
+        // Создаем вторую группу
         {
             g = new Group();
             g.setGroupId(2);
@@ -142,7 +167,7 @@ public class ManagementSystem {
     }
 
     /**
-     * создает несколько студентов и помещает их в коллекцию
+     * Создает несколько студентов и помещает их в коллекцию
      */
     public void loadStudents() {
         if (allStudents == null) {
@@ -154,7 +179,7 @@ public class ManagementSystem {
         Student s = null;
         Calendar c = Calendar.getInstance();
 
-        // создаем студентов второй группы
+        // Создаем студентов второй группы
         {
             s = new Student();
             s.setStudentId(1);
@@ -181,7 +206,7 @@ public class ManagementSystem {
             allStudents.add(s);
         }
 
-        // создаем студентов первой группы
+        // Создаем студентов первой группы
         {
             s = new Student();
             s.setStudentId(3);
@@ -210,7 +235,7 @@ public class ManagementSystem {
     }
 
     /**
-     * получить список студентов для опеределенной группы, определенного года обучения.
+     * Получить список студентов для опеределенной группы, определенного года обучения.
      */
     public Collection<Student> getStudentsFromGroup(Group group, int year) {
         Collection<Student> studentsInGroup = new TreeSet<Student>();
@@ -241,6 +266,28 @@ public class ManagementSystem {
         allStudents.add(student);
     }
 
+    /**
+     * Обновить данные о студенте
+     */
+    public void updateStudent(Student newStudentData) {
+        // Ищем нужного студента по его ИД и заменяем поля
+        Student updStudent = null;
+        for (Student s : allStudents) {
+            if (s.getStudentId() == newStudentData.getStudentId()) {
+                updStudent = s;
+                break;
+            }
+        }
+        updStudent.setFirstName(newStudentData.getFirstName());
+        updStudent.setLastName(newStudentData.getLastName());
+        updStudent.setPatronymic(newStudentData.getPatronymic());
+        updStudent.setDateOfBirth(newStudentData.getDateOfBirth());
+        updStudent.setSex(newStudentData.getSex());
+        updStudent.setGroupId(newStudentData.getGroupId());
+        updStudent.setEducationYear(newStudentData.getEducationYear());
+
+    }
+
     public ArrayList<Group> getAllGroups() {
         return allGroups;
     }
@@ -249,7 +296,7 @@ public class ManagementSystem {
         return allStudents;
     }
 
-    // меняем кодировку на UTF-8
+    // Меняем кодировку на UTF-8
     public static void printString(Object str) {
         try {
             System.out.println(new String(str.toString().getBytes("UTF-8")));
