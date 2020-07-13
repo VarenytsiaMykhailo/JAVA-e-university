@@ -13,11 +13,11 @@ public class ManagementSystem {
 
     private HashSet<Student> allStudents;
 
-    /*
-    * закрытый конструктор.
-    * Реализация шаблона Singleton.
-    * Экземпляры класса нужно создавать с помощью метода статического getInstance
-    * */
+    /**
+     * закрытый конструктор.
+     * Реализация шаблона Singleton.
+     * Экземпляры класса нужно создавать с помощью статического метода getInstance
+     */
     private ManagementSystem() {
         loadGroups();
         loadStudents();
@@ -87,7 +87,7 @@ public class ManagementSystem {
             newStudent.setLastName("Дубин");
             newStudent.setPatronymic("Алексеевич");
             Calendar c = Calendar.getInstance();
-            c.set(1998, Calendar.NOVEMBER,29);
+            c.set(1998, Calendar.NOVEMBER, 29);
             newStudent.setDateOfBirth(c.getTime());
             newStudent.setSex(Sex.MALE);
             newStudent.setGroupId(1);
@@ -127,7 +127,7 @@ public class ManagementSystem {
             newStudent.setLastName("новыйДубин");
             newStudent.setPatronymic("Алексеевич");
             Calendar c = Calendar.getInstance();
-            c.set(1998, Calendar.NOVEMBER,29);
+            c.set(1998, Calendar.NOVEMBER, 29);
             newStudent.setDateOfBirth(c.getTime());
             newStudent.setSex(Sex.MALE);
             newStudent.setGroupId(1);
@@ -149,6 +149,36 @@ public class ManagementSystem {
             ms.deleteStudent(newStudent);
             printString("--->> Полный список студентов после удаления:");
             allStudents = ms.getAllStudents();
+            for (Student s : allStudents) {
+                printString(s);
+            }
+            printString();
+        }
+
+        // Переводим всех студентов одной группы в другую
+        {
+            Group g1 = ms.allGroups.get(0);
+            Group g2 = ms.allGroups.get(1);
+            printString("Перевод студентов из 1-ой во 2-ю группу.");
+            printString("***************************");
+            ms.moveStudentsToGroup(g1, 2020, g2, 2021);
+            printString("--->> Полный список студентов после перевода:");
+            HashSet<Student> allStudents = ms.getAllStudents();
+            for (Student s : allStudents) {
+                printString(s);
+            }
+            printString();
+        }
+
+        // Удаляем всех студентов из группы
+        {
+            Group g2 = ms.getAllGroups().get(1);
+            int delYear = 2020;
+            printString("Удаление студентов из группы: " + g2 + " в " + delYear + " году.");
+            printString("***************************");
+            ms.removeStudentsFromGroup(g2, delYear);
+            printString("--->> Полный список студентов после удаления");
+            HashSet<Student> allStudents = ms.getAllStudents();
             for (Student s : allStudents) {
                 printString(s);
             }
@@ -262,7 +292,7 @@ public class ManagementSystem {
      */
     public HashSet<Student> getStudentsFromGroup(Group group, int year) {
         HashSet<Student> studentsInGroup = new HashSet<Student>();
-        for (Student s: allStudents) {
+        for (Student s : allStudents) {
             if (s.getGroupId() == group.getGroupId() && s.getEducationYear() == year) {
                 studentsInGroup.add(s);
             }
@@ -274,12 +304,26 @@ public class ManagementSystem {
      * Перевести студентов из одной группы с одним годом обучения в другую группу с другим годом обучения
      */
     public void moveStudentsToGroup(Group oldGroup, int oldYear, Group newGroup, int newYear) {
-        for (Student s: allStudents) {
+        for (Student s : allStudents) {
             if (s.getGroupId() == oldGroup.getGroupId() && s.getEducationYear() == oldYear) {
                 s.setGroupId(newGroup.getGroupId());
                 s.setEducationYear(newYear);
             }
         }
+    }
+
+    /**
+     * Удаляет всех студентов из определенной группы, определенного года обучения
+     */
+    public void removeStudentsFromGroup(Group group, int year) {
+        /* // вылетает java.util.ConcurrentModificationException
+        for (Student s : allStudents) {
+            if (s.getGroupId() == group.getGroupId() && s.getEducationYear() == year) {
+                allStudents.remove(s);
+            }
+        }*/
+
+        allStudents.removeIf(s -> s.getGroupId() == group.getGroupId() && s.getEducationYear() == year);
     }
 
     /**
