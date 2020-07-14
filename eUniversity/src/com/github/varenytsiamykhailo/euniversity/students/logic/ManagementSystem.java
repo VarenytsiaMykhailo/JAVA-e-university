@@ -32,6 +32,7 @@ public class ManagementSystem {
         return instance; // вернуть ссылку на экземпляр класса
     }
 
+/* Старая версия для тестов, проверок.
     public static void main(String[] args) {
         // перенаправляем стандартный поток вывода в текстовый файл. Нужно для корректной работы с различными языками и избежания крокозябр
         try {
@@ -186,6 +187,7 @@ public class ManagementSystem {
         }
 
     }
+*/
 
     /**
      * Создает две группы и помещает их в коллекцию для групп
@@ -389,6 +391,7 @@ public class ManagementSystem {
         return allStudents;
     }
 
+/* Старая версия для тестов, проверок
     // Меняем кодировку на UTF-8
     public static void printString(Object str) {
         try {
@@ -401,5 +404,6 @@ public class ManagementSystem {
     public static void printString() {
         System.out.println();
     }
+*/
 
 }
