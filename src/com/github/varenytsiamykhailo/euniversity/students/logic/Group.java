@@ -6,7 +6,7 @@ public class Group {
 
     private String groupName;
 
-    private Curator curator;
+    private int curatorId;
 
     private String speciality;
 
@@ -26,12 +26,12 @@ public class Group {
         this.groupName = groupName;
     }
 
-    public Curator getCurator() {
-        return curator;
+    public int getCuratorId() {
+        return curatorId;
     }
 
-    public void setCurator(Curator curator) {
-        this.curator = curator;
+    public void setCuratorId(int curatorId) {
+        this.curatorId = curatorId;
     }
 
     public String getSpeciality() {

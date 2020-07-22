@@ -13,6 +13,8 @@ public class ManagementSystem {
 
     private HashSet<Student> allStudents;
 
+    private HashSet<Student> allCurators;
+
     /**
      * закрытый конструктор.
      * Реализация шаблона Singleton.
@@ -21,6 +23,7 @@ public class ManagementSystem {
     private ManagementSystem() {
         loadGroups();
         loadStudents();
+        loadCurators();
     }
 
     /**
@@ -205,7 +208,7 @@ public class ManagementSystem {
             g = new Group();
             g.setGroupId(1);
             g.setGroupName("Первая группа");
-            g.setCurator(new Curator());
+            g.setCuratorId(1);
             g.setSpeciality("Программная инженерия");
             allGroups.add(g);
         }
@@ -215,7 +218,7 @@ public class ManagementSystem {
             g = new Group();
             g.setGroupId(2);
             g.setGroupName("Вторая группа");
-            g.setCurator(new Curator());
+            g.setCuratorId(2);
             g.setSpeciality("Информационная безопасность");
             allGroups.add(g);
         }
@@ -243,7 +246,7 @@ public class ManagementSystem {
             s.setPatronymic("Сергеевич");
             c.set(1999, Calendar.SEPTEMBER, 04);
             s.setDateOfBirth(c.getTime());
-            s.setSex(Sex.MALE);
+            s.setSex('М');
             s.setGroupId(2);
             s.setEducationYear(2020);
             allStudents.add(s);
@@ -255,7 +258,7 @@ public class ManagementSystem {
             s.setPatronymic("Игоревич");
             c.set(2000, Calendar.AUGUST, 03);
             s.setDateOfBirth(c.getTime());
-            s.setSex(Sex.MALE);
+            s.setSex('М');
             s.setGroupId(2);
             s.setEducationYear(2020);
             allStudents.add(s);
@@ -270,7 +273,7 @@ public class ManagementSystem {
             s.setPatronymic("Михайловна");
             c.set(1999, Calendar.APRIL, 02);
             s.setDateOfBirth(c.getTime());
-            s.setSex(Sex.FAMALE);
+            s.setSex('Ж');
             s.setGroupId(1);
             s.setEducationYear(2020);
             allStudents.add(s);
@@ -282,10 +285,48 @@ public class ManagementSystem {
             s.setPatronymic("Птушкинович");
             c.set(2000, Calendar.MARCH, 11);
             s.setDateOfBirth(c.getTime());
-            s.setSex(Sex.MALE);
+            s.setSex('М');
             s.setGroupId(1);
             s.setEducationYear(2020);
             allStudents.add(s);
+        }
+    }
+
+    /**
+     * Создает несколько кураторов и помещает их в коллекцию
+     */
+    public void loadCurators() {
+        if (allCurators == null) {
+            allCurators = new HashSet<Student>();
+        } else {
+            allCurators.clear();
+        }
+
+        Curator curator = null;
+        Calendar c = Calendar.getInstance();
+
+        // Создаем первого куратора
+        {
+            curator = new Curator();
+            curator.setCuratorId(1);
+            curator.setFirstName("Петр");
+            curator.setLastName("Шапкин");
+            curator.setPatronymic("Владимирович");
+            c.set(1980, Calendar.APRIL, 02);
+            curator.setDateOfBirth(c.getTime());
+            curator.setSex('М');
+        }
+
+        // Создаем второго куратора
+        {
+            curator = new Curator();
+            curator.setCuratorId(1);
+            curator.setFirstName("Николай");
+            curator.setLastName("Безверхний");
+            curator.setPatronymic("Владимирович");
+            c.set(1970, Calendar.APRIL, 02);
+            curator.setDateOfBirth(c.getTime());
+            curator.setSex('М');
         }
     }
 

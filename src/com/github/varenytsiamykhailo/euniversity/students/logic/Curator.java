@@ -17,9 +17,11 @@ public class Curator implements Comparable {
 
     private Date dateOfBirth;
 
-    private Sex sex;
+    //private Sex sex;
 
-    private int groupId;
+    private char sex;
+
+    // private int groupId;
 
     /**
      * год преподавания
@@ -67,14 +69,15 @@ public class Curator implements Comparable {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public Sex getSex() {
+    public char getSex() {
         return sex;
     }
 
-    public void setSex(Sex sex) {
+    public void setSex(char sex) {
         this.sex = sex;
     }
 
+/*  Старая версия
     public int getGroupId() {
         return groupId;
     }
@@ -82,6 +85,7 @@ public class Curator implements Comparable {
     public void setGroupId(int groupId) {
         this.groupId = groupId;
     }
+*/
 
     public int getYearOfTeaching() {
         return yearOfTeaching;
@@ -95,7 +99,7 @@ public class Curator implements Comparable {
     public String toString() {
         return lastName + " " + firstName + " " + patronymic + ", "
                 + DateFormat.getDateInstance(DateFormat.SHORT).format(dateOfBirth)
-                + ", ИД группы = " + groupId + " Год преподавания: " + yearOfTeaching;
+                + " Год преподавания: " + yearOfTeaching;
     }
 
     @Override

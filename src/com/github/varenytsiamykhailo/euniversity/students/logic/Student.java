@@ -17,7 +17,9 @@ public class Student implements Comparable {
 
     private Date dateOfBirth;
 
-    private Sex sex;
+    //private Sex sex;
+
+    private char sex;
 
     private int groupId;
 
@@ -67,11 +69,11 @@ public class Student implements Comparable {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public Sex getSex() {
+    public char getSex() {
         return sex;
     }
 
-    public void setSex(Sex sex) {
+    public void setSex(char sex) {
         this.sex = sex;
     }
 
