@@ -13,7 +13,7 @@ public class ManagementSystem {
 
     private HashSet<Student> allStudents;
 
-    private HashSet<Student> allCurators;
+    private HashSet<Curator> allCurators;
 
     /**
      * закрытый конструктор.
@@ -297,7 +297,7 @@ public class ManagementSystem {
      */
     public void loadCurators() {
         if (allCurators == null) {
-            allCurators = new HashSet<Student>();
+            allCurators = new HashSet<Curator>();
         } else {
             allCurators.clear();
         }
@@ -315,6 +315,7 @@ public class ManagementSystem {
             c.set(1980, Calendar.APRIL, 02);
             curator.setDateOfBirth(c.getTime());
             curator.setSex('М');
+            allCurators.add(curator);
         }
 
         // Создаем второго куратора
@@ -327,6 +328,7 @@ public class ManagementSystem {
             c.set(1970, Calendar.APRIL, 02);
             curator.setDateOfBirth(c.getTime());
             curator.setSex('М');
+            allCurators.add(curator);
         }
     }
 
