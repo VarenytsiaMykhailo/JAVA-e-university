@@ -1,5 +1,7 @@
 package com.github.varenytsiamykhailo.euniversity.students.logic;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.Collator;
 import java.text.DateFormat;
 import java.util.Date;
@@ -28,6 +30,16 @@ public class Student implements Comparable {
      */
     private int educationYear;
 
+    public Student(ResultSet rs) throws SQLException {
+        this.studentId = rs.getInt(1);
+        this.firstName = rs.getString(2);
+        this.lastName = rs.getString(3);
+        this.patronymic = rs.getString(4);
+        this.dateOfBirth = rs.getDate(5);
+        this.sex = rs.getString(6).charAt(0);
+        this.groupId = rs.getInt(7);
+        this.educationYear = rs.getInt(8);
+    }
 
     public int getStudentId() {
         return studentId;

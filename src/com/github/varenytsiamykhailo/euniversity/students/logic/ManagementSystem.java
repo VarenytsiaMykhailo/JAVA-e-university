@@ -3,17 +3,21 @@ package com.github.varenytsiamykhailo.euniversity.students.logic;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.sql.*;
 import java.util.*;
 
 public class ManagementSystem {
 
     private static ManagementSystem instance; // статическая переменная для шаблона Singleton
 
+    private static Connection connection;
+    /*
     private ArrayList<Group> allGroups;
 
     private HashSet<Student> allStudents;
 
     private HashSet<Curator> allCurators;
+    */
 
     /**
      * закрытый конструктор.
@@ -21,9 +25,18 @@ public class ManagementSystem {
      * Экземпляры класса нужно создавать с помощью статического метода getInstance
      */
     private ManagementSystem() {
+        /*
         loadGroups();
         loadStudents();
         loadCurators();
+        */
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            String url = "jdbc:mysql://localhost:3307/e_university";
+            connection = DriverManager.getConnection(url, "root", "root");
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -426,13 +439,67 @@ public class ManagementSystem {
         return null;
     }
 
+/* Старая версия
     public ArrayList<Group> getAllGroups() {
         return allGroups;
     }
+*/
 
+    public ArrayList<Group> getAllGroups() throws SQLException {
+        ArrayList<Group> allGroups = new ArrayList<Group>();
+
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.createStatement();
+            rs = stmt.executeQuery("SELECT * FROM all_groups");
+            while (rs.next()) {
+                Group group = new Group();
+                group.setGroupId(rs.getInt(1));
+                group.setGroupName(rs.getString(2));
+                group.setCuratorId(rs.getInt(3));
+                group.setSpeciality(rs.getString(4));
+
+                allGroups.add(group);
+            }
+        } finally {
+            rs.close();
+            stmt.close();
+        }
+
+        return allGroups;
+    }
+
+/* Старая версия
     public HashSet<Student> getAllStudents() {
         return allStudents;
     }
+*/
+
+    public ArrayList<Student> getAllStudents() throws SQLException {
+        ArrayList<Student> allStudents = new ArrayList<Student>();
+
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.createStatement();
+            rs = stmt.executeQuery(
+                        "SELECT student_id, first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year" +
+                            "FROM all_students" +
+                            "ORDER BY last_name, first_name, patronymic");
+            while (rs.next()) {
+                Student student = new Student(rs); // Класс Student сам обрабатывает переданный ему ResultSet
+                allStudents.add(student);
+            }
+        } finally {
+            rs.close();
+            stmt.close();
+        }
+
+        return allStudents;
+    }
+
+
 
 /* Старая версия для тестов, проверок
     // Меняем кодировку на UTF-8
