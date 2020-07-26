@@ -33,7 +33,7 @@ CREATE TABLE all_students
   patronymic varchar(255) not null,
   date_of_birth date not null,
   sex char(1),
-  group_id int not null,
+  group_id int,
   education_year int not null,
   primary key (student_id)
 ) engine = InnoDB;

@@ -399,15 +399,20 @@ public class ManagementSystem {
     /**
      * Удаляет всех студентов из определенной группы, определенного года обучения
      */
-    public void removeStudentsFromGroup(Group group, int year) {
-        /* // вылетает java.util.ConcurrentModificationException
-        for (Student s : allStudents) {
-            if (s.getGroupId() == group.getGroupId() && s.getEducationYear() == year) {
-                allStudents.remove(s);
-            }
-        }*/
-
-        allStudents.removeIf(s -> s.getGroupId() == group.getGroupId() && s.getEducationYear() == year);
+    public void removeStudentsFromGroup(Group group, int year) throws SQLException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement("UPDATE all_students " +
+                    "SET group_id = null " +
+                    "WHERE group_id = ? AND education_year = ?"
+            );
+            stmt.setInt(1, group.getGroupId());
+            stmt.setInt(2, year);
+            stmt.executeUpdate();
+        } finally {
+            if (stmt != null)
+                stmt.close();
+        }
     }
 
     /**
