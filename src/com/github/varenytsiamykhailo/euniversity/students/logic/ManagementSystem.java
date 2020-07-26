@@ -463,8 +463,10 @@ public class ManagementSystem {
                 allGroups.add(group);
             }
         } finally {
-            rs.close();
-            stmt.close();
+            if (rs != null)
+                rs.close();
+            if (stmt != null)
+                stmt.close();
         }
 
         return allGroups;
@@ -492,8 +494,10 @@ public class ManagementSystem {
                 allStudents.add(student);
             }
         } finally {
-            rs.close();
-            stmt.close();
+            if (rs != null)
+                rs.close();
+            if (stmt != null)
+                stmt.close();
         }
 
         return allStudents;
