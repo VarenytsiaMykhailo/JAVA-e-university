@@ -378,12 +378,21 @@ public class ManagementSystem {
     /**
      * Перевести студентов из одной группы с одним годом обучения в другую группу с другим годом обучения
      */
-    public void moveStudentsToGroup(Group oldGroup, int oldYear, Group newGroup, int newYear) {
-        for (Student s : allStudents) {
-            if (s.getGroupId() == oldGroup.getGroupId() && s.getEducationYear() == oldYear) {
-                s.setGroupId(newGroup.getGroupId());
-                s.setEducationYear(newYear);
-            }
+    public void moveStudentsToGroup(Group oldGroup, int oldYear, Group newGroup, int newYear) throws SQLException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement("UPDATE all_students " +
+                    "SET group_id = ?, education_year = ? " +
+                    "WHERE group_id = ? AND education_year = ?"
+            );
+            stmt.setInt(1, newGroup.getGroupId());
+            stmt.setInt(2, newYear);
+            stmt.setInt(3, oldGroup.getGroupId());
+            stmt.setInt(4, oldYear);
+            stmt.executeUpdate();
+        } finally {
+            if (stmt != null)
+                stmt.close();
         }
     }
 
