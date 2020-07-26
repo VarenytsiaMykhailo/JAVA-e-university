@@ -348,14 +348,31 @@ public class ManagementSystem {
     /**
      * Получить список студентов для опеределенной группы, определенного года обучения.
      */
-    public HashSet<Student> getStudentsFromGroup(Group group, int year) {
-        HashSet<Student> studentsInGroup = new HashSet<Student>();
-        for (Student s : allStudents) {
-            if (s.getGroupId() == group.getGroupId() && s.getEducationYear() == year) {
-                studentsInGroup.add(s);
+    public ArrayList<Student> getStudentsFromGroup(Group group, int year) throws SQLException {
+        ArrayList<Student> students = new ArrayList<Student>();
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.prepareStatement("SELECT student_id, first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year " +
+                    "FROM all_students " +
+                    "WHERE group_id = ? AND education_year = ? " +
+                    "ORDER BY last_name, first_name, patronymic");
+            stmt.setInt(1, group.getGroupId());
+            stmt.setInt(2, year);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Student student = new Student(rs);
+
+                students.add(student);
             }
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (stmt != null)
+                stmt.close();
         }
-        return studentsInGroup;
+        return students;
     }
 
     /**
@@ -439,12 +456,6 @@ public class ManagementSystem {
         return null;
     }
 
-/* Старая версия
-    public ArrayList<Group> getAllGroups() {
-        return allGroups;
-    }
-*/
-
     public ArrayList<Group> getAllGroups() throws SQLException {
         ArrayList<Group> allGroups = new ArrayList<Group>();
 
@@ -472,12 +483,6 @@ public class ManagementSystem {
         return allGroups;
     }
 
-/* Старая версия
-    public HashSet<Student> getAllStudents() {
-        return allStudents;
-    }
-*/
-
     public ArrayList<Student> getAllStudents() throws SQLException {
         ArrayList<Student> allStudents = new ArrayList<Student>();
 
@@ -486,11 +491,12 @@ public class ManagementSystem {
         try {
             stmt = connection.createStatement();
             rs = stmt.executeQuery(
-                        "SELECT student_id, first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year" +
-                            "FROM all_students" +
+                    "SELECT student_id, first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year " +
+                            "FROM all_students " +
                             "ORDER BY last_name, first_name, patronymic");
             while (rs.next()) {
                 Student student = new Student(rs); // Класс Student сам обрабатывает переданный ему ResultSet
+
                 allStudents.add(student);
             }
         } finally {
@@ -502,22 +508,4 @@ public class ManagementSystem {
 
         return allStudents;
     }
-
-
-
-/* Старая версия для тестов, проверок
-    // Меняем кодировку на UTF-8
-    public static void printString(Object str) {
-        try {
-            System.out.println(new String(str.toString().getBytes("UTF-8")));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void printString() {
-        System.out.println();
-    }
-*/
-
 }
