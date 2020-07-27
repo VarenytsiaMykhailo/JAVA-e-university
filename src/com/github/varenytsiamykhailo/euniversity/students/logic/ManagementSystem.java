@@ -1,8 +1,5 @@
 package com.github.varenytsiamykhailo.euniversity.students.logic;
 
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
@@ -12,13 +9,6 @@ public class ManagementSystem {
     private static ManagementSystem instance; // статическая переменная для шаблона Singleton
 
     private static Connection connection;
-    /*
-    private ArrayList<Group> allGroups;
-
-    private HashSet<Student> allStudents;
-
-    private HashSet<Curator> allCurators;
-    */
 
     /**
      * закрытый конструктор.
@@ -26,11 +16,6 @@ public class ManagementSystem {
      * Экземпляры класса нужно создавать с помощью статического метода getInstance
      */
     private ManagementSystem() {
-        /*
-        loadGroups();
-        loadStudents();
-        loadCurators();
-        */
         try {
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3307/e_university";
@@ -168,7 +153,6 @@ public class ManagementSystem {
         }
     }
 
-
     /**
      * Удаляет студента. Ищет нужного студента по его ИД и удаляет его
      */
@@ -213,6 +197,9 @@ public class ManagementSystem {
         }
     }
 
+    /**
+     * Возвращает коллекцию всех групп из базы данных в виде ArrayList<Group>
+     */
     public ArrayList<Group> getAllGroups() throws SQLException {
         ArrayList<Group> allGroups = new ArrayList<Group>();
 
@@ -240,6 +227,9 @@ public class ManagementSystem {
         return allGroups;
     }
 
+    /**
+     * Возвращает коллекцию всех студентов из базы данных в виде ArrayList<Student>
+     */
     public ArrayList<Student> getAllStudents() throws SQLException {
         ArrayList<Student> allStudents = new ArrayList<Student>();
 
