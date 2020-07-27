@@ -30,6 +30,19 @@ public class Student implements Comparable {
      */
     private int educationYear;
 
+    // Конструктор по умолчанию
+    public Student() {
+        this.studentId = 0;
+        this.firstName = "NO_NAME";
+        this.lastName = "NO_LAST_NAME";
+        this.patronymic = "NO_PATRONYMIC";
+        this.dateOfBirth = new Date();
+        this.sex = 'Н';
+        this.groupId = 0;
+        this.educationYear = 0;
+    }
+
+    // Конструктор принимающий ResultSet из бд
     public Student(ResultSet rs) throws SQLException {
         this.studentId = rs.getInt(1);
         this.firstName = rs.getString(2);
