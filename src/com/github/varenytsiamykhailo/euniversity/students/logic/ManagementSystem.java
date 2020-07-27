@@ -443,23 +443,29 @@ public class ManagementSystem {
     /**
      * Обновить данные о студенте
      */
-    public void updateStudent(Student newStudentData) {
-        // Ищем нужного студента по его ИД и заменяем поля
-        Student updStudent = null;
-        for (Student s : allStudents) {
-            if (s.getStudentId() == newStudentData.getStudentId()) {
-                updStudent = s;
-                break;
-            }
+    public void updateStudent(Student newStudentData) throws SQLException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement("UPDATE all_students " +
+                    "SET first_name = ?, last_name = ?, patronymic = ?, date_of_birth = ?, sex = ?, group_id = ?, education_year= ? " +
+                    "WHERE student_id = ?"
+            );
+            stmt.setString(1, newStudentData.getFirstName());
+            stmt.setString(2, newStudentData.getLastName());
+            stmt.setString(3,newStudentData.getPatronymic());
+            stmt.setDate(4, new Date(newStudentData.getDateOfBirth().getTime()));
+            stmt.setString(5, Character.toString(newStudentData.getSex()));
+            stmt.setInt(6, newStudentData.getGroupId());
+            stmt.setInt(7, newStudentData.getEducationYear());
+            stmt.setInt(8, newStudentData.getStudentId());
+            stmt.executeUpdate();
+        } finally {
+            if (stmt != null)
+                stmt.close();
         }
-        updStudent.setFirstName(newStudentData.getFirstName());
-        updStudent.setLastName(newStudentData.getLastName());
-        updStudent.setPatronymic(newStudentData.getPatronymic());
-        updStudent.setDateOfBirth(newStudentData.getDateOfBirth());
-        updStudent.setSex(newStudentData.getSex());
-        updStudent.setGroupId(newStudentData.getGroupId());
-        updStudent.setEducationYear(newStudentData.getEducationYear());
     }
+
+
 
     /**
      * Удаляет студента. Ищет нужного студента по его ИД и удаляет его
