@@ -1,5 +1,6 @@
 package com.github.varenytsiamykhailo.euniversity.students.logic;
 
+import java.lang.reflect.Type;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
@@ -72,12 +73,19 @@ public class ManagementSystem {
         try {
             stmt = connection.prepareStatement("UPDATE all_students " +
                     "SET group_id = ?, education_year = ? " +
-                    "WHERE group_id = ? AND education_year = ?"
+                    "WHERE COALESCE(group_id, 'nullType') = ? AND education_year = ?"
             );
+
             stmt.setInt(1, newGroup.getGroupId());
             stmt.setInt(2, newYear);
-            stmt.setInt(3, oldGroup.getGroupId());
+            // сравнение с NULL в БД с помощью функции COALESCE в запросе:
+            if (oldGroup.getGroupId() == 0) { // Если oldGroup.getGroupId() == NULL (т.е. студент не числится ни в какой группе)
+                stmt.setString(3, "nullType");
+            } else { // Если студент уже числится в какой-то группе
+                stmt.setInt(3, oldGroup.getGroupId());
+            }
             stmt.setInt(4, oldYear);
+
             stmt.executeUpdate();
         } finally {
             if (stmt != null)
