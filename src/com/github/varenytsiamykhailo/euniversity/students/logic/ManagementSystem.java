@@ -452,7 +452,7 @@ public class ManagementSystem {
             );
             stmt.setString(1, newStudentData.getFirstName());
             stmt.setString(2, newStudentData.getLastName());
-            stmt.setString(3,newStudentData.getPatronymic());
+            stmt.setString(3, newStudentData.getPatronymic());
             stmt.setDate(4, new Date(newStudentData.getDateOfBirth().getTime()));
             stmt.setString(5, Character.toString(newStudentData.getSex()));
             stmt.setInt(6, newStudentData.getGroupId());
@@ -464,7 +464,6 @@ public class ManagementSystem {
                 stmt.close();
         }
     }
-
 
 
     /**
@@ -487,13 +486,28 @@ public class ManagementSystem {
     /**
      * Поиск студента по переданному id. Если студента с таким id нет - возвращается null
      */
-    public Student getStudentById(int id) {
-        for (Student s : allStudents) {
-            if (s.getStudentId() == id) {
-                return s;
+    public Student getStudentById(int id) throws SQLException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.prepareStatement("SELECT student_id, first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year " +
+                    "FROM all_students " +
+                    "WHERE student_id = ? " +
+                    "ORDER BY last_name, first_name, patronymic");
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+            rs = stmt.getResultSet();
+            if (rs.next()) {
+                return new Student(rs);
+            } else {
+                return null;
             }
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (stmt != null)
+                stmt.close();
         }
-        return null;
     }
 
     public ArrayList<Group> getAllGroups() throws SQLException {
