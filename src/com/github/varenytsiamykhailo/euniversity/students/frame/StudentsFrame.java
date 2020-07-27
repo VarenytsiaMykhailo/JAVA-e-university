@@ -7,17 +7,19 @@ import com.github.varenytsiamykhailo.euniversity.students.logic.Student;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
+import java.sql.SQLException;
 import java.util.Vector;
 
 public class StudentsFrame extends JFrame {
-    ManagementSystem ms = ManagementSystem.getInstance();
-    private JList allGroupsList;
-    private JList allStudentsList;
+    ManagementSystem ms = null;
+    private JList allGroupsJList;
+    private JList allStudentsJList;
     private JSpinner yearSpinner;
 
     public StudentsFrame() {
         // Устанавливаем layout (область) по всему окну
         getContentPane().setLayout(new BorderLayout());
+
 
         // Верхняя панель (здесь будет поле для ввода года)
         JPanel topPanel = new JPanel();
@@ -30,6 +32,7 @@ public class StudentsFrame extends JFrame {
         yearSpinner = new JSpinner(spinnerModel);
         topPanel.add(yearSpinner);
 
+
         // Нижняя панель
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new BorderLayout()); // все оставшееся место ниже topPanel
@@ -41,12 +44,21 @@ public class StudentsFrame extends JFrame {
         leftPanel.setBorder(new BevelBorder(BevelBorder.RAISED));
 
         // Получаем список групп
-        Vector<Group> groups = new Vector<Group>(ms.getAllGroups());
+        ms = ManagementSystem.getInstance(); // коннект к базе происходит внутри ManagementSystem. ManagementSystem сам обработает исключение коннекта
 
+        // Получаем список групп и студентов
+        Vector<Group> allGroups = null;
+        Vector<Student> allStudents = null;
+        try { // Необходимо обработать ошибку при обращении к базе данных
+            allGroups = new Vector<Group>(ms.getAllGroups());
+            allStudents = new Vector<Student>(ms.getAllStudents());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         leftPanel.add(new JLabel("Группы:"), BorderLayout.NORTH);
 
-        allGroupsList = new JList(groups); //создаем визуальный список
-        leftPanel.add(new JScrollPane(allGroupsList), BorderLayout.CENTER); // вставляем список в скроллируемую панель (JScrollPane), которую помещаем в центре leftPanel
+        allGroupsJList = new JList(allGroups); //создаем визуальный список
+        leftPanel.add(new JScrollPane(allGroupsJList), BorderLayout.CENTER); // вставляем список в скроллируемую панель (JScrollPane), которую помещаем в центре leftPanel
 
 
         // Правая панель для вывода списка студентов
@@ -54,13 +66,10 @@ public class StudentsFrame extends JFrame {
         rightPanel.setLayout(new BorderLayout());
         rightPanel.setBorder(new BevelBorder(BevelBorder.RAISED));
 
-        // Получаем список студентов
-        Vector<Student> students = new Vector<Student>(ms.getAllStudents());
-
         rightPanel.add(new JLabel("Студенты:"), BorderLayout.NORTH);
 
-        allStudentsList = new JList(students);
-        rightPanel.add(new JScrollPane(allStudentsList), BorderLayout.CENTER); // вставляем список в скроллируемую панель (JScrollPane), которую помещаем в центре leftPanel
+        allStudentsJList = new JList(allStudents);
+        rightPanel.add(new JScrollPane(allStudentsJList), BorderLayout.CENTER); // вставляем список в скроллируемую панель (JScrollPane), которую помещаем в центре leftPanel
 
 
         // Вставляем панели со списками групп (leftPanel) и студентов (rightPanel) в нижнюю панель (bottomPanel)

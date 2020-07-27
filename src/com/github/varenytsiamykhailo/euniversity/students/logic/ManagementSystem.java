@@ -17,7 +17,7 @@ public class ManagementSystem {
      */
     private ManagementSystem() {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3307/e_university";
             connection = DriverManager.getConnection(url, "root", "root");
         } catch (ClassNotFoundException | SQLException e) {

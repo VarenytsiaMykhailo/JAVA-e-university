@@ -13,6 +13,5 @@ public class Main {
                 studentsFrame.setVisible(true);
             }
         });
-
     }
 }
