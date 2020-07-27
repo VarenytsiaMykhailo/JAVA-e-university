@@ -71,26 +71,14 @@ public class ManagementSystem {
     public void moveStudentsToGroup(Group oldGroup, int oldYear, Group newGroup, int newYear) throws SQLException {
         PreparedStatement stmt = null;
         try {
-            if (oldGroup.getGroupId() == 0) { // Если oldGroup.getGroupId() == NULL (т.е. студент не числится ни в какой группе)
-                stmt = connection.prepareStatement("UPDATE all_students " +
-                        "SET group_id = ?, education_year = ? " +
-                        "WHERE group_id IS NULL AND education_year = ?"
-                );
-                stmt.setInt(1, newGroup.getGroupId());
-                stmt.setInt(2, newYear);
-                stmt.setInt(3, oldYear);
-                stmt.executeUpdate();
-            } else { // Если студент уже числится в какой-то группе
-                stmt = connection.prepareStatement("UPDATE all_students " +
-                        "SET group_id = ?, education_year = ? " +
-                        "WHERE group_id = ? AND education_year = ?"
-                );
-                stmt.setInt(1, newGroup.getGroupId());
-                stmt.setInt(2, newYear);
-                stmt.setInt(3, oldGroup.getGroupId());
-                stmt.setInt(4, oldYear);
-                stmt.executeUpdate();
-            }
+           stmt = connection.prepareStatement("UPDATE all_students " +
+                   "SET group_id = ?, education_year = ? " +
+                   "WHERE group_id = ? AND education_year = ?");
+           stmt.setInt(1, newGroup.getGroupId());
+           stmt.setInt(2, newYear);
+           stmt.setInt(3, oldGroup.getGroupId());
+           stmt.setInt(4, oldYear);
+           stmt.executeUpdate();
         } finally {
             if (stmt != null)
                 stmt.close();
