@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 
 public class ManagementSystem {
@@ -418,8 +419,25 @@ public class ManagementSystem {
     /**
      * Добавить студента
      */
-    public void insertStudent(Student student) {
-        allStudents.add(student);
+    public void insertStudent(Student student) throws SQLException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement("INSERT INTO all_students " +
+                    "(first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)"
+            );
+            stmt.setString(1, student.getFirstName());
+            stmt.setString(2, student.getLastName());
+            stmt.setString(3, student.getPatronymic());
+            stmt.setDate(4, new Date(student.getDateOfBirth().getTime()));
+            stmt.setString(5, Character.toString(student.getSex()));
+            stmt.setInt(6, student.getGroupId());
+            stmt.setInt(7, student.getEducationYear());
+            stmt.executeUpdate();
+        } finally {
+            if (stmt != null)
+                stmt.close();
+        }
     }
 
     /**
