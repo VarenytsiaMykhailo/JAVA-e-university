@@ -470,16 +470,18 @@ public class ManagementSystem {
     /**
      * Удаляет студента. Ищет нужного студента по его ИД и удаляет его
      */
-    public void deleteStudent(Student delStudentData) {
-        // Ищем нужного студента по его ИД и удаляем
-        Student delStudent = null;
-        for (Student s : allStudents) {
-            if (s.getStudentId() == delStudentData.getStudentId()) {
-                delStudent = s;
-                break;
-            }
+    public void deleteStudent(Student delStudentData) throws SQLException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement("DELETE FROM all_students " +
+                    "WHERE student_id = ?"
+            );
+            stmt.setInt(1, delStudentData.getStudentId());
+            stmt.executeUpdate();
+        } finally {
+            if (stmt != null)
+                stmt.close();
         }
-        allStudents.remove(delStudent);
     }
 
     /**
