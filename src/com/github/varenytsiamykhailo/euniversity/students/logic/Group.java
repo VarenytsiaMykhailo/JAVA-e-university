@@ -44,6 +44,6 @@ public class Group {
 
     @Override
     public String toString() {
-        return groupName;
+        return groupName + ", Специальность: " + speciality + ", curatorId: " + curatorId;
     }
 }
