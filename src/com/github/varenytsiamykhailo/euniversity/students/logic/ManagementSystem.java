@@ -92,7 +92,7 @@ public class ManagementSystem {
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement("UPDATE all_students " +
-                    "SET group_id = NULL " +
+                    "SET group_id = 0 " +
                     "WHERE group_id = ? AND education_year = ?"
             );
             stmt.setInt(1, group.getGroupId());
