@@ -18,7 +18,7 @@ public class ManagementSystem {
     private ManagementSystem() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3307/e_university";
+            String url = "jdbc:mysql://localhost:3307/e_university?serverTimezone=Europe/Moscow";
             connection = DriverManager.getConnection(url, "root", "root");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
@@ -182,7 +182,7 @@ public class ManagementSystem {
                     "WHERE student_id = ? " +
                     "ORDER BY last_name, first_name, patronymic");
             stmt.setInt(1, id);
-            stmt.executeUpdate();
+            stmt.executeQuery();
             rs = stmt.getResultSet();
             if (rs.next()) {
                 return new Student(rs);
