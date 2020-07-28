@@ -6,11 +6,24 @@ import com.github.varenytsiamykhailo.euniversity.students.logic.Student;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.Vector;
 
-public class StudentsFrame extends JFrame {
+
+/*
+ * ActionListener - для меню и кнопок
+ * ListSelectionListener - для списка
+ * ChangeListener - для спиннера
+ */
+
+public class StudentsFrame extends JFrame implements ActionListener, ListSelectionListener, ChangeListener {
 
     // Имена константы для строк (надписи меню, кнопок и т.д.)
     private static final String MENU_REPORTS = "Отчеты";
@@ -30,7 +43,7 @@ public class StudentsFrame extends JFrame {
     private static final String INSERT_STUDENT_BUTTON_NAME = "insertStudent";
     private static final String UPDATE_STUDENT_BUTTON_NAME = "updateStudent";
     private static final String DELETE_STUDENT_BUTTON_NAME = "deleteStudent";
-    private static final String MENU_ITEM_NAME = "allStudents";
+    private static final String ALL_STUDENTS_MENU_ITEM_NAME = "allStudents";
 
     ManagementSystem ms = null;
 
@@ -73,7 +86,9 @@ public class StudentsFrame extends JFrame {
         JMenu menu = new JMenu(MENU_REPORTS);
         // Создаем пункт в выпадающем меню
         JMenuItem menuItem = new JMenuItem(MENU_ITEM_ALL_STUDENTS);
-        menuItem.setName(MENU_ITEM_NAME);
+        menuItem.setName(ALL_STUDENTS_MENU_ITEM_NAME);
+        // Добавляем листенер
+        menuItem.addActionListener(this);
         // Вставляем пункт меню в выпадающее меню
         menu.add(menuItem);
         // Вставляем выпадающее меню в строку меню
@@ -88,6 +103,8 @@ public class StudentsFrame extends JFrame {
         // Спиннер:
         SpinnerModel spinnerModel = new SpinnerNumberModel(2020, 1900, 2100, 1);
         yearJSpinner = new JSpinner(spinnerModel);
+        // Добавляем листенер
+        yearJSpinner.addChangeListener(this);
 
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -113,6 +130,10 @@ public class StudentsFrame extends JFrame {
             e.printStackTrace();
         }
         allGroupsJList = new JList(allGroups);
+        // выставляем режим выделения одного пункта из листа (выделение через контрл не будет работать)
+        allGroupsJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        // Добавляем листенер
+        allGroupsJList.addListSelectionListener(this);
         allStudentsJList = new JList(allStudents);
 
         // Нижняя панель
@@ -134,8 +155,11 @@ public class StudentsFrame extends JFrame {
         // Создаем кнопки для раздела группы и помещаем их вниз leftPanel
         JButton moveGroupButton = new JButton(MOVE_GROUP_BUTTON);
         moveGroupButton.setName(MOVE_GROUP_BUTTON_NAME);
+        moveGroupButton.addActionListener(this);
         JButton clearGroupButton = new JButton(CLEAR_GROUP_BUTTON);
         clearGroupButton.setName(CLEAR_GROUP_BUTTON_NAME);
+        clearGroupButton.addActionListener(this);
+
         // Создаем панель, на которую положим наши кнопки и поместим ее вниз leftPanel
         JPanel groupsButtonsPanel = new JPanel();
         groupsButtonsPanel.setLayout(new GridLayout(1, 2));
@@ -166,10 +190,14 @@ public class StudentsFrame extends JFrame {
         // Создаем кнопки для студентов
         JButton insertStudentButton = new JButton(INSERT_STUDENT_BUTTON);
         insertStudentButton.setName(INSERT_STUDENT_BUTTON_NAME);
+        insertStudentButton.addActionListener(this);
         JButton updateStudentButton = new JButton(UPDATE_STUDENT_BUTTON);
         updateStudentButton.setName(UPDATE_STUDENT_BUTTON_NAME);
+        updateStudentButton.addActionListener(this);
         JButton deleteStudentButton = new JButton(DELETE_STUDENT_BUTTON);
         deleteStudentButton.setName(DELETE_STUDENT_BUTTON_NAME);
+        deleteStudentButton.addActionListener(this);
+
         // Создаем панель, на которую положим наши кнопки и поместим ее вниз rightPanel
         JPanel studentsButtonsPanel = new JPanel();
         studentsButtonsPanel.setLayout(new GridLayout(1, 3));
@@ -186,6 +214,95 @@ public class StudentsFrame extends JFrame {
         rightPanel.add(studentsButtonsPanel, BorderLayout.SOUTH);
 
         return rightPanel;
+    }
+
+    /**
+     * Реализация интерфейса ActionListener
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() instanceof Component) {
+            Component c = (Component) e.getSource();
+            if (c.getName().equals(ALL_STUDENTS_MENU_ITEM_NAME))
+                showAllStudents();
+            if (c.getName().equals(MOVE_GROUP_BUTTON_NAME))
+                moveGroup();
+            if (c.getName().equals(CLEAR_GROUP_BUTTON_NAME))
+                clearGroup();
+            if (c.getName().equals(INSERT_STUDENT_BUTTON_NAME))
+                insertStudent();
+            if (c.getName().equals(UPDATE_STUDENT_BUTTON_NAME))
+                updateStudent();
+            if (c.getName().equals(DELETE_STUDENT_BUTTON_NAME))
+                deleteStudent();
+        }
+    }
+
+    /**
+     * Показ всех студентов
+     */
+    private void showAllStudents() {
+        JOptionPane.showMessageDialog(this, "showAllStudents");
+    }
+
+    /**
+     * Перенос группы
+     */
+    private void moveGroup() {
+        JOptionPane.showMessageDialog(this, "moveGroup");
+    }
+
+    /**
+     * Очистка группы
+     */
+    private void clearGroup() {
+        JOptionPane.showMessageDialog(this, "clearGroup");
+    }
+
+    /**
+     * Добавление студента
+     */
+    private void insertStudent() {
+        JOptionPane.showMessageDialog(this, "insertStudent");
+    }
+
+    /**
+     * Редактирование студента
+     */
+    private void updateStudent() {
+        JOptionPane.showMessageDialog(this, "updateStudent");
+    }
+
+    /**
+     * Удаление студента
+     */
+    private void deleteStudent() {
+        JOptionPane.showMessageDialog(this, "deleteStudent");
+    }
+
+    /**
+     * Реализация интерфейса ListSelectionListener
+     */
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        if (!e.getValueIsAdjusting()) { // Если выбрали какую-либо группу (например, мышкой) в списке групп
+            reloadStudents();
+        }
+    }
+
+    /**
+     * Реализация интерфейса ChangeListener
+     */
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        reloadStudents();
+    }
+
+    /**
+     * Обновление списка студентов для определенной группы
+     */
+    private void reloadStudents() {
+        JOptionPane.showMessageDialog(this, "reloadStudents");
     }
 }
 
