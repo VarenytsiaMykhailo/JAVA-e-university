@@ -1,5 +1,7 @@
 package com.github.varenytsiamykhailo.euniversity.students.logic;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.Collator;
 import java.text.DateFormat;
 import java.util.Date;
@@ -28,6 +30,26 @@ public class Curator implements Comparable {
      */
     private int yearOfTeaching;
 
+    // Конструктор по умолчанию
+    public Curator() {
+        this.firstName = "NO_NAME";
+        this.lastName = "NO_LAST_NAME";
+        this.patronymic = "NO_PATRONYMIC";
+        this.dateOfBirth = new Date();
+        this.sex = 'Н';
+        this.yearOfTeaching = 0;
+    }
+
+    // Конструктор принимающий ResultSet из бд
+    public Curator(ResultSet rs) throws SQLException {
+        this.curatorId = rs.getInt(1);
+        this.firstName = rs.getString(2);
+        this.lastName = rs.getString(3);
+        this.patronymic = rs.getString(4);
+        this.dateOfBirth = rs.getDate(5);
+        this.sex = rs.getString(6).charAt(0);
+        this.yearOfTeaching = rs.getInt(7);
+    }
 
     public int getCuratorId() {
         return curatorId;
