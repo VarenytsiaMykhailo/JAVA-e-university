@@ -41,39 +41,39 @@ CREATE TABLE all_students
 SET NAMES 'utf8';
 
 INSERT INTO all_groups (group_name, curator_id, speciality)
-VALUES ('Нулевая группа', 0, 'Неопределенные студенты');
+VALUES ('Нулевая группа', 1, 'Неопределенные студенты');
 
 INSERT INTO all_groups (group_name, curator_id, speciality)
-VALUES ('Первая группа', 1, 'Программная инженерия');
+VALUES ('Первая группа', 2, 'Программная инженерия');
 
 INSERT INTO all_groups (group_name, curator_id, speciality)
-VALUES ('Вторая группа', 2, 'Информационная безопасность');
+VALUES ('Вторая группа', 3, 'Информационная безопасность');
 
 
 INSERT INTO all_students (first_name, patronymic, last_name, sex, date_of_birth, group_id, education_year)
-VALUES ('Иван', 'Сергеевич', 'Степанов', 'М', '1999-03-20', 1, 2019);
+VALUES ('Иван', 'Сергеевич', 'Степанов', 'М', '1999-03-20', 2, 2019);
 
 INSERT INTO all_students (first_name, patronymic, last_name, sex, date_of_birth, group_id, education_year)
 VALUES ('Наталья', 'Андреевна', 'Чичикова', 'Ж', '2000-06-10', 1, 2019);
 
 INSERT INTO all_students (first_name, patronymic, last_name, sex, date_of_birth, group_id, education_year)
-VALUES ('Виктор', 'Сидорович', 'Белов', 'М', '1999-01-10', 1, 2020);
+VALUES ('Виктор', 'Сидорович', 'Белов', 'М', '1999-01-10', 2, 2020);
 
 INSERT INTO all_students (first_name, patronymic, last_name, sex, date_of_birth, group_id, education_year)
-VALUES ('Петр', 'Викторович', 'Сушкин', 'М', '2000-03-12', 2, 2020);
+VALUES ('Петр', 'Викторович', 'Сушкин', 'М', '2000-03-12', 3, 2020);
 
 INSERT INTO all_students (first_name, patronymic, last_name, sex, date_of_birth, group_id, education_year)
-VALUES ('Вероника', 'Сергеевна', 'Ковалева', 'Ж', '1999-07-19', 2, 2020);
+VALUES ('Вероника', 'Сергеевна', 'Ковалева', 'Ж', '1999-07-19', 3, 2020);
 
 INSERT INTO all_students (first_name, patronymic, last_name, sex, date_of_birth, group_id, education_year)
-VALUES ('Ирина', 'Федоровна', 'Истомина', 'Ж', '2002-04-29', 2, 2020);
+VALUES ('Ирина', 'Федоровна', 'Истомина', 'Ж', '2002-04-29', 3, 2020);
 
 
 INSERT INTO all_curators (first_name, patronymic, last_name, sex, date_of_birth, year_of_teaching)
 VALUES ('Отсутствует', 'Отсутствует', 'Отсутствует', 'М', '1900-04-20', 1900);
 
 INSERT INTO all_curators (first_name, patronymic, last_name, sex, date_of_birth, year_of_teaching)
-VALUES ('Петр', 'Шапкин', 'Владимирович', 'М', '1980-04-29', 2020);
+VALUES ('Петр', 'Владимирович', 'Шапкин', 'М', '1980-04-29', 2020);
 
 INSERT INTO all_curators (first_name, patronymic, last_name, sex, date_of_birth, year_of_teaching)
-VALUES ('Николай', 'Безверхний', 'Владимирович', 'М', '1970-04-29', 2020);
+VALUES ('Николай', 'Владимирович', 'Безверхний', 'М', '1970-04-29', 2020);
