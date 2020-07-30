@@ -14,6 +14,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Vector;
 
 
@@ -174,9 +175,6 @@ public class StudentsFrame extends JFrame implements ActionListener, ListSelecti
         leftPanel.add(new JScrollPane(allGroupsJList), BorderLayout.CENTER); // Вставляем список в скроллируемую панель (JScrollPane), которую помещаем в центре leftPanel
         leftPanel.add(groupsButtonsPanel, BorderLayout.SOUTH);
 
-        // Сразу выделяем первую группу в списке групп
-        allGroupsJList.setSelectedIndex(0);
-
         return leftPanel;
     }
 
@@ -185,7 +183,8 @@ public class StudentsFrame extends JFrame implements ActionListener, ListSelecti
      */
     private JPanel createRightPanelForBottomPanel() {
         // Создаем таблицу и вставляем ее в скроллируемую панель. Эту скроллируемую панель кладем на панель rightPanel
-        studentsJTable = new JTable(1, 4);
+        studentsJTable = new JTable(0, StudentsTableModel.NUM_COLUMNS_FOR_STUDENTS_TABLE);
+        studentsJTable.setModel(new StudentsTableModel(new Vector<Student>())); // Устанавливаем модель для таблицы с пустыми студентами
 
         // Создаем кнопки для студентов
         JButton insertStudentButton = new JButton(INSERT_STUDENT_BUTTON);
@@ -299,10 +298,28 @@ public class StudentsFrame extends JFrame implements ActionListener, ListSelecti
     }
 
     /**
-     * Обновление списка студентов для определенной группы
+     * Обновление списка студентов для определенной группы. Тело метода выполняется в другом потоке
      */
     private void reloadStudents() {
-        JOptionPane.showMessageDialog(this, "reloadStudents");
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                if (studentsJTable != null) {
+                    Group g = (Group) allGroupsJList.getSelectedValue(); // Получаем выделенную группу
+                    SpinnerNumberModel spinnerNumberModel = (SpinnerNumberModel) yearJSpinner.getModel();
+                    int spinnerNumber = spinnerNumberModel.getNumber().intValue();
+                    try {
+                        ArrayList<Student> students = ms.getStudentsFromGroup(g, spinnerNumber);
+                        studentsJTable.setModel(new StudentsTableModel(new Vector<Student>(students))); // Устанавливаем модель для таблицы с новыми данными
+                    } catch (SQLException e) {
+                        JOptionPane.showMessageDialog(StudentsFrame.this, e.getMessage());
+                    }
+
+                }
+            }
+        };
+
+        thread.start();
     }
 }
 
