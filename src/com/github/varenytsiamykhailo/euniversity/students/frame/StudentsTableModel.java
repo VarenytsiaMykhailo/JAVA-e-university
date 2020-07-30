@@ -7,6 +7,14 @@ import java.util.Vector;
 
 public class StudentsTableModel extends AbstractTableModel {
 
+    // Константы
+    /**
+     * Количество столбцов в таблице и их названия.
+     * При изменении параметра - внести изменения в метод getValueAt классе StudentsTableModel
+     */
+    protected static final String[] studentsTableColumnNames = new String[]{"Фамилия", "Имя", "Отчество", "Дата рождения", "Пол", "Год обучения"};
+    protected static final int  NUM_COLUMNS_FOR_STUDENTS_TABLE = studentsTableColumnNames.length;
+
     private Vector<Student> students; // Хранилище для списка студентов
 
     public StudentsTableModel(Vector students) {
@@ -28,15 +36,15 @@ public class StudentsTableModel extends AbstractTableModel {
      */
     @Override
     public int getColumnCount() {
-        return 7; // Количество столбцов - 7: Фамилия, Имя, Отчество, Дата рождения, Пол, Группа, Год обучения
+        return NUM_COLUMNS_FOR_STUDENTS_TABLE; // Количество столбцов - 7: Фамилия, Имя, Отчество, Дата рождения, Пол, Группа, Год обучения
     }
 
     /**
      * Возвращает имя колонки
      */
+    @Override
     public String getColumnName(int columnIndex) {
-        String[] columnNames = {"Фамилия", "Имя", "Отчество", "Дата рождения", "Пол", "Группа", "Год обучения"};
-        return columnNames[columnIndex];
+        return  studentsTableColumnNames[columnIndex];
     }
 
     /**
@@ -59,8 +67,6 @@ public class StudentsTableModel extends AbstractTableModel {
                 case 4:
                     return student.getSex();
                 case 5:
-                    return null; // Дописать
-                case 6:
                     return student.getEducationYear();
             }
         }
@@ -70,7 +76,7 @@ public class StudentsTableModel extends AbstractTableModel {
     /**
      * Возвращает студента (объект типа Student) по номеру строки
      */
-    public Student getStudent(int rowIndex) {
+    private Student getStudent(int rowIndex) {
         if (students != null) {
             if (rowIndex < students.size() && rowIndex >= 0) {
                 return (Student) students.get(rowIndex);
