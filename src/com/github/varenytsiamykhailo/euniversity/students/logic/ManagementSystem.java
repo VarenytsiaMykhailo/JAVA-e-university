@@ -198,6 +198,33 @@ public class ManagementSystem {
     }
 
     /**
+     * Поиск куратора по переданному id. Если куратора с таким id нет - возвращается null
+     */
+    public Curator getCuratorById(int id) throws SQLException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.prepareStatement("SELECT curator_id, first_name, last_name, patronymic, date_of_birth, sex, year_of_teaching " +
+                    "FROM all_curators " +
+                    "WHERE curator_id = ? " +
+                    "ORDER BY last_name, first_name, patronymic");
+            stmt.setInt(1, id);
+            stmt.executeQuery();
+            rs = stmt.getResultSet();
+            if (rs.next()) {
+                return new Curator(rs);
+            } else {
+                return null;
+            }
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (stmt != null)
+                stmt.close();
+        }
+    }
+
+    /**
      * Возвращает коллекцию всех групп из базы данных в виде ArrayList<Group>
      */
     public ArrayList<Group> getAllGroups() throws SQLException {
