@@ -32,13 +32,12 @@ public class Student implements Comparable {
 
     // Конструктор по умолчанию
     public Student() {
-        this.studentId = 0;
         this.firstName = "NO_NAME";
         this.lastName = "NO_LAST_NAME";
         this.patronymic = "NO_PATRONYMIC";
         this.dateOfBirth = new Date();
         this.sex = 'Н';
-        this.groupId = 0;
+        this.groupId = 1;
         this.educationYear = 0;
     }
 
