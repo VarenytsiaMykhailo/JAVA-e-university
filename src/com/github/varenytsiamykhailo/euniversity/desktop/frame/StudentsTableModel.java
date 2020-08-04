@@ -1,6 +1,6 @@
-package com.github.varenytsiamykhailo.euniversity.students.frame;
+package com.github.varenytsiamykhailo.euniversity.desktop.frame;
 
-import com.github.varenytsiamykhailo.euniversity.students.logic.Student;
+import com.github.varenytsiamykhailo.euniversity.logic.Student;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.Vector;

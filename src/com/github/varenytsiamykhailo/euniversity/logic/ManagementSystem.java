@@ -1,6 +1,5 @@
-package com.github.varenytsiamykhailo.euniversity.students.logic;
+package com.github.varenytsiamykhailo.euniversity.logic;
 
-import java.lang.reflect.Type;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;

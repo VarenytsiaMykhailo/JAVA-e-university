@@ -1,4 +1,4 @@
-package com.github.varenytsiamykhailo.euniversity.students.logic;
+package com.github.varenytsiamykhailo.euniversity.logic;
 
 public class Group {
 

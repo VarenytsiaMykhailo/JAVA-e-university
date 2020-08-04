@@ -1,8 +1,8 @@
-package com.github.varenytsiamykhailo.euniversity.students.frame;
+package com.github.varenytsiamykhailo.euniversity.desktop.frame;
 
-import com.github.varenytsiamykhailo.euniversity.students.logic.Group;
-import com.github.varenytsiamykhailo.euniversity.students.logic.ManagementSystem;
-import com.github.varenytsiamykhailo.euniversity.students.logic.Student;
+import com.github.varenytsiamykhailo.euniversity.logic.Group;
+import com.github.varenytsiamykhailo.euniversity.logic.ManagementSystem;
+import com.github.varenytsiamykhailo.euniversity.logic.Student;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;

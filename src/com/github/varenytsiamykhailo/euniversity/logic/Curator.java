@@ -1,4 +1,4 @@
-package com.github.varenytsiamykhailo.euniversity.students.logic;
+package com.github.varenytsiamykhailo.euniversity.logic;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,9 +7,9 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Student implements Comparable {
+public class Curator implements Comparable {
 
-    private int studentId;
+    private int curatorId;
 
     private String firstName;
 
@@ -23,42 +23,40 @@ public class Student implements Comparable {
 
     private char sex;
 
-    private int groupId;
+    // private int groupId;
 
     /**
      * год преподавания
      */
-    private int educationYear;
+    private int yearOfTeaching;
 
     // Конструктор по умолчанию
-    public Student() {
+    public Curator() {
         this.firstName = "NO_NAME";
         this.lastName = "NO_LAST_NAME";
         this.patronymic = "NO_PATRONYMIC";
         this.dateOfBirth = new Date();
         this.sex = 'Н';
-        this.groupId = 1;
-        this.educationYear = 0;
+        this.yearOfTeaching = 0;
     }
 
     // Конструктор принимающий ResultSet из бд
-    public Student(ResultSet rs) throws SQLException {
-        this.studentId = rs.getInt(1);
+    public Curator(ResultSet rs) throws SQLException {
+        this.curatorId = rs.getInt(1);
         this.firstName = rs.getString(2);
         this.lastName = rs.getString(3);
         this.patronymic = rs.getString(4);
         this.dateOfBirth = rs.getDate(5);
         this.sex = rs.getString(6).charAt(0);
-        this.groupId = rs.getInt(7);
-        this.educationYear = rs.getInt(8);
+        this.yearOfTeaching = rs.getInt(7);
     }
 
-    public int getStudentId() {
-        return studentId;
+    public int getCuratorId() {
+        return curatorId;
     }
 
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
+    public void setCuratorId(int curatorId) {
+        this.curatorId = curatorId;
     }
 
     public String getFirstName() {
@@ -101,6 +99,7 @@ public class Student implements Comparable {
         this.sex = sex;
     }
 
+/*  Старая версия
     public int getGroupId() {
         return groupId;
     }
@@ -108,28 +107,27 @@ public class Student implements Comparable {
     public void setGroupId(int groupId) {
         this.groupId = groupId;
     }
+*/
 
-    public int getEducationYear() {
-        return educationYear;
+    public int getYearOfTeaching() {
+        return yearOfTeaching;
     }
 
-    public void setEducationYear(int educationYear) {
-        this.educationYear = educationYear;
+    public void setYearOfTeaching(int yearOfTeaching) {
+        this.yearOfTeaching = yearOfTeaching;
     }
 
     @Override
     public String toString() {
         return lastName + " " + firstName + " " + patronymic + ", "
                 + DateFormat.getDateInstance(DateFormat.SHORT).format(dateOfBirth)
-                + ", ИД группы = " + groupId + ", Год обучения: " + educationYear;
+                + " Год преподавания: " + yearOfTeaching;
     }
 
     @Override
     public int compareTo(Object obj) {
-        //Collator collator = Collator.getInstance(new Locale("ru"));
-        Collator collator = Collator.getInstance(new Locale("ru", "RU"));
+        Collator collator = Collator.getInstance(new Locale("ru"));
         collator.setStrength(Collator.PRIMARY);
-        //return this.toString().compareToIgnoreCase(obj.toString());
         return collator.compare(this.toString(), obj.toString());
     }
 }
