@@ -14,13 +14,6 @@ public class ManagementSystemDesktop extends ManagementSystem {
      * Экземпляры класса нужно создавать с помощью статического метода getInstance
      */
     private ManagementSystemDesktop() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3307/e_university?serverTimezone=Europe/Moscow";
-            connection = DriverManager.getConnection(url, "root", "root");
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -28,7 +21,14 @@ public class ManagementSystemDesktop extends ManagementSystem {
      */
     public static synchronized ManagementSystemDesktop getInstance() {
         if (instance == null) { // если экземпляр класса не создан, то создать его (выделить память)
-            instance = new ManagementSystemDesktop();
+            try {
+                instance = new ManagementSystemDesktop();
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                String url = "jdbc:mysql://localhost:3307/e_university?serverTimezone=Europe/Moscow";
+                instance.connection = DriverManager.getConnection(url, "root", "root");
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
+            }
         }
         return instance; // вернуть ссылку на экземпляр класса
     }
