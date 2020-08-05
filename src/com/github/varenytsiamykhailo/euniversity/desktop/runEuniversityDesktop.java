@@ -1,14 +1,14 @@
-package com.github.varenytsiamykhailo.euniversity.desktop.frame;
+package com.github.varenytsiamykhailo.euniversity.desktop;
 
+import com.github.varenytsiamykhailo.euniversity.desktop.frame.StudentsFrame;
 import com.github.varenytsiamykhailo.euniversity.logic.Group;
-import com.github.varenytsiamykhailo.euniversity.logic.ManagementSystem;
 import com.github.varenytsiamykhailo.euniversity.logic.Student;
 
 import javax.swing.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class Main {
+public class runEuniversityDesktop {
     public static void main(String[] args) {
         // Запуск формы лучше производить в специальном треде Event-dispatching thread (EDT)
         SwingUtilities.invokeLater(new Runnable() {
@@ -27,7 +27,7 @@ public class Main {
     }
 
     private void testManagementSystemMethods() {
-        ManagementSystem ms = ManagementSystem.getInstance();
+        ManagementSystemDesktop ms = ManagementSystemDesktop.getInstance();
         try {
             // Проверка метода getAllGroups
             System.out.println("        Проверка метода getAllGroups");

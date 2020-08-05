@@ -4,35 +4,9 @@ import java.sql.*;
 import java.sql.Date;
 import java.util.*;
 
-public class ManagementSystem {
+public abstract class ManagementSystem {
 
-    private static ManagementSystem instance; // статическая переменная для шаблона Singleton
-
-    private static Connection connection;
-
-    /**
-     * закрытый конструктор.
-     * Реализация шаблона Singleton.
-     * Экземпляры класса нужно создавать с помощью статического метода getInstance
-     */
-    private ManagementSystem() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3307/e_university?serverTimezone=Europe/Moscow";
-            connection = DriverManager.getConnection(url, "root", "root");
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * статический метод для получения экземпляра класса (реализация шаблона Singleton)
-     */
-    public static synchronized ManagementSystem getInstance() {
-        if (instance == null) // если экземпляр класса не создан, то создать его (выделить память)
-            instance = new ManagementSystem();
-        return instance; // вернуть ссылку на экземпляр класса
-    }
+    public Connection connection;
 
     /**
      * Получить список студентов для опеределенной группы, определенного года обучения.
