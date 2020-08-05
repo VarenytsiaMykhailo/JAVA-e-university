@@ -155,8 +155,7 @@ public abstract class ManagementSystem {
                     "WHERE student_id = ? " +
                     "ORDER BY last_name, first_name, patronymic");
             stmt.setInt(1, id);
-            stmt.executeQuery();
-            rs = stmt.getResultSet();
+            rs = stmt.executeQuery();
             if (rs.next()) {
                 return new Student(rs);
             } else {
@@ -182,8 +181,7 @@ public abstract class ManagementSystem {
                     "WHERE curator_id = ? " +
                     "ORDER BY last_name, first_name, patronymic");
             stmt.setInt(1, id);
-            stmt.executeQuery();
-            rs = stmt.getResultSet();
+            rs = stmt.executeQuery();
             if (rs.next()) {
                 return new Curator(rs);
             } else {
