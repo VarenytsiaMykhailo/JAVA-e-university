@@ -1,7 +1,6 @@
 package com.github.varenytsiamykhailo.euniversity.web;
 
 import com.github.varenytsiamykhailo.euniversity.logic.Group;
-import com.github.varenytsiamykhailo.euniversity.logic.ManagementSystem;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +11,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
 
-public class HelloWorldServlet extends HttpServlet {
+public class SimpleListServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html;charset=utf-8");

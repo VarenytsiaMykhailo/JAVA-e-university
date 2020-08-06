@@ -21,8 +21,8 @@
     </servlet>
 
     <servlet>
-        <servlet-name>SimpleList</servlet-name>
-        <servlet-class>com.github.varenytsiamykhailo.euniversity.web.SimpleList</servlet-class>
+        <servlet-name>SimpleListServlet</servlet-name>
+        <servlet-class>com.github.varenytsiamykhailo.euniversity.web.SimpleListServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -36,7 +36,7 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>SimpleList</servlet-name>
+        <servlet-name>SimpleListServlet</servlet-name>
         <url-pattern>/simple</url-pattern>
     </servlet-mapping>
 
