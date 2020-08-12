@@ -41,7 +41,7 @@ public abstract class ManagementSystem {
     /**
      * Перевести студентов из одной группы с одним годом обучения в другую группу с другим годом обучения
      */
-    public void moveStudentsToGroup(Group oldGroup, int oldYear, Group newGroup, int newYear) throws SQLException {
+    public void moveStudentsFromGroupToNewGroup (Group oldGroup, int oldYear, Group newGroup, int newYear) throws SQLException {
         PreparedStatement stmt = null;
         try {
            stmt = connection.prepareStatement("UPDATE all_students " +

@@ -109,7 +109,7 @@ public class runEuniversityDesktop {
                 System.out.println(nullGroup);
                 System.out.println("null group id is: " + nullGroup.getGroupId());
                 System.out.println();
-                ms.moveStudentsToGroup(gr2, 2020, nullGroup, 2019);
+                ms.moveStudentsFromGroupToNewGroup(gr2, 2020, nullGroup, 2019);
             }
 
             // Вызов метода getAllStudents
@@ -134,7 +134,7 @@ public class runEuniversityDesktop {
                 System.out.println(nullGroup);
                 System.out.println("null group id is: " + nullGroup.getGroupId());
                 System.out.println();
-                ms.moveStudentsToGroup(nullGroup, 2019, gr2, 2021);
+                ms.moveStudentsFromGroupToNewGroup(nullGroup, 2019, gr2, 2021);
             }
 
             // Проверка метода getAllStudents после перевода null группы во вторую
