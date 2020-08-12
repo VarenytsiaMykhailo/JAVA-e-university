@@ -11,11 +11,6 @@
     </description>
 
     <servlet>
-        <servlet-name>hello</servlet-name>
-        <servlet-class>com.github.varenytsiamykhailo.euniversity.web.HelloWorldServlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>jspTest</servlet-name>
         <servlet-class>com.github.varenytsiamykhailo.euniversity.web.jspTestServlet</servlet-class>
     </servlet>
@@ -24,11 +19,6 @@
         <servlet-name>SimpleListServlet</servlet-name>
         <servlet-class>com.github.varenytsiamykhailo.euniversity.web.SimpleListServlet</servlet-class>
     </servlet>
-
-    <servlet-mapping>
-        <servlet-name>hello</servlet-name>
-        <url-pattern>/hello</url-pattern>
-    </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>jspTest</servlet-name>
