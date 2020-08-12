@@ -25,9 +25,6 @@ public class Student implements Comparable {
 
     private int groupId;
 
-    /**
-     * год преподавания
-     */
     private int educationYear;
 
     // Конструктор по умолчанию
