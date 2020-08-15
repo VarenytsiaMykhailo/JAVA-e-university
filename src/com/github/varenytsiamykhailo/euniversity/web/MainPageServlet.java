@@ -1,7 +1,6 @@
 package com.github.varenytsiamykhailo.euniversity.web;
 
 import com.github.varenytsiamykhailo.euniversity.logic.Group;
-import com.github.varenytsiamykhailo.euniversity.logic.ManagementSystem;
 import com.github.varenytsiamykhailo.euniversity.logic.Student;
 import com.github.varenytsiamykhailo.euniversity.web.forms.MainDataFormForDisplay;
 import com.github.varenytsiamykhailo.euniversity.web.forms.StudentDataFormForDisplay;
@@ -124,23 +123,31 @@ public class MainPageServlet extends HttpServlet {
         MainDataFormForDisplay mainDataFormForDisplay = new MainDataFormForDisplay();
         try {
             ArrayList<Group> allGroups = ManagementSystemWeb.getInstance().getAllGroups();
-            Group group;
-            if (selectedGroupId == -1) {
+            Group group = new Group();
+            group.setGroupId(selectedGroupId);
+            if (selectedGroupId == -1) { // Если группа не выбрала в списке
                 Iterator it = allGroups.iterator();
                 group = (Group) it.next();
-            } else { // Если новая группа уже выбрана в списке (после перевода студентов в новую группу)
-                group = new Group();
-                group.setGroupId(selectedGroupId);
             }
 
             ArrayList<Student> studentsForSelectedGroup = ManagementSystemWeb.getInstance().getStudentsFromGroup(group, selectedYear);
-            mainDataFormForDisplay.setSelectedGroupId(selectedGroupId);
+            mainDataFormForDisplay.setSelectedGroupId(group.getGroupId());
             mainDataFormForDisplay.setSelectedYear(selectedYear);
             mainDataFormForDisplay.setAllGroups(allGroups);
             mainDataFormForDisplay.setStudentsForSelectedGroup(studentsForSelectedGroup);
         } catch (SQLException e) {
             throw new IOException(e.getMessage());
         }
+/* Дебаг
+        System.out.println();
+        System.out.println("prepared mainDataFormForDisplay:");
+        System.out.println(mainDataFormForDisplay);
+        System.out.println("selected year = " + mainDataFormForDisplay.getSelectedYear());
+        System.out.println("selected groupId = " + mainDataFormForDisplay.getSelectedGroupId());
+        System.out.println("allGroups = " + mainDataFormForDisplay.getAllGroups());
+        System.out.println("StudentsForSelectedGroup = " + mainDataFormForDisplay.getStudentsForSelectedGroup());
+        System.out.println();
+*/
 
         req.setAttribute("mainDataForm", mainDataFormForDisplay);
         getServletContext().getRequestDispatcher("/MainPageFrame.jsp").forward(req, resp);
