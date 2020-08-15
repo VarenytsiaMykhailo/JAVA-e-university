@@ -1,5 +1,6 @@
 /.idea
 /out
+/euniversityTomcatApp/WEB-INF/classes/
 /tmp
 eUniversity.iml
 out.txt
