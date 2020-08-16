@@ -44,7 +44,7 @@ public class MainPageServlet extends HttpServlet {
                 studentDataFormForDisplay.initFromStudent(student);
                 studentDataFormForDisplay.setAllGroups(allGroups);
                 req.setAttribute("studentDataForm", studentDataFormForDisplay);
-                getServletContext().getRequestDispatcher("/StudentFrame.jsp").forward(req, resp);
+                getServletContext().getRequestDispatcher("/StudentEditPage.jsp").forward(req, resp);
 
                 return;
 
@@ -64,7 +64,7 @@ public class MainPageServlet extends HttpServlet {
                     studentDataFormForDisplay.initFromStudent(student);
                     studentDataFormForDisplay.setAllGroups(allGroups);
                     req.setAttribute("studentDataForm", studentDataFormForDisplay);
-                    getServletContext().getRequestDispatcher("/StudentFrame.jsp").forward(req, resp);
+                    getServletContext().getRequestDispatcher("/StudentEditPage.jsp").forward(req, resp);
 
                     return;
 
@@ -150,6 +150,6 @@ public class MainPageServlet extends HttpServlet {
         System.out.println();
 
         req.setAttribute("mainDataForm", mainDataFormForDisplay);
-        getServletContext().getRequestDispatcher("/MainPageFrame.jsp").forward(req, resp);
+        getServletContext().getRequestDispatcher("/MainPage.jsp").forward(req, resp);
     }
 }
