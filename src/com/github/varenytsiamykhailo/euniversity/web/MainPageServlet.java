@@ -78,7 +78,7 @@ public class MainPageServlet extends HttpServlet {
             try {
                 if (req.getParameter("student_id") != null) {
                     Student student = new Student();
-                    student.setStudentId(Integer.parseInt(req.getParameter("studentId")));
+                    student.setStudentId(Integer.parseInt(req.getParameter("student_Id")));
                     ManagementSystemWeb.getInstance().deleteStudent(student);
                 }
             } catch (SQLException e) {
@@ -86,8 +86,8 @@ public class MainPageServlet extends HttpServlet {
             }
         }
 
-        String groupIdString = req.getParameter("group_id");
-        String yearString = req.getParameter("year");
+        String groupIdString = req.getParameter("selected_group_id");
+        String yearString = req.getParameter("selected_year");
 
         if (req.getParameter("move_group") != null) {
             // Перемещаем всех студентов в другую группу
@@ -138,7 +138,8 @@ public class MainPageServlet extends HttpServlet {
         } catch (SQLException e) {
             throw new IOException(e.getMessage());
         }
-/* Дебаг
+
+        // Отладка:
         System.out.println();
         System.out.println("prepared mainDataFormForDisplay:");
         System.out.println(mainDataFormForDisplay);
@@ -147,7 +148,6 @@ public class MainPageServlet extends HttpServlet {
         System.out.println("allGroups = " + mainDataFormForDisplay.getAllGroups());
         System.out.println("StudentsForSelectedGroup = " + mainDataFormForDisplay.getStudentsForSelectedGroup());
         System.out.println();
-*/
 
         req.setAttribute("mainDataForm", mainDataFormForDisplay);
         getServletContext().getRequestDispatcher("/MainPageFrame.jsp").forward(req, resp);
