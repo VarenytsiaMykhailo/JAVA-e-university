@@ -5,17 +5,18 @@
 <head>
     <meta charset="UTF-8"/>
     <title>e-university</title>
+    <link rel="stylesheet" type="text/css" href="css/MainPage.css">
 </head>
 
 <body>
 <form action="<c:url value="/main" />" method="POST">
-    <table> <%-- Таблица --%>
+    <table id="selectGroupTable"> <%-- Таблица --%>
         <tr> <%-- Строка --%>
             <td> <%-- Столбец --%>
-                Год: <input type="text" name="selected_year" value="${mainDataForm.selectedYear}" size="5"/>
+                Год обучения:&nbsp; <input type="number" name="selected_year" id="year" min="1900"  value="${mainDataForm.selectedYear}"/>
             </td>
             <td>
-                Список групп:
+                Список групп:&nbsp;
                 <select name="selected_group_id"> <%-- Список групп --%>
                     <c:forEach var="group" items="${mainDataForm.allGroups}">
                         <c:choose>
@@ -39,11 +40,9 @@
         </tr>
     </table>
 
-    <p></p>
-    <b>Список студентов для выбранных параметров:</b>
-    <p></p>
+    <p><b>Список студентов для выбранных параметров:</b></p>
 
-    <table>
+    <table width="50%" cellspacing="0" cellpadding="5" border="1">
         <tr>
             <th></th>
             <th>Фамилия</th>
@@ -76,6 +75,8 @@
         </c:forEach>
     </table>
 
+    <p></p>
+
     <table> <%-- Кнопки управления --%>
         <tr>
             <td>
@@ -90,17 +91,15 @@
         </tr>
     </table>
 
-    <p></p>
-    <b>Переместить студентов в другую группу:</b>
-    <p></p>
+    <p><b>Переместить студентов в другую группу:</b></p>
 
-    <table>
+    <table id="moveGroupTable">
         <tr>
             <td>
-                Новый год обучения: <input type="text" name="new_year" value="${mainDataForm.selectedYear}" size="5"/>
+                Новый год обучения:&nbsp; <input type="number" name="new_year" min="1900" size="5" value="${mainDataForm.selectedYear}"/>
             </td>
             <td>
-                Новая группа:
+                Новая группа:&nbsp;
                 <select name="new_group_id"> <%-- Список групп --%>
                     <c:forEach var="group" items="${mainDataForm.allGroups}">
                         <option value="${group.groupId}">
