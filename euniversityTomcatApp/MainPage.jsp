@@ -16,7 +16,7 @@
             </td>
             <td>
                 Список групп:
-                <select name="selected_group_id"> <%-- Список --%>
+                <select name="selected_group_id"> <%-- Список групп --%>
                     <c:forEach var="group" items="${mainDataForm.allGroups}">
                         <c:choose>
                             <c:when test="${group.groupId == mainDataForm.selectedGroupId}">
@@ -101,7 +101,7 @@
             </td>
             <td>
                 Новая группа:
-                <select name="new_group_id"> <%-- Список --%>
+                <select name="new_group_id"> <%-- Список групп --%>
                     <c:forEach var="group" items="${mainDataForm.allGroups}">
                         <option value="${group.groupId}">
                             <c:out value="${group.groupName}"/>
