@@ -78,7 +78,7 @@ public class MainPageServlet extends HttpServlet {
             try {
                 if (req.getParameter("student_id") != null) {
                     Student student = new Student();
-                    student.setStudentId(Integer.parseInt(req.getParameter("student_Id")));
+                    student.setStudentId(Integer.parseInt(req.getParameter("student_id")));
                     ManagementSystemWeb.getInstance().deleteStudent(student);
                 }
             } catch (SQLException e) {
@@ -141,7 +141,7 @@ public class MainPageServlet extends HttpServlet {
 
         // Отладка:
         System.out.println();
-        System.out.println("prepared mainDataFormForDisplay:");
+        System.out.println(">>>>>>>>>>> Prepared mainDataFormForDisplay:");
         System.out.println(mainDataFormForDisplay);
         System.out.println("selected year = " + mainDataFormForDisplay.getSelectedYear());
         System.out.println("selected groupId = " + mainDataFormForDisplay.getSelectedGroupId());
