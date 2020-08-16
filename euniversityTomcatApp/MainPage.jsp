@@ -5,15 +5,40 @@
 <head>
     <meta charset="UTF-8"/>
     <title>e-university</title>
-    <link rel="stylesheet" type="text/css" href="css/MainPage.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.17.1/dist/sweetalert2.min.js"></script> <%-- Скрипты всплывающего окна. Используеюся библиотека sweetalert2 --%>
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@9.17.1/dist/sweetalert2.min.css'> <%-- Стили всплывающего окна --%>
+    <link rel="stylesheet" type="text/css" href="css/MainPage.css"> <%-- Стили страницы --%>
 </head>
 
 <body>
+
+<c:if test="${successfulMoveGroupNotification}"> <%-- Скрипт всплывающего окна об успешном переводе студентов --%>
+    <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: false,
+            onOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+
+        Toast.fire({
+            icon: 'success',
+            title: 'Студенты были успешно переведены в новую группу'
+        })
+    </script>
+</c:if>
+
 <form action="<c:url value="/main" />" method="POST">
     <table id="selectGroupTable"> <%-- Таблица --%>
         <tr> <%-- Строка --%>
             <td> <%-- Столбец --%>
-                Год обучения:&nbsp; <input type="number" name="selected_year" id="year" min="1900"  value="${mainDataForm.selectedYear}"/>
+                Год обучения:&nbsp; <input type="number" name="selected_year" id="year" min="1900"
+                                           value="${mainDataForm.selectedYear}"/>
             </td>
             <td>
                 Список групп:&nbsp;
@@ -96,7 +121,8 @@
     <table id="moveGroupTable">
         <tr>
             <td>
-                Новый год обучения:&nbsp; <input type="number" name="new_year" min="1900" size="5" value="${mainDataForm.selectedYear}"/>
+                Новый год обучения:&nbsp; <input type="number" name="new_year" min="1900" size="5"
+                                                 value="${mainDataForm.selectedYear}"/>
             </td>
             <td>
                 Новая группа:&nbsp;

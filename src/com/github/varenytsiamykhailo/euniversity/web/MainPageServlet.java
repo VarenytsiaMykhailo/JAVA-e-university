@@ -105,6 +105,10 @@ public class MainPageServlet extends HttpServlet {
                 // Устанавливаем новые значения. Нужно для показа группы, в которую мы переместили студентов
                 groupIdString = newGroupIdString;
                 yearString = newYearString;
+
+                // Посылаем в jsp инфу об успешном добавлении группы. Нужно для вывода всплывающего окна об успешности.
+                req.setAttribute("successfulMoveGroupNotification", Boolean.TRUE);
+
             } catch (SQLException e) {
                 throw new IOException(e.getMessage());
             }
