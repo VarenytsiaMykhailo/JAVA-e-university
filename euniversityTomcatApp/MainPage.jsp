@@ -6,8 +6,8 @@
 <head>
     <meta charset="UTF-8"/>
     <title>e-university</title>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.17.1/dist/sweetalert2.min.js"></script> <%-- Скрипты всплывающего окна. Используеюся библиотека sweetalert2 --%>
-    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@9.17.1/dist/sweetalert2.min.css'> <%-- Стили всплывающего окна --%>
+    <script src="scripts/sweetalert2.min.js"></script> <%-- Скрипты всплывающего окна. Используеюся библиотека sweetalert2 --%>
+    <link rel="stylesheet" type="text/css" href="css/sweetalert2.min.css"> <%-- Стили всплывающего окна --%>
     <link rel="stylesheet" type="text/css" href="css/MainPage.css"> <%-- Стили страницы --%>
 </head>
 
