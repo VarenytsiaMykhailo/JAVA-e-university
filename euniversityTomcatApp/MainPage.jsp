@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
 <head>
@@ -91,7 +92,7 @@
                     <c:out value="${student.patronymic}"/>
                 </td>
                 <td>
-                    <c:out value="${student.dateOfBirth}"/>
+                    <fmt:formatDate value="${student.dateOfBirth}" pattern="dd-MM-yyyy"/>
                 </td>
                 <td>
                     <c:out value="${student.sex}"/>
