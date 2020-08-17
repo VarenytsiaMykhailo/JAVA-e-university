@@ -97,7 +97,7 @@
         <tr>
             <td>Год обучения:</td>
             <td>
-                <input type="number" name="education_year" min="1900" size="5" value="${studentDataForm.educationYear}">
+                <input type="number" name="education_year" min="1900" value="${studentDataForm.educationYear}">
             </td>
         </tr>
     </table>

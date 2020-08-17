@@ -14,9 +14,19 @@
         <servlet-class>com.github.varenytsiamykhailo.euniversity.web.MainPageServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>StudentEditPageServlet</servlet-name>
+        <servlet-class>com.github.varenytsiamykhailo.euniversity.web.StudentEditPageServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>MainPageServlet</servlet-name>
         <url-pattern>/main</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>StudentEditPageServlet</servlet-name>
+        <url-pattern>/student-edit</url-pattern>
     </servlet-mapping>
 
     <resource-ref>
