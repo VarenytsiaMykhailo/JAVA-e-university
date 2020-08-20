@@ -34,6 +34,21 @@
     </script>
 </c:if>
 
+<div id="userBar">
+    <hr>
+    <c:if test="${role eq 'ADMIN'}">
+        <h1>ADMIN</h1>
+    </c:if>
+    <c:if test="${role eq 'USER'}">
+        <h1>USER</h1>
+    </c:if>
+
+    <a href="<c:url value='/logout' />">Logout</a>
+
+    <hr>
+</div>
+
+
 <form action="<c:url value="/main" />" method="POST">
     <table id="selectGroupTable"> <%-- Таблица --%>
         <tr> <%-- Строка --%>

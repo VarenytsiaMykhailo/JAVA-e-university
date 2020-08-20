@@ -42,7 +42,7 @@ public class AuthFilter implements Filter {
         System.out.println("URI = " + req.getRequestURI());
         System.out.println("URL = " + req.getRequestURL());
 
-        if (req.getRequestURI().equals(req.getServletContext().getContextPath() + "/logout")) {
+        if (req.getRequestURI().equals(req.getServletContext().getContextPath() + "/logout")) { // Если нажата кнопка logout
             System.out.println("Redirecting to LogoutServlet");
             // res.sendRedirect(req.getServletContext().getContextPath() + "/logout");
             filterChain.doFilter(req, res);
@@ -56,7 +56,7 @@ public class AuthFilter implements Filter {
             final User.Role role = (User.Role) session.getAttribute("role");
             System.out.println("Role = " + role.toString());
 
-            giveAccessToContent(req, res, role);
+            giveAccessToContent(req, res, filterChain, role);
         } else if (nonNull(login) && nonNull(password) && userDAO.get().userIsExist(login, password)) { // Если пользователь проходит проверку впервые (и он ввел корректные данные)
             System.out.println("Enter to the second validator block");
 
@@ -67,21 +67,27 @@ public class AuthFilter implements Filter {
             req.getSession().setAttribute("login", login);
             req.getSession().setAttribute("role", role);
 
-            giveAccessToContent(req, res, role);
+            giveAccessToContent(req, res, filterChain, role);
         } else { // Если пользователь ввел некорректные данные
             System.out.println("Enter to the third validator block");
 
-            giveAccessToContent(req, res, User.Role.UNKNOWN);
-        }
+            if (nonNull(login) || nonNull(password)) {
+                req.setAttribute("incorrectLoginPassword", true);
+            }
 
-        System.out.println("_________________________>");
+            giveAccessToContent(req, res, filterChain, User.Role.UNKNOWN);
+        }
     }
 
-    private void giveAccessToContent(final HttpServletRequest req, final HttpServletResponse res, final User.Role role) throws ServletException, IOException {
+    private void giveAccessToContent(final HttpServletRequest req, final HttpServletResponse res, FilterChain filterChain, final User.Role role) throws ServletException, IOException {
         if (role.equals(User.Role.USER)) {
-            req.getRequestDispatcher("/UserMenu.jsp").forward(req, res);
+            filterChain.doFilter(req, res);
+            req.setAttribute("role", "USER");
+            req.getRequestDispatcher("/main").forward(req, res);
         } else if (role.equals(User.Role.ADMIN)) {
-            req.getRequestDispatcher("/AdminMenu.jsp").forward(req, res);
+            filterChain.doFilter(req, res);
+            req.setAttribute("role", "ADMIN");
+            req.getRequestDispatcher("/main").forward(req, res);
         } else {
             req.getRequestDispatcher("/LoginPage.jsp").forward(req, res); // Если роль UNKNOWN т.е. человек не прошел аутентификацию
         }
