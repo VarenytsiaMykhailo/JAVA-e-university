@@ -42,6 +42,12 @@ public class AuthFilter implements Filter {
         System.out.println("URI = " + req.getRequestURI());
         System.out.println("URL = " + req.getRequestURL());
 
+        if (req.getRequestURI().equals(req.getServletContext().getContextPath() + "/RegistrationPage.jsp")) { // Если нажата кнопка Регистрации
+            System.out.println("Redirecting to RegistrationPage.jsp");
+            filterChain.doFilter(req, res);
+            return;
+        }
+
         if (req.getRequestURI().equals(req.getServletContext().getContextPath() + "/logout")) { // Если нажата кнопка logout
             System.out.println("Redirecting to LogoutServlet");
             // res.sendRedirect(req.getServletContext().getContextPath() + "/logout");
@@ -54,14 +60,12 @@ public class AuthFilter implements Filter {
             System.out.println("Enter to the first validator block");
 
             final User.Role role = (User.Role) session.getAttribute("role");
-            System.out.println("Role = " + role.toString());
 
             giveAccessToContent(req, res, filterChain, role);
         } else if (nonNull(login) && nonNull(password) && userDAO.get().userIsExist(login, password)) { // Если пользователь проходит проверку впервые (и он ввел корректные данные)
             System.out.println("Enter to the second validator block");
 
             final User.Role role = userDAO.get().getUserRoleByLoginPassword(login, password);
-            System.out.println("Role = " + role.toString());
 
             req.getSession().setAttribute("password", password);
             req.getSession().setAttribute("login", login);
@@ -71,8 +75,8 @@ public class AuthFilter implements Filter {
         } else { // Если пользователь ввел некорректные данные
             System.out.println("Enter to the third validator block");
 
-            if (nonNull(login) || nonNull(password)) {
-                req.setAttribute("incorrectLoginPassword", true);
+            if (nonNull(login) || nonNull(password)) {  // Логика вывода сообщения об неправильно введенных данных
+                req.setAttribute("incorrectLoginPassword", Boolean.TRUE);
             }
 
             giveAccessToContent(req, res, filterChain, User.Role.UNKNOWN);

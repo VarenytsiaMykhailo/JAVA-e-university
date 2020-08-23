@@ -36,15 +36,38 @@
 
 <div id="userBar">
     <hr>
+
     <c:if test="${role eq 'ADMIN'}">
-        <h1>ADMIN</h1>
+        <h3>Администратор</h3>
+        <table class="userBarOptionsTable">
+            <tr>
+                <td><b>Опции:</b></td>
+                <td>
+                    <input type="submit" value="Регистрация нового пользователя" onclick="window.location='RegistrationPage.jsp';"/>
+                </td>
+            </tr>
+        </table>
     </c:if>
+
     <c:if test="${role eq 'USER'}">
-        <h1>USER</h1>
+        <h3>Пользователь</h3>
+        <table class="userBarOptionsTable">
+            <tr>
+                <td><b>Опции:</b></td>
+                <td>
+                    Дополнительные привилегии доступны у администратора
+                </td>
+            </tr>
+        </table>
     </c:if>
 
-    <a href="<c:url value='/logout' />">Logout</a>
-
+    <table>
+        <tr>
+            <td>
+                <a href="<c:url value='/logout' />">Выйти</a>
+            </td>
+        </tr>
+    </table>
     <hr>
 </div>
 
