@@ -19,7 +19,7 @@
         </c:otherwise>
     </c:choose>
 </p>
-<form action="<c:url value="/student-edit" />" method="POST">
+<form action="<c:url value="/student-edit" />" method="POST"> <%-- Вызов сервелета StudentEditPageServlet --%>
     <input type="hidden" name="student_id"
            value="${studentDataForm.studentId}"> <%-- Для передачи student_id из studentDataForm в сервлет StudentEditPageServlet --%>
 

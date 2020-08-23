@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
 <head>
@@ -12,25 +13,25 @@
     <form action="" method="POST">
         <h1>Вход в систему e-university</h1>
 
-        <%--
-        <c:if test="${incorrectLoginPassword}">
-            Неправильный логин или пароль
-        </c:if>
-        --%>
-
         <p>
             <strong>Логин:</strong>
             <br>
-            <input type="text" name="login" maxlength="30" size="40" placeholder="введите логин" required>
+            <input type="text" name="login" maxlength="30" size="40" placeholder="введите логин" required/>
         </p>
         <p>
             <strong>Пароль:</strong>
             <br>
-            <input type="password" name="password" maxlength="30" size="40" placeholder="введите пароль" required>
+            <input type="password" name="password" maxlength="30" size="40" placeholder="введите пароль" required/>
         </p>
         <p>
-            <input type="submit" class="submitButton" value="Войти">
+            <c:if test="${incorrectLoginPassword}">
+                Вы ввели неверный логин или пароль.
+            </c:if>
         </p>
+        <p>
+            <input type="submit" value="Войти"/>
+        </p>
+
     </form>
 </div>
 </body>
