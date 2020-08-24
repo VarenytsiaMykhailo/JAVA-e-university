@@ -107,7 +107,7 @@
                 <input type="submit" name="apply" value="Выполнить">
             </td>
             <td>
-                <input type="submit" name="cancel" value="Отмена">
+                <input type="button" name="cancel" onclick="history.back();" value="Отмена"> <%-- history.back() - возрващает на предыдущую страницу --%>
             </td>
         </tr>
     </table>
