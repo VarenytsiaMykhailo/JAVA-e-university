@@ -3,7 +3,6 @@
 
 <html>
 <head>
-    <meta charset="UTF-8"/>
     <title>e-university</title>
 </head>
 

@@ -4,11 +4,10 @@
 
 <html>
 <head>
-    <meta charset="UTF-8"/>
     <title>e-university</title>
-    <script src="scripts/sweetalert2.min.js"></script> <%-- Скрипты всплывающего окна. Используеюся библиотека sweetalert2 --%>
-    <link rel="stylesheet" type="text/css" href="css/sweetalert2.min.css"> <%-- Стили всплывающего окна --%>
-    <link rel="stylesheet" type="text/css" href="css/MainPage.css"> <%-- Стили страницы --%>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/static/scripts/sweetalert2.min.js"></script> <%-- Скрипты всплывающего окна. Используеюся библиотека sweetalert2 --%>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/sweetalert2.min.css"> <%-- Стили всплывающего окна --%>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/MainPage.css"> <%-- Стили страницы --%>
 </head>
 
 <body>

@@ -1,3 +1,5 @@
+@charset "utf-8";
+
 body {
     padding-top: 3%;
     padding-left: 7%;
@@ -26,3 +28,7 @@ td {
     padding-bottom: 1ex;
 }
 
+#selectGroupTable, #moveGroupTable {
+    font-size: large;
+    font-weight: bold;
+}

@@ -3,9 +3,8 @@
 
 <html>
 <head>
-    <meta charset="UTF-8"/>
     <title>e-university</title>
-    <link rel="stylesheet" type="text/css" href="css/StudentEditPage.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/StudentEditPage.css">
 </head>
 
 <body>
