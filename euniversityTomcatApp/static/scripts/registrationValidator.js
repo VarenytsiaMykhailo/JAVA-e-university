@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordRepeat = form.querySelector("#passwordRepeatInput");
 
     // Регулярные выражения для валидации
-    const regExpLogin = /^[a-zA-Z][a-zA-Z0-9-_\.]{3,15}$/; // минимум 4 символа, максимум 16; допускаются строчные и заглавные латинские буквы и цифры; первый символ обязательно буква
+    const regExpLogin = /^[a-zA-Z][a-zA-Z0-9-_\.]{3,21}$/; // минимум 4 символа, максимум 20; допускаются строчные и заглавные латинские буквы и цифры; первый символ обязательно буква
     const regExpEmail = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i; // минимум 2 символа после "@"; минимум 2 символа после ".";
     const regExpPassword = /^[0-9a-zA-Z]{6,}$/; // минимум 6 символов; допускаются строчные и заглавные латинские буквы и цифры;
 
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 Toast.fire({ // Всплывающая подсказка
                     icon: 'info',
                     html: '<p align="center"><h5>Логин может содержать:</h5></p>' +
-                        '<p align="left" style="margin-left: 3ex">- От 4 до 16 символов</p>' +
+                        '<p align="left" style="margin-left: 3ex">- От 4 до 20 символов</p>' +
                         '<p align="left" style="margin-left: 3ex">- Строчные или заглавные латинские буквы: a-z, A-Z</p>' +
                         '<p align="left" style="margin-left: 3ex">- Цифры (первый символ - обязательно буква)</p>',
                 })
