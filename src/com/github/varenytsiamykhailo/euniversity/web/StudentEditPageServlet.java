@@ -32,6 +32,8 @@ public class StudentEditPageServlet extends HttpServlet {
 
         req.setCharacterEncoding("UTF-8"); // Установка кодировки для принятия параметров (запроса)
 
+        System.out.println("Enter to StudentEditPageServlet");
+
         String studentId = req.getParameter("student_id");
 
         // Если пользователь нажал кнопку apply (выполнить) - обновляем данные
@@ -80,9 +82,10 @@ public class StudentEditPageServlet extends HttpServlet {
         } catch (SQLException e) {
             throw new IOException(e.getMessage());
         }
-
+        System.out.println("Redirect from StudentEditPageServelet to /MainPage.jsp");
         req.setAttribute("mainDataForm", mainDataFormForDisplay);
         getServletContext().getRequestDispatcher("/MainPage.jsp").forward(req, resp);
+        //getServletContext().getRequestDispatcher("/MainPageServlet").forward(req, resp);
     }
 
     private void insertStudent(HttpServletRequest req) throws SQLException, ParseException {

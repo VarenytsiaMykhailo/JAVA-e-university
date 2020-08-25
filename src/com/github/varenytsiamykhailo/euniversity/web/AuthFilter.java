@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static java.util.Objects.nonNull;
 
 /**
- * Acidification filter.
+ * Authentication filter.
  */
 public class AuthFilter implements Filter {
 
@@ -30,30 +30,17 @@ public class AuthFilter implements Filter {
         final String login = req.getParameter("login");
         final String password = req.getParameter("password");
 
-        System.out.println("<_________________________");
+        System.out.println("_________________________");
+        System.out.println("Enter to Filter");
         System.out.println("LOGIN = " + login);
         System.out.println("PASSWORD = " + password);
+        System.out.println("URI = " + req.getRequestURI());
+        System.out.println("URL = " + req.getRequestURL());
 
         @SuppressWarnings("unchecked")
         final AtomicReference<UserDAO> userDAO = (AtomicReference<UserDAO>) req.getServletContext().getAttribute("userDAO");
 
         final HttpSession session = req.getSession();
-
-        System.out.println("URI = " + req.getRequestURI());
-        System.out.println("URL = " + req.getRequestURL());
-
-        if (req.getRequestURI().equals(req.getServletContext().getContextPath() + "/RegistrationPage.jsp")) { // Если нажата кнопка Регистрации
-            System.out.println("Redirecting to RegistrationPage.jsp");
-            filterChain.doFilter(req, res);
-            return;
-        }
-
-        if (req.getRequestURI().equals(req.getServletContext().getContextPath() + "/logout")) { // Если нажата кнопка logout
-            System.out.println("Redirecting to LogoutServlet");
-            // res.sendRedirect(req.getServletContext().getContextPath() + "/logout");
-            filterChain.doFilter(req, res);
-            return;
-        }
 
 
         if (nonNull(session) && nonNull(session.getAttribute("login")) && nonNull(session.getAttribute("password"))) { // Если пользователь уже вводил логин и пароль ранее (т.е. через куки пришла инфа с его активной сессией и введенными ранее данными), то мы его пропускаем
@@ -85,15 +72,33 @@ public class AuthFilter implements Filter {
 
     private void giveAccessToContent(final HttpServletRequest req, final HttpServletResponse res, FilterChain filterChain, final User.Role role) throws ServletException, IOException {
         if (role.equals(User.Role.USER)) {
-            filterChain.doFilter(req, res);
-            req.setAttribute("role", "USER");
-            req.getRequestDispatcher("/main").forward(req, res);
+            System.out.println("giveAccessToContent USER");
+            req.setAttribute("role", "USER"); // Добавляем в запрос информацию об роли. Нужно для доп. логики в других сервелетах
+
+            if (nonNull(req.getParameter("is_login_action"))) { // Если пользователь попал фильтр со страницы входа, перенаправляем его на главную страницу
+                System.out.println("isLoginAction = " + req.getParameter("is_login_action"));
+                req.getRequestDispatcher("/main").forward(req, res);
+                return;
+            }
+
+            filterChain.doFilter(req, res); // Передаем управление следующим фильтрам/сервлетам в цепочке
+
         } else if (role.equals(User.Role.ADMIN)) {
-            filterChain.doFilter(req, res);
-            req.setAttribute("role", "ADMIN");
-            req.getRequestDispatcher("/main").forward(req, res);
+            System.out.println("giveAccessToContent ADMIN");
+            req.setAttribute("role", "ADMIN"); // Добавляем в запрос информацию об роли. Нужно для доп. логики в других сервелетах
+
+            if (nonNull(req.getParameter("is_login_action"))) { // Если пользователь попал фильтр со страницы входа, перенаправляем его на главную страницу
+                System.out.println("isLoginAction = " + req.getParameter("is_login_action"));
+                req.getRequestDispatcher("/main").forward(req, res);
+                return;
+            }
+
+            filterChain.doFilter(req, res); // Передаем управление следующим фильтрам/сервлетам в цепочке
+
         } else {
-            req.getRequestDispatcher("/LoginPage.jsp").forward(req, res); // Если роль UNKNOWN т.е. человек не прошел аутентификацию
+            System.out.println("giveAccessToContent UNKNOWN");
+
+            req.getRequestDispatcher("/LoginPage.jsp").forward(req, res); // Если роль UNKNOWN т.е. человек не прошел аутентификацию - отправляем его на страницу входа
         }
     }
 

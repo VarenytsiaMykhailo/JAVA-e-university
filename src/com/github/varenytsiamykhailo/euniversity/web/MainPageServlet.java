@@ -32,6 +32,8 @@ public class MainPageServlet extends HttpServlet {
 
         req.setCharacterEncoding("UTF-8"); // Установка кодировки для принятия параметров (запроса)
 
+        System.out.println("Enter to MainPageServlet");
+
         if (req.getParameter("insert_student") != null) {
             // Вызов другой формы, которая перенеаправляет сервлет на другую JSP для ввода данных о новом студенте
             try {
@@ -44,6 +46,7 @@ public class MainPageServlet extends HttpServlet {
                 studentDataFormForDisplay.initFromStudent(student);
                 studentDataFormForDisplay.setAllGroups(allGroups);
                 req.setAttribute("studentDataForm", studentDataFormForDisplay);
+                System.out.println("Redirect from MainPageServlet to /StudentEditPage.jsp");
                 getServletContext().getRequestDispatcher("/StudentEditPage.jsp").forward(req, resp);
 
                 return;
@@ -64,6 +67,7 @@ public class MainPageServlet extends HttpServlet {
                     studentDataFormForDisplay.initFromStudent(student);
                     studentDataFormForDisplay.setAllGroups(allGroups);
                     req.setAttribute("studentDataForm", studentDataFormForDisplay);
+                    System.out.println("Redirect from MainPageServlet to /StudentEditPage.jsp");
                     getServletContext().getRequestDispatcher("/StudentEditPage.jsp").forward(req, resp);
 
                     return;
@@ -154,6 +158,7 @@ public class MainPageServlet extends HttpServlet {
         System.out.println();
 
         req.setAttribute("mainDataForm", mainDataFormForDisplay);
+        System.out.println("Redirect from MainPageServlet to /MainPage.jsp");
         getServletContext().getRequestDispatcher("/MainPage.jsp").forward(req, resp);
     }
 }

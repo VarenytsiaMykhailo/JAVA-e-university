@@ -5,9 +5,10 @@
 <html>
 <head>
     <title>e-university</title>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/static/scripts/sweetalert2.min.js"></script> <%-- Скрипты всплывающего окна. Используеюся библиотека sweetalert2 --%>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/sweetalert2.min.css"> <%-- Стили всплывающего окна --%>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/MainPage.css"> <%-- Стили страницы --%>
+    <%-- Скрипты всплывающего окна. Используеюся библиотека sweetalert2 --%>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/static/scripts/sweetalert2.min.js"></script>
+    <%-- Стили страницы --%>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/MainPage.css">
 </head>
 
 <body>
@@ -42,7 +43,8 @@
             <tr>
                 <td><b>Опции:</b></td>
                 <td>
-                    <input type="submit" value="Регистрация нового пользователя" onclick="window.location='RegistrationPage.jsp';"/>
+                    <input type="submit" value="Регистрация нового пользователя"
+                           onclick="window.location='RegistrationPage.jsp';"/>
                 </td>
             </tr>
         </table>
@@ -179,5 +181,8 @@
     </table>
 
 </form>
+<%-- Скрипты выгодно подключать в конце тега body для более быстрой загрузки страницы --%>
+<%-- Стили всплывающего окна. Скрипты подключаются перед /body --%>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/sweetalert2.min.css">
 </body>
 </html>

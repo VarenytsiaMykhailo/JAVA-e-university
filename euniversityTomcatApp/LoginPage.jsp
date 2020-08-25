@@ -9,8 +9,11 @@
 <body>
 
 <div id="loginForm">
-    <form action="" method="POST">
+    <form action="" method="POST"> <%-- Запрос перехватит фильтр и если авторизация выполнится, он переотправит на /main сервелет MainPage --%>
         <h1>Вход в систему e-university</h1>
+
+        <input type="hidden" name="is_login_action"
+               value="${true}"> <%-- Для передачи student_id из studentDataForm в сервлет StudentEditPageServlet --%>
 
         <p>
             <strong>Логин:</strong>
