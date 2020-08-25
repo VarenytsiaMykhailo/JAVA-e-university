@@ -17,6 +17,11 @@
     <request-character-encoding>UTF-8</request-character-encoding>
     <response-character-encoding>UTF-8</response-character-encoding>
 
+    <!-- index.jsp автоматически редиректит на /main -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
     <!--
     default фильтр нужн для того, чтобы решить проблему подключения css, js и других ресурсов.
     Кажется AuthFilter (отвечающий за авторизацию пользователей),
@@ -69,6 +74,11 @@
     </servlet>
 
     <servlet>
+        <servlet-name>RegistrationPageServlet</servlet-name>
+        <servlet-class>com.github.varenytsiamykhailo.euniversity.web.RegistrationPageServlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>StudentEditPageServlet</servlet-name>
         <servlet-class>com.github.varenytsiamykhailo.euniversity.web.StudentEditPageServlet</servlet-class>
     </servlet>
@@ -81,6 +91,11 @@
     <servlet-mapping>
         <servlet-name>MainPageServlet</servlet-name>
         <url-pattern>/main</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>RegistrationPageServlet</servlet-name>
+        <url-pattern>/registration</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

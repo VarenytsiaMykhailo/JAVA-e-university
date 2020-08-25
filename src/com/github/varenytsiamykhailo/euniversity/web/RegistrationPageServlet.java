@@ -20,7 +20,10 @@ public class RegistrationPageServlet extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
         req.setCharacterEncoding("UTF-8"); // Установка кодировки для принятия параметров (запроса)
+
+        System.out.println("Enter to RegistrationPageServlet");
 
         final String login = req.getParameter("login");
         final String loginRepeat = req.getParameter("login_repeat");

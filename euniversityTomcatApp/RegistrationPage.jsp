@@ -4,97 +4,112 @@
 <html>
 <head>
     <title>e-university</title>
+    <!-- Настройка viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Подключаем Bootstrap CSS -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bootstrap.min.css">
+    <!-- Подключаем стили заголовка -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/headerStyle.css">
+    <%-- Стили всплывающего окна. Скрипты подключаются перед /body --%>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/sweetalert2.min.css">
 </head>
 
 <body>
 
-<div id="registrationForm">
-    <form action="<c:url value="/registration" />" method="POST"> <%-- Вызов сервелета RegistrationPageServlet --%>
+<div class="container">
 
-        <%-- Секция логина --%>
-        <table class="registrationFormTable">
-            <tr>
-                <td>Введите логин:</td>
-                <td>
-                    <input type="text" name="login" placeholder="введите логин" required/>
-                </td>
-            </tr>
-            <tr>
-                <td>Повторите логин:</td>
-                <td>
-                    <input type="text" name="login_repeat" placeholder="повторите логин" required/>
-                </td>
-            </tr>
-        </table>
+    <!-- Заголовок -->
+    <div class="row justify-content-center">
+        <div class="header-h1 header-h1-left" style="margin-top: 4ex">
+            <h1>Регистрация пользователя</h1>
+        </div>
+    </div>
 
-        <p></p>
+    <div class="row justify-content-center" style="margin-top: 6ex">
+        <form action="<c:url value="/registration"/> "
+              class="col-6 row justify-content-center" method="POST"> <%-- Вызов сервелета RegistrationPageServlet --%>
 
-        <%-- Секция емаила --%>
-        <table class="registrationFormTable">
-            <tr>
-                <td>Введите e-mail:</td>
-                <td>
-                    <input type="text" name="email" placeholder="введите e-mail" required/>
-                </td>
-            </tr>
-            <tr>
-                <td>Повторите e-mail:</td>
-                <td>
-                    <input type="text" name="email_repeat" placeholder="повторите e-mail" required/>
-                </td>
-            </tr>
-        </table>
+            <%-- Секция логина --%>
+            <div class="form-group col-6">
+                <label for="loginInput">Введите логин:</label>
+                <input type="text" name="login" class="form-control" id="loginInput" aria-describedby="emailHelp" />
+                <div class="errors" style="height: 20px; color: red"></div>
+            </div>
+            <%-- Секция повторения логина --%>
+            <div class="form-group col-6">
+                <label for="loginRepeatInput">Повторите логин:</label>
+                <input type="text" name="login_repeat" class="form-control" id="loginRepeatInput"
+                       aria-describedby="emailHelp" />
+                <div class="errors" style="height: 20px; color: red"></div>
+            </div>
 
-        <p></p>
 
-        <table class="registrationFormTable">  <%-- Секция пароля --%>
-            <tr>
-                <td>Введите пароль:</td>
-                <td>
-                    <input type="text" name="password" placeholder="введите пароль" required/>
-                </td>
-            </tr>
-            <tr>
-                <td>Повторите пароль:</td>
-                <td>
-                    <input type="text" name="password_repeat" placeholder="повторите пароль" required/>
-                </td>
-            </tr>
-        </table>
+            <%-- Секция емаила --%>
+            <div class="clearfix"></div> <%-- Скрытый блок. Следующий начнется с новой строки --%>
+            <div class="form-group col-6">
+                <label for="emailInput">Введите email:</label>
+                <input type="email" name="email" class="form-control" id="emailInput" aria-describedby="emailHelp" />
+                <div class="errors" style="height: 20px; color: red"></div>
+            </div>
+            <%-- Секция повторения емаила --%>
+            <div class="form-group col-6">
+                <label for="emailRepeatInput">Повторите email:</label>
+                <input type="email" name="email_repeat" class="form-control" id="emailRepeatInput"
+                       aria-describedby="emailHelp" />
+                <div class="errors" style="height: 20px; color: red"></div>
+            </div>
 
-        <p></p>
 
-        <table class="registrationFormTable">  <%-- Секция типа учетной записи --%>
-            <tr>
-                <td>Тип учетной записи:</td>
-                <td>
-                    <select name="role"> <%-- Список доступных типов учетной записи--%>
-                        <option value="user" selected>
-                            <c:out value="пользователь"/>
-                        </option>
-                        <option value="admin">
-                            <c:out value="администратор"/>
-                        </option>
-                    </select>
-                </td>
-            </tr>
-        </table>
+            <%-- Секция пароля --%>
+            <div class="clearfix"></div> <%-- Скрытый блок. Следующий начнется с новой строки --%>
+            <div class="form-group col-6">
+                <label for="passwordInput">Введите пароль:</label>
+                <input type="password" name="password" class="form-control formPassword" id="passwordInput" />
+                <div class="errors" style="height: 20px; color: red"></div>
+            </div>
+            <%-- Секция повторения пароля --%>
+            <div class="form-group col-6">
+                <label for="passwordRepeatInput">Повторите пароль:</label>
+                <input type="password" name="password_repeat" class="form-control formPasswordRepeat"
+                       id="passwordRepeatInput" />
+                <div class="errors" style="height: 20px; color: red"></div>
+            </div>
 
-        <p></p>
 
-        <table class="registrationFormTable">
-            <tr>
-                <td>
-                    <input type="submit" value="Зарегистрировать">
-                </td>
-                <td>
-                    <input type="button" name="cancel" onclick="history.back();" value="Отмена"> <%-- history.back() - возрващает на предыдущую страницу --%>
-                </td>
-            </tr>
-        </table>
+            <%-- Секция выбора типа учетной записи --%>
+            <div class="clearfix"></div> <%-- Скрытый блок. Следующий начнется с новой строки --%>
+            <div class="form-group col-12 row justify-content-center" style="margin-bottom: 6ex">
+                <label for="roleSelect" class="col-7">Укажите тип учетной записи:</label>
+                <select name="role" class="form-control col-7"
+                        id="roleSelect"> <%-- Список доступных типов учетной записи --%>
+                    <option value="user" selected>
+                        <c:out value="пользователь"/>
+                    </option>
+                    <option value="admin">
+                        <c:out value="администратор"/>
+                    </option>
+                </select>
+                <div class="errors" style="height: 20px; color: red"></div>
+            </div>
 
-    </form>
+            <div class="clearfix"></div> <%-- Скрытый блок. Следующий начнется с новой строки --%>
+            <div class="form-group col-6 row justify-content-center">
+                <button type="submit" class="btn btn-primary col-10">Зарегистрировать</button>
+            </div>
+            <div class="form-group col-6 row justify-content-center">
+                <button type="button" name="cancel" class="btn btn-primary col-10" onclick="history.back();">Отмена
+                </button>
+                <%-- history.back() - возрващает на предыдущую страницу --%>
+            </div>
 
+        </form>
+    </div>
 </div>
+
+<%-- Скрипты выгодно подключать в конце тега body для более быстрой загрузки страницы --%>
+<%-- подключаем скрипт валидации введенных данных --%>
+<script src="${pageContext.request.contextPath}/static/scripts/registrationValidator.js"></script>
+<%-- Скрипты всплывающего окна. Используеюся библиотека sweetalert2 --%>
+<script type="text/javascript" src="${pageContext.request.contextPath}/static/scripts/sweetalert2.min.js"></script>
 </body>
 </html>
