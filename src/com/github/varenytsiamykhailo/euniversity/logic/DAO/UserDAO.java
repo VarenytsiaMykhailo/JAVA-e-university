@@ -13,10 +13,10 @@ public class UserDAO {
      */
     public User getUserById(int id) {
         User resultUser = new User();
-        resultUser.setId(-1);
+        resultUser.setUserId(-1);
 
         for (User user : usersStore) {
-            if (user.getId() == id) {
+            if (user.getUserId() == id) {
                 resultUser = user;
                 break;
             }
@@ -29,7 +29,7 @@ public class UserDAO {
      */
     public User getUserByLoginPassword(final String login, final String password) {
         User resultUser =new User();
-        resultUser.setId(-1);
+        resultUser.setUserId(-1);
 
         for (User user : usersStore) {
             if (user.getLogin().equals(login) && user.getPassword().equals(password)) {

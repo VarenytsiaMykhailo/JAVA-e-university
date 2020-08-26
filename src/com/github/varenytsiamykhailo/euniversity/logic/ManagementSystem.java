@@ -253,4 +253,29 @@ public abstract class ManagementSystem {
 
         return allStudents;
     }
+
+    /**
+     * Поиск user по переданному id. Если user с таким id нет - возвращается null
+     */
+    public User getUserById(int id) throws SQLException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.prepareStatement("SELECT user_id, login, password, email, role_id " +
+                    "FROM all_users " +
+                    "WHERE user_id = ?");
+            stmt.setInt(1, id);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new User(rs);
+            } else {
+                return null;
+            }
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (stmt != null)
+                stmt.close();
+        }
+    }
 }
