@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class StudentEditPageServlet extends HttpServlet {
 
@@ -33,6 +34,9 @@ public class StudentEditPageServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8"); // Установка кодировки для принятия параметров (запроса)
 
         System.out.println("Enter to StudentEditPageServlet");
+
+        @SuppressWarnings("unchecked")
+        final AtomicReference<ManagementSystemWebDAO> managementSystemWebDAO = (AtomicReference<ManagementSystemWebDAO>) req.getServletContext().getAttribute("managementSystemWebDAO");
 
         String studentId = req.getParameter("student_id");
 
@@ -66,7 +70,7 @@ public class StudentEditPageServlet extends HttpServlet {
 
         MainDataFormForDisplay mainDataFormForDisplay = new MainDataFormForDisplay();
         try {
-            ArrayList<Group> allGroups = ManagementSystemDAOWeb.getInstance().getAllGroups();
+            ArrayList<Group> allGroups = managementSystemWebDAO.get().getAllGroups();
             Group group = new Group();
             group.setGroupId(groupId);
             if (groupId == -1) { // Если группа не выбрала в списке
@@ -74,7 +78,7 @@ public class StudentEditPageServlet extends HttpServlet {
                 group = (Group) it.next();
             }
 
-            ArrayList<Student> studentsForSelectedGroup = ManagementSystemDAOWeb.getInstance().getStudentsFromGroup(group, year);
+            ArrayList<Student> studentsForSelectedGroup = managementSystemWebDAO.get().getStudentsFromGroup(group, year);
             mainDataFormForDisplay.setSelectedGroupId(group.getGroupId());
             mainDataFormForDisplay.setSelectedYear(year);
             mainDataFormForDisplay.setAllGroups(allGroups);
@@ -90,12 +94,18 @@ public class StudentEditPageServlet extends HttpServlet {
 
     private void insertStudent(HttpServletRequest req) throws SQLException, ParseException {
         Student preparedStudent = prepareStudent(req);
-        ManagementSystemDAOWeb.getInstance().insertStudent(preparedStudent);
+
+        @SuppressWarnings("unchecked")
+        final AtomicReference<ManagementSystemWebDAO> managementSystemWebDAO = (AtomicReference<ManagementSystemWebDAO>) req.getServletContext().getAttribute("managementSystemWebDAO");
+        managementSystemWebDAO.get().insertStudent(preparedStudent);
     }
 
     private void updateStudent(HttpServletRequest req) throws SQLException, ParseException {
         Student preparedStudent = prepareStudent(req);
-        ManagementSystemDAOWeb.getInstance().updateStudent(preparedStudent);
+
+        @SuppressWarnings("unchecked")
+        final AtomicReference<ManagementSystemWebDAO> managementSystemWebDAO = (AtomicReference<ManagementSystemWebDAO>) req.getServletContext().getAttribute("managementSystemWebDAO");
+        managementSystemWebDAO.get().updateStudent(preparedStudent);
     }
 
     private Student prepareStudent(HttpServletRequest req) throws ParseException {

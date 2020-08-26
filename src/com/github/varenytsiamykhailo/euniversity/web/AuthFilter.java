@@ -1,14 +1,13 @@
 package com.github.varenytsiamykhailo.euniversity.web;
 
-import com.github.varenytsiamykhailo.euniversity.logic.DAO.UserDAO;
 import com.github.varenytsiamykhailo.euniversity.logic.Role;
-import com.github.varenytsiamykhailo.euniversity.logic.User;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.nonNull;
@@ -39,7 +38,7 @@ public class AuthFilter implements Filter {
         System.out.println("URL = " + req.getRequestURL());
 
         @SuppressWarnings("unchecked")
-        final AtomicReference<UserDAO> userDAO = (AtomicReference<UserDAO>) req.getServletContext().getAttribute("userDAO");
+        final AtomicReference<ManagementSystemWebDAO> managementSystemWebDAO = (AtomicReference<ManagementSystemWebDAO>) req.getServletContext().getAttribute("managementSystemWebDAO");
 
         final HttpSession session = req.getSession();
 
@@ -50,24 +49,30 @@ public class AuthFilter implements Filter {
             final Role role = (Role) session.getAttribute("role");
 
             giveAccessToContent(req, res, filterChain, role);
-        } else if (nonNull(login) && nonNull(password) && userDAO.get().userIsExist(login, password)) { // Если пользователь проходит проверку впервые (и он ввел корректные данные)
-            System.out.println("Enter to the second validator block");
+        } else {
+            try {
+                if (nonNull(login) && nonNull(password) && managementSystemWebDAO.get().userIsExist(login, password)) { // Если пользователь проходит проверку впервые (и он ввел корректные данные)
+                    System.out.println("Enter to the second validator block");
 
-            final Role role = userDAO.get().getUserRoleByLoginPassword(login, password);
+                    final Role role = managementSystemWebDAO.get().getUserRoleByLoginPassword(login, password);
 
-            req.getSession().setAttribute("password", password);
-            req.getSession().setAttribute("login", login);
-            req.getSession().setAttribute("role", role);
+                    req.getSession().setAttribute("password", password);
+                    req.getSession().setAttribute("login", login);
+                    req.getSession().setAttribute("role", role);
 
-            giveAccessToContent(req, res, filterChain, role);
-        } else { // Если пользователь ввел некорректные данные
-            System.out.println("Enter to the third validator block");
+                    giveAccessToContent(req, res, filterChain, role);
+                } else { // Если пользователь ввел некорректные данные
+                    System.out.println("Enter to the third validator block");
 
-            if (nonNull(login) || nonNull(password)) {  // Логика вывода сообщения об неправильно введенных данных
-                req.setAttribute("incorrectLoginPassword", Boolean.TRUE);
+                    if (nonNull(login) || nonNull(password)) {  // Логика вывода сообщения об неправильно введенных данных
+                        req.setAttribute("incorrectLoginPassword", Boolean.TRUE);
+                    }
+
+                    giveAccessToContent(req, res, filterChain, Role.UNKNOWN);
+                }
+            } catch (SQLException e) {
+                throw new IOException(e.getMessage());
             }
-
-            giveAccessToContent(req, res, filterChain, Role.UNKNOWN);
         }
     }
 

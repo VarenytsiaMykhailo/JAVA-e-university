@@ -8,25 +8,25 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
-public class ManagementSystemDAOWeb extends ManagementSystemDAO {
+public class ManagementSystemWebDAO extends ManagementSystemDAO {
 
-    private static ManagementSystemDAOWeb instance; // статическая переменная для шаблона Singleton
+    private static ManagementSystemWebDAO instance; // статическая переменная для шаблона Singleton
 
     /**
      * закрытый конструктор.
      * Реализация шаблона Singleton.
      * Экземпляры класса нужно создавать с помощью статического метода getInstance
      */
-    private ManagementSystemDAOWeb() {
+    private ManagementSystemWebDAO() {
     }
 
     /**
      * статический метод для получения экземпляра класса (реализация шаблона Singleton)
      */
-    public static synchronized ManagementSystemDAOWeb getInstance() {
+    public static synchronized ManagementSystemWebDAO getInstance() {
         if (instance == null) { // если экземпляр класса не создан, то создать его (выделить память)
             try {
-                instance = new ManagementSystemDAOWeb();
+                instance = new ManagementSystemWebDAO();
                 Context context = new InitialContext();
                 DataSource dataSource = (DataSource) context.lookup("java:comp/env/jdbc/mysqlconnector");
                 instance.connection = dataSource.getConnection();

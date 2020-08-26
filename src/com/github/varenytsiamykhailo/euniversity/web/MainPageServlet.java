@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MainPageServlet extends HttpServlet {
 
@@ -34,6 +35,9 @@ public class MainPageServlet extends HttpServlet {
 
         System.out.println("Enter to MainPageServlet");
 
+        @SuppressWarnings("unchecked")
+        final AtomicReference<ManagementSystemWebDAO> managementSystemWebDAO = (AtomicReference<ManagementSystemWebDAO>) req.getServletContext().getAttribute("managementSystemWebDAO");
+
         if (req.getParameter("insert_student") != null) {
             // Вызов другой формы, которая перенеаправляет сервлет на другую JSP для ввода данных о новом студенте
             try {
@@ -41,7 +45,7 @@ public class MainPageServlet extends HttpServlet {
                 student.setStudentId(0);
                 student.setDateOfBirth(new Date());
                 student.setEducationYear(Calendar.getInstance().get(Calendar.YEAR)); // Дефолтное значение - текущий год
-                ArrayList<Group> allGroups = ManagementSystemDAOWeb.getInstance().getAllGroups();
+                ArrayList<Group> allGroups = managementSystemWebDAO.get().getAllGroups();
                 StudentDataFormForDisplay studentDataFormForDisplay = new StudentDataFormForDisplay();
                 studentDataFormForDisplay.initFromStudent(student);
                 studentDataFormForDisplay.setAllGroups(allGroups);
@@ -61,8 +65,8 @@ public class MainPageServlet extends HttpServlet {
             try {
                 if (req.getParameter("student_id") != null) {
                     int studentId = Integer.parseInt(req.getParameter("student_id"));
-                    Student student = ManagementSystemDAOWeb.getInstance().getStudentById(studentId);
-                    ArrayList<Group> allGroups = ManagementSystemDAOWeb.getInstance().getAllGroups();
+                    Student student = managementSystemWebDAO.get().getStudentById(studentId);
+                    ArrayList<Group> allGroups = managementSystemWebDAO.get().getAllGroups();
                     StudentDataFormForDisplay studentDataFormForDisplay = new StudentDataFormForDisplay();
                     studentDataFormForDisplay.initFromStudent(student);
                     studentDataFormForDisplay.setAllGroups(allGroups);
@@ -83,7 +87,7 @@ public class MainPageServlet extends HttpServlet {
                 if (req.getParameter("student_id") != null) {
                     Student student = new Student();
                     student.setStudentId(Integer.parseInt(req.getParameter("student_id")));
-                    ManagementSystemDAOWeb.getInstance().deleteStudent(student);
+                    managementSystemWebDAO.get().deleteStudent(student);
                 }
             } catch (SQLException e) {
                 throw new IOException(e.getMessage());
@@ -104,7 +108,7 @@ public class MainPageServlet extends HttpServlet {
                 Group newGroup = new Group();
                 newGroup.setGroupId(Integer.parseInt(newGroupIdString));
 
-                ManagementSystemDAOWeb.getInstance().moveStudentsFromGroupToNewGroup(group, Integer.parseInt(yearString), newGroup, Integer.parseInt(newYearString));
+                managementSystemWebDAO.get().moveStudentsFromGroupToNewGroup(group, Integer.parseInt(yearString), newGroup, Integer.parseInt(newYearString));
 
                 // Устанавливаем новые значения. Нужно для показа группы, в которую мы переместили студентов
                 groupIdString = newGroupIdString;
@@ -130,7 +134,7 @@ public class MainPageServlet extends HttpServlet {
 
         MainDataFormForDisplay mainDataFormForDisplay = new MainDataFormForDisplay();
         try {
-            ArrayList<Group> allGroups = ManagementSystemDAOWeb.getInstance().getAllGroups();
+            ArrayList<Group> allGroups = managementSystemWebDAO.get().getAllGroups();
             Group group = new Group();
             group.setGroupId(selectedGroupId);
             if (selectedGroupId == -1) { // Если группа не выбрала в списке
@@ -138,7 +142,7 @@ public class MainPageServlet extends HttpServlet {
                 group = (Group) it.next();
             }
 
-            ArrayList<Student> studentsForSelectedGroup = ManagementSystemDAOWeb.getInstance().getStudentsFromGroup(group, selectedYear);
+            ArrayList<Student> studentsForSelectedGroup = managementSystemWebDAO.get().getStudentsFromGroup(group, selectedYear);
             mainDataFormForDisplay.setSelectedGroupId(group.getGroupId());
             mainDataFormForDisplay.setSelectedYear(selectedYear);
             mainDataFormForDisplay.setAllGroups(allGroups);
