@@ -1,6 +1,7 @@
 package com.github.varenytsiamykhailo.euniversity.web;
 
 import com.github.varenytsiamykhailo.euniversity.logic.DAO.UserDAO;
+import com.github.varenytsiamykhailo.euniversity.logic.Role;
 import com.github.varenytsiamykhailo.euniversity.logic.User;
 
 import javax.servlet.*;
@@ -46,13 +47,13 @@ public class AuthFilter implements Filter {
         if (nonNull(session) && nonNull(session.getAttribute("login")) && nonNull(session.getAttribute("password"))) { // Если пользователь уже вводил логин и пароль ранее (т.е. через куки пришла инфа с его активной сессией и введенными ранее данными), то мы его пропускаем
             System.out.println("Enter to the first validator block");
 
-            final User.Role role = (User.Role) session.getAttribute("role");
+            final Role role = (Role) session.getAttribute("role");
 
             giveAccessToContent(req, res, filterChain, role);
         } else if (nonNull(login) && nonNull(password) && userDAO.get().userIsExist(login, password)) { // Если пользователь проходит проверку впервые (и он ввел корректные данные)
             System.out.println("Enter to the second validator block");
 
-            final User.Role role = userDAO.get().getUserRoleByLoginPassword(login, password);
+            final Role role = userDAO.get().getUserRoleByLoginPassword(login, password);
 
             req.getSession().setAttribute("password", password);
             req.getSession().setAttribute("login", login);
@@ -66,12 +67,12 @@ public class AuthFilter implements Filter {
                 req.setAttribute("incorrectLoginPassword", Boolean.TRUE);
             }
 
-            giveAccessToContent(req, res, filterChain, User.Role.UNKNOWN);
+            giveAccessToContent(req, res, filterChain, Role.UNKNOWN);
         }
     }
 
-    private void giveAccessToContent(final HttpServletRequest req, final HttpServletResponse res, FilterChain filterChain, final User.Role role) throws ServletException, IOException {
-        if (role.equals(User.Role.USER)) {
+    private void giveAccessToContent(final HttpServletRequest req, final HttpServletResponse res, FilterChain filterChain, final Role role) throws ServletException, IOException {
+        if (role.equals(Role.USER)) {
             System.out.println("giveAccessToContent USER");
             req.setAttribute("role", "USER"); // Добавляем в запрос информацию об роли. Нужно для доп. логики в других сервелетах
 
@@ -83,7 +84,7 @@ public class AuthFilter implements Filter {
 
             filterChain.doFilter(req, res); // Передаем управление следующим фильтрам/сервлетам в цепочке
 
-        } else if (role.equals(User.Role.ADMIN)) {
+        } else if (role.equals(Role.ADMIN)) {
             System.out.println("giveAccessToContent ADMIN");
             req.setAttribute("role", "ADMIN"); // Добавляем в запрос информацию об роли. Нужно для доп. логики в других сервелетах
 

@@ -283,7 +283,24 @@ public abstract class ManagementSystem {
     }
 
     /**
-     * Поиск user по переданному логину и паролю. Если user с таким login и password не найден - возвращается null
+     * Возвращает Role.ADMIN если id == 1, Role.USER если id == 2, в противном случае - Role.UNKNOWN.
+     * Если получаемый параметр null, то возвращается null.
+     */
+    Role getUserRoleByRoleIdFromDB(Long id) {
+        if (id == null) {
+            return null;
+        }
+        if (id == 1) {
+            return Role.ADMIN;
+        } else if (id == 2) {
+            return Role.USER;
+        } else {
+            return Role.UNKNOWN;
+        }
+    }
+
+    /**
+     * Поиск user по переданному логину и паролю. Если user с таким login и password не найден - возвращается null.
      */
     public User getUserByLoginPassword(final String login, final String password) throws SQLException {
         PreparedStatement stmt = null;
@@ -303,6 +320,27 @@ public abstract class ManagementSystem {
         } finally {
             if (rs != null)
                 rs.close();
+            if (stmt != null)
+                stmt.close();
+        }
+    }
+
+    /**
+     * Добавляет (регистрирует) user в базу данных.
+     */
+    public void addUser(User user) throws SQLException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement("INSERT INTO all_users " +
+                    "(login, password, email, role_id) " +
+                    "VALUES (?, ?, ?, ?)"
+            );
+            stmt.setString(1, user.getLogin());
+            stmt.setString(2, user.getPassword());
+            stmt.setString(3, user.getEmail());
+            stmt.setInt(4, user.getRoleId());
+            stmt.executeUpdate();
+        } finally {
             if (stmt != null)
                 stmt.close();
         }

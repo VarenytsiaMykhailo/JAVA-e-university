@@ -13,22 +13,16 @@ public class User {
 
     private String email;
 
-    private Role role;
-
-    public enum Role {
-        ADMIN,
-        USER,
-        UNKNOWN
-    }
+    private int roleId;
 
     public User() {
     }
 
-    public User(int id, String login, String password, String email, Role role) {
-        this.userId = id;
+    public User(String login, String password, String email, int roleId) {
         this.login = login;
         this.password = password;
-        this.role = role;
+        this.email = email;
+        this.roleId = roleId;
     }
 
     // Конструктор принимающий ResultSet из бд
@@ -37,25 +31,11 @@ public class User {
         this.login = rs.getString(2);
         this.password = rs.getString(3);
         this.email = rs.getString(4);
-        role = getRoleByRoleIdFromDB((Long) rs.getObject(5));
+        this.roleId = rs.getInt(5);
+        // role = getRoleByRoleIdFromDB((Long) rs.getObject(5));
     }
 
-    /**
-     * Возвращает Role.ADMIN если id == 1, Role.USER если id == 2, в противном случае - Role.UNKNOWN.
-     * Если получаемый параметр null, то возвращается null.
-     */
-    User.Role getRoleByRoleIdFromDB(Long id) {
-        if (id == null) {
-            return null;
-        }
-        if (id == 1) {
-            return Role.ADMIN;
-        } else if (id == 2) {
-            return Role.USER;
-        } else {
-            return Role.UNKNOWN;
-        }
-    }
+
 
     public int getUserId() {
         return userId;
@@ -81,12 +61,20 @@ public class User {
         this.password = password;
     }
 
-    public Role getRole() {
-        return role;
+    public String getEmail() {
+        return email;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
     }
 
     @Override
@@ -96,7 +84,7 @@ public class User {
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", role=" + role +
+                ", roleId=" + roleId +
                 '}';
     }
 }
