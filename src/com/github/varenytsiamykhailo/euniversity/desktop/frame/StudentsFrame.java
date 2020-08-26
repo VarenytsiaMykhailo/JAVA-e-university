@@ -1,6 +1,6 @@
 package com.github.varenytsiamykhailo.euniversity.desktop.frame;
 
-import com.github.varenytsiamykhailo.euniversity.desktop.ManagementSystemDesktop;
+import com.github.varenytsiamykhailo.euniversity.desktop.ManagementSystemDAODesktop;
 import com.github.varenytsiamykhailo.euniversity.logic.Group;
 import com.github.varenytsiamykhailo.euniversity.logic.Student;
 
@@ -46,7 +46,7 @@ public class StudentsFrame extends JFrame implements ActionListener, ListSelecti
     private static final String DELETE_STUDENT_BUTTON_NAME = "deleteStudent";
     private static final String ALL_STUDENTS_MENU_ITEM_NAME = "allStudents";
 
-    ManagementSystemDesktop ms = null;
+    ManagementSystemDAODesktop ms = null;
 
     private JList allGroupsJList;
 
@@ -119,7 +119,7 @@ public class StudentsFrame extends JFrame implements ActionListener, ListSelecti
      * Нижняя панель (внутри нее - левая панель (список групп) и правая панель (список студентов))
      */
     private JPanel createBottomPanel() {
-        ms = ManagementSystemDesktop.getInstance(); // Коннект к базе происходит внутри ManagementSystem. ManagementSystem сам обработает исключение коннекта
+        ms = ManagementSystemDAODesktop.getInstance(); // Коннект к базе происходит внутри ManagementSystem. ManagementSystem сам обработает исключение коннекта
 
         // Получаем список групп и студентов
         Vector<Group> allGroups = null;

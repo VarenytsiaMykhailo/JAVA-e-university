@@ -41,7 +41,7 @@ public class MainPageServlet extends HttpServlet {
                 student.setStudentId(0);
                 student.setDateOfBirth(new Date());
                 student.setEducationYear(Calendar.getInstance().get(Calendar.YEAR)); // Дефолтное значение - текущий год
-                ArrayList<Group> allGroups = ManagementSystemWeb.getInstance().getAllGroups();
+                ArrayList<Group> allGroups = ManagementSystemDAOWeb.getInstance().getAllGroups();
                 StudentDataFormForDisplay studentDataFormForDisplay = new StudentDataFormForDisplay();
                 studentDataFormForDisplay.initFromStudent(student);
                 studentDataFormForDisplay.setAllGroups(allGroups);
@@ -61,8 +61,8 @@ public class MainPageServlet extends HttpServlet {
             try {
                 if (req.getParameter("student_id") != null) {
                     int studentId = Integer.parseInt(req.getParameter("student_id"));
-                    Student student = ManagementSystemWeb.getInstance().getStudentById(studentId);
-                    ArrayList<Group> allGroups = ManagementSystemWeb.getInstance().getAllGroups();
+                    Student student = ManagementSystemDAOWeb.getInstance().getStudentById(studentId);
+                    ArrayList<Group> allGroups = ManagementSystemDAOWeb.getInstance().getAllGroups();
                     StudentDataFormForDisplay studentDataFormForDisplay = new StudentDataFormForDisplay();
                     studentDataFormForDisplay.initFromStudent(student);
                     studentDataFormForDisplay.setAllGroups(allGroups);
@@ -83,7 +83,7 @@ public class MainPageServlet extends HttpServlet {
                 if (req.getParameter("student_id") != null) {
                     Student student = new Student();
                     student.setStudentId(Integer.parseInt(req.getParameter("student_id")));
-                    ManagementSystemWeb.getInstance().deleteStudent(student);
+                    ManagementSystemDAOWeb.getInstance().deleteStudent(student);
                 }
             } catch (SQLException e) {
                 throw new IOException(e.getMessage());
@@ -104,7 +104,7 @@ public class MainPageServlet extends HttpServlet {
                 Group newGroup = new Group();
                 newGroup.setGroupId(Integer.parseInt(newGroupIdString));
 
-                ManagementSystemWeb.getInstance().moveStudentsFromGroupToNewGroup(group, Integer.parseInt(yearString), newGroup, Integer.parseInt(newYearString));
+                ManagementSystemDAOWeb.getInstance().moveStudentsFromGroupToNewGroup(group, Integer.parseInt(yearString), newGroup, Integer.parseInt(newYearString));
 
                 // Устанавливаем новые значения. Нужно для показа группы, в которую мы переместили студентов
                 groupIdString = newGroupIdString;
@@ -130,7 +130,7 @@ public class MainPageServlet extends HttpServlet {
 
         MainDataFormForDisplay mainDataFormForDisplay = new MainDataFormForDisplay();
         try {
-            ArrayList<Group> allGroups = ManagementSystemWeb.getInstance().getAllGroups();
+            ArrayList<Group> allGroups = ManagementSystemDAOWeb.getInstance().getAllGroups();
             Group group = new Group();
             group.setGroupId(selectedGroupId);
             if (selectedGroupId == -1) { // Если группа не выбрала в списке
@@ -138,7 +138,7 @@ public class MainPageServlet extends HttpServlet {
                 group = (Group) it.next();
             }
 
-            ArrayList<Student> studentsForSelectedGroup = ManagementSystemWeb.getInstance().getStudentsFromGroup(group, selectedYear);
+            ArrayList<Student> studentsForSelectedGroup = ManagementSystemDAOWeb.getInstance().getStudentsFromGroup(group, selectedYear);
             mainDataFormForDisplay.setSelectedGroupId(group.getGroupId());
             mainDataFormForDisplay.setSelectedYear(selectedYear);
             mainDataFormForDisplay.setAllGroups(allGroups);

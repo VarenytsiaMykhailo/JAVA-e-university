@@ -66,7 +66,7 @@ public class StudentEditPageServlet extends HttpServlet {
 
         MainDataFormForDisplay mainDataFormForDisplay = new MainDataFormForDisplay();
         try {
-            ArrayList<Group> allGroups = ManagementSystemWeb.getInstance().getAllGroups();
+            ArrayList<Group> allGroups = ManagementSystemDAOWeb.getInstance().getAllGroups();
             Group group = new Group();
             group.setGroupId(groupId);
             if (groupId == -1) { // Если группа не выбрала в списке
@@ -74,7 +74,7 @@ public class StudentEditPageServlet extends HttpServlet {
                 group = (Group) it.next();
             }
 
-            ArrayList<Student> studentsForSelectedGroup = ManagementSystemWeb.getInstance().getStudentsFromGroup(group, year);
+            ArrayList<Student> studentsForSelectedGroup = ManagementSystemDAOWeb.getInstance().getStudentsFromGroup(group, year);
             mainDataFormForDisplay.setSelectedGroupId(group.getGroupId());
             mainDataFormForDisplay.setSelectedYear(year);
             mainDataFormForDisplay.setAllGroups(allGroups);
@@ -90,12 +90,12 @@ public class StudentEditPageServlet extends HttpServlet {
 
     private void insertStudent(HttpServletRequest req) throws SQLException, ParseException {
         Student preparedStudent = prepareStudent(req);
-        ManagementSystemWeb.getInstance().insertStudent(preparedStudent);
+        ManagementSystemDAOWeb.getInstance().insertStudent(preparedStudent);
     }
 
     private void updateStudent(HttpServletRequest req) throws SQLException, ParseException {
         Student preparedStudent = prepareStudent(req);
-        ManagementSystemWeb.getInstance().updateStudent(preparedStudent);
+        ManagementSystemDAOWeb.getInstance().updateStudent(preparedStudent);
     }
 
     private Student prepareStudent(HttpServletRequest req) throws ParseException {

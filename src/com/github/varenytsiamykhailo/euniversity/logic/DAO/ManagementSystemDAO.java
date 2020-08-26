@@ -1,4 +1,6 @@
-package com.github.varenytsiamykhailo.euniversity.logic;
+package com.github.varenytsiamykhailo.euniversity.logic.DAO;
+
+import com.github.varenytsiamykhailo.euniversity.logic.*;
 
 import java.sql.*;
 import java.sql.Date;
@@ -7,7 +9,7 @@ import java.util.*;
 /**
  * Класс предоставляет методы с запросами к базе данных
  */
-public abstract class ManagementSystem {
+public abstract class ManagementSystemDAO {
 
     public Connection connection;
 
@@ -20,7 +22,8 @@ public abstract class ManagementSystem {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement("SELECT student_id, first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year " +
+            stmt = connection.prepareStatement(
+                    "SELECT student_id, first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year " +
                     "FROM all_students " +
                     "WHERE group_id = ? AND education_year = ? " +
                     "ORDER BY last_name, first_name, patronymic");
@@ -47,7 +50,8 @@ public abstract class ManagementSystem {
     public void moveStudentsFromGroupToNewGroup (Group oldGroup, int oldYear, Group newGroup, int newYear) throws SQLException {
         PreparedStatement stmt = null;
         try {
-           stmt = connection.prepareStatement("UPDATE all_students " +
+           stmt = connection.prepareStatement(
+                   "UPDATE all_students " +
                    "SET group_id = ?, education_year = ? " +
                    "WHERE group_id = ? AND education_year = ?");
            stmt.setInt(1, newGroup.getGroupId());
@@ -67,7 +71,8 @@ public abstract class ManagementSystem {
     public void removeStudentsFromGroup(Group group, int year) throws SQLException {
         PreparedStatement stmt = null;
         try {
-            stmt = connection.prepareStatement("UPDATE all_students " +
+            stmt = connection.prepareStatement(
+                    "UPDATE all_students " +
                     "SET group_id = 0 " +
                     "WHERE group_id = ? AND education_year = ?"
             );
@@ -86,7 +91,8 @@ public abstract class ManagementSystem {
     public void insertStudent(Student student) throws SQLException {
         PreparedStatement stmt = null;
         try {
-            stmt = connection.prepareStatement("INSERT INTO all_students " +
+            stmt = connection.prepareStatement(
+                    "INSERT INTO all_students " +
                     "(first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)"
             );
@@ -110,7 +116,8 @@ public abstract class ManagementSystem {
     public void updateStudent(Student newStudentData) throws SQLException {
         PreparedStatement stmt = null;
         try {
-            stmt = connection.prepareStatement("UPDATE all_students " +
+            stmt = connection.prepareStatement(
+                    "UPDATE all_students " +
                     "SET first_name = ?, last_name = ?, patronymic = ?, date_of_birth = ?, sex = ?, group_id = ?, education_year= ? " +
                     "WHERE student_id = ?"
             );
@@ -135,7 +142,8 @@ public abstract class ManagementSystem {
     public void deleteStudent(Student delStudentData) throws SQLException {
         PreparedStatement stmt = null;
         try {
-            stmt = connection.prepareStatement("DELETE FROM all_students " +
+            stmt = connection.prepareStatement(
+                    "DELETE FROM all_students " +
                     "WHERE student_id = ?"
             );
             stmt.setInt(1, delStudentData.getStudentId());
@@ -153,7 +161,8 @@ public abstract class ManagementSystem {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement("SELECT student_id, first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year " +
+            stmt = connection.prepareStatement(
+                    "SELECT student_id, first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year " +
                     "FROM all_students " +
                     "WHERE student_id = ? " +
                     "ORDER BY last_name, first_name, patronymic");
@@ -179,7 +188,8 @@ public abstract class ManagementSystem {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement("SELECT curator_id, first_name, last_name, patronymic, date_of_birth, sex, year_of_teaching " +
+            stmt = connection.prepareStatement(
+                    "SELECT curator_id, first_name, last_name, patronymic, date_of_birth, sex, year_of_teaching " +
                     "FROM all_curators " +
                     "WHERE curator_id = ? " +
                     "ORDER BY last_name, first_name, patronymic");
@@ -341,6 +351,39 @@ public abstract class ManagementSystem {
             stmt.setInt(4, user.getRoleId());
             stmt.executeUpdate();
         } finally {
+            if (stmt != null)
+                stmt.close();
+        }
+    }
+
+    /**
+     * Получает роль пользователя по его логину и паролю. Если роли нет или введен неверный логин или пароль - возвращается null
+     */
+    public Role getUserRoleByLoginPassword(final String login, final String password) throws SQLException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.prepareStatement("SELECT role FROM all_users " +
+                    "JOIN roles ON all_users.role_id = roles.role_id " +
+                    "WHERE all_users.login = ? AND all_users.password = ?"
+            );
+            stmt.setString(1, login);
+            stmt.setString(2, password);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                if (rs.getString(1).equals("ADMIN")) {
+                    return Role.ADMIN;
+                } else if (rs.getString(1).equals("USER")) {
+                    return Role.USER;
+                } else {
+                    return null; // Переписать, если добавится новая роль в БД.
+                }
+            } else {
+                return null;
+            }
+        } finally {
+            if (rs != null)
+                rs.close();
             if (stmt != null)
                 stmt.close();
         }
