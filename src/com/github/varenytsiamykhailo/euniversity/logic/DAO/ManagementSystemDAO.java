@@ -22,11 +22,11 @@ public abstract class ManagementSystemDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement(
-                    "SELECT student_id, first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year " +
+            stmt = connection.prepareStatement("SELECT student_id, first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year " +
                     "FROM all_students " +
                     "WHERE group_id = ? AND education_year = ? " +
-                    "ORDER BY last_name, first_name, patronymic");
+                    "ORDER BY last_name, first_name, patronymic"
+            );
             stmt.setInt(1, group.getGroupId());
             stmt.setInt(2, year);
             rs = stmt.executeQuery();
@@ -47,18 +47,18 @@ public abstract class ManagementSystemDAO {
     /**
      * Перевести студентов из одной группы с одним годом обучения в другую группу с другим годом обучения
      */
-    public void moveStudentsFromGroupToNewGroup (Group oldGroup, int oldYear, Group newGroup, int newYear) throws SQLException {
+    public void moveStudentsFromGroupToNewGroup(Group oldGroup, int oldYear, Group newGroup, int newYear) throws SQLException {
         PreparedStatement stmt = null;
         try {
-           stmt = connection.prepareStatement(
-                   "UPDATE all_students " +
-                   "SET group_id = ?, education_year = ? " +
-                   "WHERE group_id = ? AND education_year = ?");
-           stmt.setInt(1, newGroup.getGroupId());
-           stmt.setInt(2, newYear);
-           stmt.setInt(3, oldGroup.getGroupId());
-           stmt.setInt(4, oldYear);
-           stmt.executeUpdate();
+            stmt = connection.prepareStatement("UPDATE all_students " +
+                    "SET group_id = ?, education_year = ? " +
+                    "WHERE group_id = ? AND education_year = ?"
+            );
+            stmt.setInt(1, newGroup.getGroupId());
+            stmt.setInt(2, newYear);
+            stmt.setInt(3, oldGroup.getGroupId());
+            stmt.setInt(4, oldYear);
+            stmt.executeUpdate();
         } finally {
             if (stmt != null)
                 stmt.close();
@@ -71,8 +71,7 @@ public abstract class ManagementSystemDAO {
     public void removeStudentsFromGroup(Group group, int year) throws SQLException {
         PreparedStatement stmt = null;
         try {
-            stmt = connection.prepareStatement(
-                    "UPDATE all_students " +
+            stmt = connection.prepareStatement("UPDATE all_students " +
                     "SET group_id = 0 " +
                     "WHERE group_id = ? AND education_year = ?"
             );
@@ -91,8 +90,7 @@ public abstract class ManagementSystemDAO {
     public void insertStudent(Student student) throws SQLException {
         PreparedStatement stmt = null;
         try {
-            stmt = connection.prepareStatement(
-                    "INSERT INTO all_students " +
+            stmt = connection.prepareStatement("INSERT INTO all_students " +
                     "(first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)"
             );
@@ -116,8 +114,7 @@ public abstract class ManagementSystemDAO {
     public void updateStudent(Student newStudentData) throws SQLException {
         PreparedStatement stmt = null;
         try {
-            stmt = connection.prepareStatement(
-                    "UPDATE all_students " +
+            stmt = connection.prepareStatement("UPDATE all_students " +
                     "SET first_name = ?, last_name = ?, patronymic = ?, date_of_birth = ?, sex = ?, group_id = ?, education_year= ? " +
                     "WHERE student_id = ?"
             );
@@ -142,8 +139,7 @@ public abstract class ManagementSystemDAO {
     public void deleteStudent(Student delStudentData) throws SQLException {
         PreparedStatement stmt = null;
         try {
-            stmt = connection.prepareStatement(
-                    "DELETE FROM all_students " +
+            stmt = connection.prepareStatement("DELETE FROM all_students " +
                     "WHERE student_id = ?"
             );
             stmt.setInt(1, delStudentData.getStudentId());
@@ -161,11 +157,11 @@ public abstract class ManagementSystemDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement(
-                    "SELECT student_id, first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year " +
+            stmt = connection.prepareStatement("SELECT student_id, first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year " +
                     "FROM all_students " +
                     "WHERE student_id = ? " +
-                    "ORDER BY last_name, first_name, patronymic");
+                    "ORDER BY last_name, first_name, patronymic"
+            );
             stmt.setInt(1, id);
             rs = stmt.executeQuery();
             if (rs.next()) {
@@ -188,11 +184,11 @@ public abstract class ManagementSystemDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement(
-                    "SELECT curator_id, first_name, last_name, patronymic, date_of_birth, sex, year_of_teaching " +
+            stmt = connection.prepareStatement("SELECT curator_id, first_name, last_name, patronymic, date_of_birth, sex, year_of_teaching " +
                     "FROM all_curators " +
                     "WHERE curator_id = ? " +
-                    "ORDER BY last_name, first_name, patronymic");
+                    "ORDER BY last_name, first_name, patronymic"
+            );
             stmt.setInt(1, id);
             rs = stmt.executeQuery();
             if (rs.next()) {
@@ -248,10 +244,10 @@ public abstract class ManagementSystemDAO {
         ResultSet rs = null;
         try {
             stmt = connection.createStatement();
-            rs = stmt.executeQuery(
-                    "SELECT student_id, first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year " +
-                            "FROM all_students " +
-                            "ORDER BY last_name, first_name, patronymic");
+            rs = stmt.executeQuery("SELECT student_id, first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year " +
+                    "FROM all_students " +
+                    "ORDER BY last_name, first_name, patronymic"
+            );
             while (rs.next()) {
                 Student student = new Student(rs); // Класс Student сам обрабатывает переданный ему ResultSet
 
@@ -276,7 +272,8 @@ public abstract class ManagementSystemDAO {
         try {
             stmt = connection.prepareStatement("SELECT user_id, login, password, email, role_id " +
                     "FROM all_users " +
-                    "WHERE user_id = ?");
+                    "WHERE user_id = ?"
+            );
             stmt.setInt(1, id);
             rs = stmt.executeQuery();
             if (rs.next()) {
@@ -318,7 +315,8 @@ public abstract class ManagementSystemDAO {
         try {
             stmt = connection.prepareStatement("SELECT user_id, login, password, email, role_id " +
                     "FROM all_users " +
-                    "WHERE login = ? AND password = ?");
+                    "WHERE login = ? AND password = ?"
+            );
             stmt.setString(1, login);
             stmt.setString(2, password);
             rs = stmt.executeQuery();
@@ -357,7 +355,7 @@ public abstract class ManagementSystemDAO {
     }
 
     /**
-     * Получает роль пользователя по его логину и паролю. Если роли нет или введен неверный логин или пароль - возвращается null
+     * Получает роль пользователя по его логину и паролю. Если роли нет или введен неверный логин или пароль - возвращается null.
      */
     public Role getUserRoleByLoginPassword(final String login, final String password) throws SQLException {
         PreparedStatement stmt = null;
@@ -380,6 +378,37 @@ public abstract class ManagementSystemDAO {
                 }
             } else {
                 return null;
+            }
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (stmt != null)
+                stmt.close();
+        }
+    }
+
+    /**
+     * Возвращает true, если пользователь с переданными логином и паролем существует, иначе - false.
+     */
+    public boolean userIsExist(final String login, final String password) throws SQLException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.prepareStatement("SELECT EXISTS(" +
+                    "SELECT user_id FROM all_users " +
+                    "WHERE login = ? && password = ?)"
+            );
+            stmt.setString(1, login);
+            stmt.setString(2, password);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                int result = rs.getInt(1);
+                if (result == 1)
+                    return true;
+                else
+                    return false;
+            } else {
+                return false;
             }
         } finally {
             if (rs != null)
