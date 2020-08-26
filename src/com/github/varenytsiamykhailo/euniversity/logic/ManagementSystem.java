@@ -4,6 +4,9 @@ import java.sql.*;
 import java.sql.Date;
 import java.util.*;
 
+/**
+ * Класс предоставляет методы с запросами к базе данных
+ */
 public abstract class ManagementSystem {
 
     public Connection connection;
@@ -265,6 +268,32 @@ public abstract class ManagementSystem {
                     "FROM all_users " +
                     "WHERE user_id = ?");
             stmt.setInt(1, id);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new User(rs);
+            } else {
+                return null;
+            }
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (stmt != null)
+                stmt.close();
+        }
+    }
+
+    /**
+     * Поиск user по переданному логину и паролю. Если user с таким login и password не найден - возвращается null
+     */
+    public User getUserByLoginPassword(final String login, final String password) throws SQLException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.prepareStatement("SELECT user_id, login, password, email, role_id " +
+                    "FROM all_users " +
+                    "WHERE login = ? AND password = ?");
+            stmt.setString(1, login);
+            stmt.setString(2, password);
             rs = stmt.executeQuery();
             if (rs.next()) {
                 return new User(rs);
