@@ -4,13 +4,32 @@ CREATE DATABASE e_university DEFAULT CHARACTER SET 'utf8';
 
 USE e_university;
 
+CREATE TABLE roles
+(
+  role_id int unsigned not null auto_increment,
+  role varchar(50) not null,
+  primary key (role_id)
+) engine = InnoDB;
+
+CREATE TABLE all_users
+(
+  user_id int unsigned not null auto_increment,
+  login varchar(255) not null,
+  password varchar(255) not null,
+  email varchar(255) not null,
+  role_id int unsigned,
+  primary key (user_id),
+  foreign key (role_id) references roles (role_id) ON DELETE SET NULL ON UPDATE SET NULL
+) engine = InnoDB;
+
 CREATE TABLE all_groups
 (
   group_id int unsigned not null auto_increment,
   group_name varchar(255) not null,
-  curator_id int unsigned not null,
+  curator_id int unsigned,
   speciality varchar(255) not null,
-  primary key (group_id)
+  primary key (group_id),
+   foreign key (curator_id) references all_curators (curator_id) ON DELETE SET NULL ON UPDATE SET NULL
 ) engine = InnoDB;
 
 CREATE TABLE all_curators
@@ -39,6 +58,18 @@ CREATE TABLE all_students
 ) engine = InnoDB;
 
 SET NAMES 'utf8';
+
+INSERT INTO roles (role)
+VALUES ('ADMIN');
+INSERT INTO roles (role)
+VALUES ('USER');
+INSERT INTO roles (role)
+VALUES ('UNKNOWN');
+
+
+INSERT INTO all_users (login, password, email, role_id)
+VALUES ('AdminAdmin', 'AdminAdmin', 'example@example.ru', 1);
+
 
 INSERT INTO all_groups (group_name, curator_id, speciality)
 VALUES ('Нулевая группа', 1, 'Неопределенные студенты');
