@@ -29,6 +29,11 @@
         <form action="<c:url value="/registration"/> "
               class="col-6 row justify-content-center" method="POST"> <%-- Вызов сервелета RegistrationPageServlet --%>
 
+            <div>
+                <input type="hidden" name="validatedByJSValidator"
+                       value="FALSE"> <%-- Для передачи в js скрипт валидации и контроля прохождения валидации скриптом на сервелете  --%>
+            </div>
+
             <%-- Секция логина --%>
             <div class="form-group col-6">
                 <label for="loginInput"><b>Введите логин:</b></label>
@@ -118,6 +123,7 @@
 <%-- !!! Так как registrationValidator.js использует код из sweetalert2.min.js, то этот скрипт нужно подключать после подключения sweetalert2.min.js! --%>
 <script src="${pageContext.request.contextPath}/static/scripts/registrationValidator.js"></script>
 
+<%-- Скрипт всплывающего окна для успешной регистрации --%>
 <c:if test="${successfulRegistrationNotification}">
     <script>
         const swalWithBootstrapButtons = Swal.mixin({
@@ -147,6 +153,7 @@
     </script>
 </c:if>
 
+<%-- Скрипт всплывающего окна для неудачной регистрации --%>
 <c:if test="${unsuccessfulRegistrationNotification}">
     <script>
         const swalWithBootstrapButtons = Swal.mixin({
