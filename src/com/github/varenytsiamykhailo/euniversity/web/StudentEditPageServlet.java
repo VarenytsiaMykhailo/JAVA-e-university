@@ -46,8 +46,12 @@ public class StudentEditPageServlet extends HttpServlet {
                 // Если id студента == 0 т.е. новый студент
                 if (Integer.parseInt(studentId) == 0) {
                     insertStudent(req);
+                    // Посылаем в jsp инфу об успешном добавлении студента. Нужно для вывода всплывающего окна об успешности.
+                    req.setAttribute("successfulStudentInsertionNotification", Boolean.TRUE);
                 } else {
                     updateStudent(req);
+                    // Посылаем в jsp инфу об успешном редактировании студента. Нужно для вывода всплывающего окна об успешности.
+                    req.setAttribute("successfulStudentUpdatingNotification", Boolean.TRUE);
                 }
             } catch (SQLException | ParseException e) {
                 throw new IOException(e.getMessage());
@@ -114,7 +118,7 @@ public class StudentEditPageServlet extends HttpServlet {
         student.setFirstName(req.getParameter("first_name").trim()); // trim - удаляет пробелы вначале и в конце строки
         student.setLastName(req.getParameter("last_name").trim());
         student.setPatronymic(req.getParameter("patronymic").trim());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         student.setDateOfBirth(simpleDateFormat.parse(req.getParameter("date_of_birth").trim()));
         if (req.getParameter("sex").equals("0")) {
             student.setSex('М');
