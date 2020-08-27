@@ -5,34 +5,13 @@
 <html>
 <head>
     <title>e-university</title>
-    <%-- Скрипты всплывающего окна. Используеюся библиотека sweetalert2 --%>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/static/scripts/sweetalert2.min.js"></script>
     <%-- Стили страницы --%>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/MainPage.css">
+    <%-- Стили всплывающего окна. Используеюся библиотека sweetalert2. --%>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/sweetalert2.min.css">
 </head>
 
 <body>
-
-<c:if test="${successfulMoveGroupNotification}"> <%-- Скрипт всплывающего окна об успешном переводе студентов --%>
-    <script>
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: false,
-            onOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        })
-
-        Toast.fire({
-            icon: 'success',
-            title: 'Студенты были успешно переведены в новую группу'
-        })
-    </script>
-</c:if>
 
 <div id="userBar">
     <hr>
@@ -182,7 +161,29 @@
 
 </form>
 <%-- Скрипты выгодно подключать в конце тега body для более быстрой загрузки страницы --%>
-<%-- Стили всплывающего окна. Скрипты подключаются перед /body --%>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/sweetalert2.min.css">
+<%-- Скрипты всплывающего окна. Используеюся библиотека sweetalert2. Скрипты выгодно подключать перед /body --%>
+<script type="text/javascript" src="${pageContext.request.contextPath}/static/scripts/sweetalert2.min.js"></script>
+
+<%-- Скрипт всплывающего окна об успешном переводе студентов --%>
+<c:if test="${successfulMoveGroupNotification}">
+    <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: false,
+            onOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+
+        Toast.fire({
+            icon: 'success',
+            title: 'Студенты были успешно переведены в новую группу'
+        })
+    </script>
+</c:if>
 </body>
 </html>
