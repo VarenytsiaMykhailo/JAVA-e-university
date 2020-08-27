@@ -27,13 +27,8 @@ public class AuthFilter implements Filter {
         final HttpServletRequest req = (HttpServletRequest) servletRequest;
         final HttpServletResponse res = (HttpServletResponse) servletResponse;
 
-        final String login = req.getParameter("login");
-        final String password = req.getParameter("password");
-
         System.out.println("_________________________");
         System.out.println("Enter to Filter");
-        System.out.println("LOGIN = " + login);
-        System.out.println("PASSWORD = " + password);
         System.out.println("URI = " + req.getRequestURI());
         System.out.println("URL = " + req.getRequestURL());
 
@@ -50,8 +45,14 @@ public class AuthFilter implements Filter {
 
             giveAccessToContent(req, res, filterChain, role);
         } else {
+
+            final String login = req.getParameter("login");
+            final String password = req.getParameter("password");
+            System.out.println("LOGIN = " + login);
+            System.out.println("PASSWORD = " + password);
+
             try {
-                if (nonNull(login) && nonNull(password) && managementSystemWebDAO.get().userIsExist(login, password)) { // Если пользователь проходит проверку впервые (и он ввел корректные данные)
+                if (nonNull(login) && nonNull(password) && managementSystemWebDAO.get().userIsExistByLoginPassword(login, password)) { // Если пользователь проходит проверку впервые (и он ввел корректные данные)
                     System.out.println("Enter to the second validator block");
 
                     final Role role = managementSystemWebDAO.get().getUserRoleByLoginPassword(login, password);

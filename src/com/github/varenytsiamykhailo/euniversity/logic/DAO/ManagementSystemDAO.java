@@ -290,12 +290,18 @@ public abstract class ManagementSystemDAO {
     }
 
     /**
-     * Возвращает Role.ADMIN если id == 1, Role.USER если id == 2, в противном случае - Role.UNKNOWN.
-     * Если получаемый параметр null, то возвращается null.
+     * Возвращает представление роли, выраженное типом Role, в зависимости от его соответствующего числового представления id.
+     * Если id == 1, то возвращается Role.ADMIN.
+     * Если id == 2, то возвращается Role.USER.
+     * Во всех остальных случаях возвращается Role.UNKNOWN, даже если получаемый параметр равен null
+     * Role.UNKNOWN - соответствует id = 3 (числу 3).
+     * Противоположный ему метод - getRoleIdByUserRole.
+     * !!! Обязательно отредактировать эти методы, при внесении изменений в таблицу roles в базе данных
+     * (в случае изменения порядка расположения кортежей или в случае добавления новых ролей).
      */
-    Role getUserRoleByRoleIdFromDB(Long id) {
+    public Role getUserRoleByRoleIdFromDB(Long id) {
         if (id == null) {
-            return null;
+            return Role.UNKNOWN;
         }
         if (id == 1) {
             return Role.ADMIN;
@@ -303,6 +309,29 @@ public abstract class ManagementSystemDAO {
             return Role.USER;
         } else {
             return Role.UNKNOWN;
+        }
+    }
+
+    /**
+     * Возвращает числовое представление передаваемому типу Role.
+     * Если role == Role.ADMIN, то возвращается число 1.
+     * Если role == Role.USER, то возвращается число 2.
+     * Во всех остальных случаях возвращается число 3, даже если получаемый параметр равен null.
+     * Число 3 - соответствует типу Role.UNKNOWN
+     * Противоположный ему метод - getUserRoleByRoleIdFromDB.
+     * !!! Обязательно отредактировать эти методы, при внесении изменений в таблицу roles в базе данных
+     * (в случае изменения порядка расположения кортежей или в случае добавления новых ролей).
+     */
+    public int getRoleIdByUserRole(Role role) {
+        if (role == null) {
+            return 3;
+        }
+        if (role == Role.ADMIN) {
+            return 1;
+        } else if (role == Role.USER) {
+            return 2;
+        } else {
+            return 3;
         }
     }
 
@@ -390,7 +419,7 @@ public abstract class ManagementSystemDAO {
     /**
      * Возвращает true, если пользователь с переданными логином и паролем существует, иначе - false.
      */
-    public boolean userIsExist(final String login, final String password) throws SQLException {
+    public boolean userIsExistByLoginPassword(final String login, final String password) throws SQLException {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -400,6 +429,36 @@ public abstract class ManagementSystemDAO {
             );
             stmt.setString(1, login);
             stmt.setString(2, password);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                int result = rs.getInt(1);
+                if (result == 1)
+                    return true;
+                else
+                    return false;
+            } else {
+                return false;
+            }
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (stmt != null)
+                stmt.close();
+        }
+    }
+
+    /**
+     * Возвращает true, если пользователь с переданным логином существует, иначе - false.
+     */
+    public boolean userIsExistByLogin(final String login) throws SQLException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.prepareStatement("SELECT EXISTS(" +
+                    "SELECT user_id FROM all_users " +
+                    "WHERE login = ?)"
+            );
+            stmt.setString(1, login);
             rs = stmt.executeQuery();
             if (rs.next()) {
                 int result = rs.getInt(1);
