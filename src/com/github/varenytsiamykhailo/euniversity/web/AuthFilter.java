@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.nonNull;
@@ -80,7 +81,11 @@ public class AuthFilter implements Filter {
     private void giveAccessToContent(final HttpServletRequest req, final HttpServletResponse res, FilterChain filterChain, final Role role) throws ServletException, IOException {
         if (role.equals(Role.USER)) {
             System.out.println("giveAccessToContent USER");
-            req.setAttribute("role", "USER"); // Добавляем в запрос информацию об роли. Нужно для доп. логики в других сервелетах
+
+            // В эту коллекцию добавляем страницы, которые недоступны User.
+            ArrayList<String> blockedContentForUsers = new ArrayList<>();
+            blockedContentForUsers.add("/RegistrationPage.jsp");
+            blockedContentForUsers.add("/registration");
 
             if (nonNull(req.getParameter("is_login_action"))) { // Если пользователь попал фильтр со страницы входа, перенаправляем его на главную страницу
                 System.out.println("isLoginAction = " + req.getParameter("is_login_action"));
@@ -88,11 +93,17 @@ public class AuthFilter implements Filter {
                 return;
             }
 
+            // Блокируем запрещенные контенты
+            for (String pageName : blockedContentForUsers) { // Попытка перейти на запрещенный контент
+                if (req.getRequestURI().equals(req.getServletContext().getContextPath() + pageName)) {
+                    throw new IOException(new IllegalRequestException());
+                }
+            }
+
             filterChain.doFilter(req, res); // Передаем управление следующим фильтрам/сервлетам в цепочке
 
         } else if (role.equals(Role.ADMIN)) {
             System.out.println("giveAccessToContent ADMIN");
-            req.setAttribute("role", "ADMIN"); // Добавляем в запрос информацию об роли. Нужно для доп. логики в других сервелетах
 
             if (nonNull(req.getParameter("is_login_action"))) { // Если пользователь попал фильтр со страницы входа, перенаправляем его на главную страницу
                 System.out.println("isLoginAction = " + req.getParameter("is_login_action"));
