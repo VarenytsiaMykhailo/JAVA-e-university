@@ -31,13 +31,13 @@
 
             <%-- Секция логина --%>
             <div class="form-group col-6">
-                <label for="loginInput">Введите логин:</label>
+                <label for="loginInput"><b>Введите логин:</b></label>
                 <input type="text" name="login" class="form-control" id="loginInput" aria-describedby="emailHelp"/>
                 <div class="errors" style="height: 20px; color: red"></div>
             </div>
             <%-- Секция повторения логина --%>
             <div class="form-group col-6">
-                <label for="loginRepeatInput">Повторите логин:</label>
+                <label for="loginRepeatInput"><b>Повторите логин:</b></label>
                 <input type="text" name="login_repeat" class="form-control" id="loginRepeatInput"
                        aria-describedby="emailHelp"/>
                 <div class="errors" style="height: 20px; color: red"></div>
@@ -48,13 +48,13 @@
             <div class="clearfix"></div>
             <%-- Скрытый блок. Следующий начнется с новой строки --%>
             <div class="form-group col-6">
-                <label for="emailInput">Введите email:</label>
+                <label for="emailInput"><b>Введите email:</b></label>
                 <input type="email" name="email" class="form-control" id="emailInput" aria-describedby="emailHelp"/>
                 <div class="errors" style="height: 20px; color: red"></div>
             </div>
             <%-- Секция повторения емаила --%>
             <div class="form-group col-6">
-                <label for="emailRepeatInput">Повторите email:</label>
+                <label for="emailRepeatInput"><b>Повторите email:</b></label>
                 <input type="email" name="email_repeat" class="form-control" id="emailRepeatInput"
                        aria-describedby="emailHelp"/>
                 <div class="errors" style="height: 20px; color: red"></div>
@@ -65,13 +65,13 @@
             <div class="clearfix"></div>
             <%-- Скрытый блок. Следующий начнется с новой строки --%>
             <div class="form-group col-6">
-                <label for="passwordInput">Введите пароль:</label>
+                <label for="passwordInput"><b>Введите пароль:</b></label>
                 <input type="password" name="password" class="form-control formPassword" id="passwordInput"/>
                 <div class="errors" style="height: 20px; color: red"></div>
             </div>
             <%-- Секция повторения пароля --%>
             <div class="form-group col-6">
-                <label for="passwordRepeatInput">Повторите пароль:</label>
+                <label for="passwordRepeatInput"><b>Повторите пароль:</b></label>
                 <input type="password" name="password_repeat" class="form-control formPasswordRepeat"
                        id="passwordRepeatInput"/>
                 <div class="errors" style="height: 20px; color: red"></div>
@@ -82,7 +82,7 @@
             <div class="clearfix"></div>
             <%-- Скрытый блок. Следующий начнется с новой строки --%>
             <div class="form-group col-12 row justify-content-center" style="margin-bottom: 6ex">
-                <label for="roleSelect" class="col-7">Укажите тип учетной записи:</label>
+                <label for="roleSelect" class="col-7"><b>Укажите тип учетной записи:</b></label>
                 <select name="role" class="form-control col-7"
                         id="roleSelect"> <%-- Список доступных типов учетной записи --%>
                     <option value="USER" selected>
