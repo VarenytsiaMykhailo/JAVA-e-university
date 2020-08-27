@@ -32,72 +32,76 @@
             <%-- Секция логина --%>
             <div class="form-group col-6">
                 <label for="loginInput">Введите логин:</label>
-                <input type="text" name="login" class="form-control" id="loginInput" aria-describedby="emailHelp" />
+                <input type="text" name="login" class="form-control" id="loginInput" aria-describedby="emailHelp"/>
                 <div class="errors" style="height: 20px; color: red"></div>
             </div>
             <%-- Секция повторения логина --%>
             <div class="form-group col-6">
                 <label for="loginRepeatInput">Повторите логин:</label>
                 <input type="text" name="login_repeat" class="form-control" id="loginRepeatInput"
-                       aria-describedby="emailHelp" />
+                       aria-describedby="emailHelp"/>
                 <div class="errors" style="height: 20px; color: red"></div>
             </div>
 
 
             <%-- Секция емаила --%>
-            <div class="clearfix"></div> <%-- Скрытый блок. Следующий начнется с новой строки --%>
+            <div class="clearfix"></div>
+            <%-- Скрытый блок. Следующий начнется с новой строки --%>
             <div class="form-group col-6">
                 <label for="emailInput">Введите email:</label>
-                <input type="email" name="email" class="form-control" id="emailInput" aria-describedby="emailHelp" />
+                <input type="email" name="email" class="form-control" id="emailInput" aria-describedby="emailHelp"/>
                 <div class="errors" style="height: 20px; color: red"></div>
             </div>
             <%-- Секция повторения емаила --%>
             <div class="form-group col-6">
                 <label for="emailRepeatInput">Повторите email:</label>
                 <input type="email" name="email_repeat" class="form-control" id="emailRepeatInput"
-                       aria-describedby="emailHelp" />
+                       aria-describedby="emailHelp"/>
                 <div class="errors" style="height: 20px; color: red"></div>
             </div>
 
 
             <%-- Секция пароля --%>
-            <div class="clearfix"></div> <%-- Скрытый блок. Следующий начнется с новой строки --%>
+            <div class="clearfix"></div>
+            <%-- Скрытый блок. Следующий начнется с новой строки --%>
             <div class="form-group col-6">
                 <label for="passwordInput">Введите пароль:</label>
-                <input type="password" name="password" class="form-control formPassword" id="passwordInput" />
+                <input type="password" name="password" class="form-control formPassword" id="passwordInput"/>
                 <div class="errors" style="height: 20px; color: red"></div>
             </div>
             <%-- Секция повторения пароля --%>
             <div class="form-group col-6">
                 <label for="passwordRepeatInput">Повторите пароль:</label>
                 <input type="password" name="password_repeat" class="form-control formPasswordRepeat"
-                       id="passwordRepeatInput" />
+                       id="passwordRepeatInput"/>
                 <div class="errors" style="height: 20px; color: red"></div>
             </div>
 
 
             <%-- Секция выбора типа учетной записи --%>
-            <div class="clearfix"></div> <%-- Скрытый блок. Следующий начнется с новой строки --%>
+            <div class="clearfix"></div>
+            <%-- Скрытый блок. Следующий начнется с новой строки --%>
             <div class="form-group col-12 row justify-content-center" style="margin-bottom: 6ex">
                 <label for="roleSelect" class="col-7">Укажите тип учетной записи:</label>
                 <select name="role" class="form-control col-7"
                         id="roleSelect"> <%-- Список доступных типов учетной записи --%>
-                    <option value="user" selected>
+                    <option value="USER" selected>
                         <c:out value="пользователь"/>
                     </option>
-                    <option value="admin">
+                    <option value="ADMIN">
                         <c:out value="администратор"/>
                     </option>
                 </select>
                 <div class="errors" style="height: 20px; color: red"></div>
             </div>
 
-            <div class="clearfix"></div> <%-- Скрытый блок. Следующий начнется с новой строки --%>
+            <div class="clearfix"></div>
+            <%-- Скрытый блок. Следующий начнется с новой строки --%>
             <div class="form-group col-6 row justify-content-center">
                 <button type="submit" class="btn btn-primary col-10">Зарегистрировать</button>
             </div>
             <div class="form-group col-6 row justify-content-center">
-                <button type="button" name="cancel" class="btn btn-primary col-10" onclick="history.back();">Отмена
+                <button type="button" name="cancel" class="btn btn-primary col-10" onclick="window.location = 'main';">Отмена
                 </button>
                 <%-- history.back() - возрващает на предыдущую страницу --%>
             </div>
@@ -107,9 +111,68 @@
 </div>
 
 <%-- Скрипты выгодно подключать в конце тега body для более быстрой загрузки страницы --%>
-<%-- подключаем скрипт валидации введенных данных --%>
-<script src="${pageContext.request.contextPath}/static/scripts/registrationValidator.js"></script>
 <%-- Скрипты всплывающего окна. Используеюся библиотека sweetalert2 --%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/static/scripts/sweetalert2.min.js"></script>
+<%-- подключаем скрипт валидации введенных данных --%>
+<%-- !!! Так как registrationValidator.js использует код из sweetalert2.min.js, то этот скрипт нужно подключать после подключения sweetalert2.min.js! --%>
+<script src="${pageContext.request.contextPath}/static/scripts/registrationValidator.js"></script>
+
+<c:if test="${successfulRegistrationNotification}">
+    <script>
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-success'
+            },
+            buttonsStyling: true
+        })
+
+        swalWithBootstrapButtons.fire({
+            icon: 'success',
+            title: 'Вы успешно зарегистрировали нового пользователя в системе!',
+            text: "Зарегистрировать нового или перейти на главную страницу?",
+            showCancelButton: true,
+            confirmButtonText: 'На главную',
+            cancelButtonText: 'Регистрация',
+            reverseButtons: true,
+            backdrop: 'rgb(0, 255, 102, 0.1)'
+        }).then((result) => {
+            if (result.value) { // Yes
+                window.location = 'main';
+            } else if (result.dismiss === Swal.DismissReason.cancel) { // No
+                window.location = 'RegistrationPage.jsp';
+            }
+        })
+    </script>
+</c:if>
+
+<c:if test="${unsuccessfulRegistrationNotification}">
+    <script>
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-success'
+            },
+            buttonsStyling: true
+        })
+
+        swalWithBootstrapButtons.fire({
+            icon: 'error',
+            title: 'Регистрация не удалась!',
+            html: 'Пользователь с логином <b>${unsuccessfulRegistrationLogin}</b> уже существует. <br>Зарегистрировать нового или перейти на главную страницу?',
+            showCancelButton: true,
+            confirmButtonText: 'Регистрация',
+            cancelButtonText: 'На главную',
+            reverseButtons: false,
+            backdrop: 'rgba(255, 0, 0, 0.1)'
+        }).then((result) => {
+            if (result.value) { // Yes
+                window.location = 'RegistrationPage.jsp';
+            } else if (result.dismiss === Swal.DismissReason.cancel) { // No
+                window.location = 'main';
+            }
+        })
+    </script>
+</c:if>
 </body>
 </html>

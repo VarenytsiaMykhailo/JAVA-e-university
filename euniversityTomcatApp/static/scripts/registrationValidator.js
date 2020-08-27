@@ -180,7 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const submit = () => {
         form.submit();
-        alert('Данные отправленны');
         form.reset();
     }
 
