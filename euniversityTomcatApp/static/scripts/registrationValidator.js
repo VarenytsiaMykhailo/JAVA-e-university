@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', (event) => {
         event.preventDefault(); // Временно блокируем отправку формы на сервер
         for (let elem of form.elements) {
-            if (elem.tagName !== 'BUTTON') { // Отсекаем кнопки
+            if (elem.tagName !== 'BUTTON' && elem.getAttribute('type') !== 'hidden') { // Отсекаем кнопки и инпуты с типом hidden
                 if (elem.value === "") { // Если поля пустые
                     elem.nextElementSibling.textContent = "Заполните данное поле!";
                     isValidate = false;
@@ -179,6 +179,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const submit = () => {
+        form.elements.namedItem("validatedByJSValidator").setAttribute("value", "TRUE"); // Для проверки прохождения валидации скриптом в сервелете
+
         form.submit();
         form.reset();
     }

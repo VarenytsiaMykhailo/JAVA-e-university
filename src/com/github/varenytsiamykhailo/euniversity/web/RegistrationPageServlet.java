@@ -30,7 +30,8 @@ public class RegistrationPageServlet extends HttpServlet {
         System.out.println("Enter to RegistrationPageServlet");
 
         // Мини защита, если пытаются попасть в сервелет RegistrationPageServelet не из RegistrationPage.jsp, обойдя валидацию js скрипта.
-        if (!req.getHeader("Referer").endsWith("RegistrationPage.jsp")) {
+        if (req.getHeader("Referer") == null || !req.getHeader("Referer").endsWith("RegistrationPage.jsp")
+                || req.getParameter("validatedByJSValidator") == null || !req.getParameter("validatedByJSValidator").equals("TRUE")) {
             throw new IOException(new IllegalRequestException());
         }
 
