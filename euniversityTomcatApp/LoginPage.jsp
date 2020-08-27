@@ -4,40 +4,62 @@
 <html>
 <head>
     <title>e-university</title>
+    <!-- Настройка viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Подключаем Bootstrap CSS -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bootstrap.min.css">
+    <!-- Подключаем стили заголовка -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/headerStyle.css">
 </head>
 
 <body>
 
-<div id="loginForm">
-    <form action="" method="POST"> <%-- Запрос перехватит фильтр и если авторизация выполнится, он переотправит на /main сервелет MainPage --%>
-        <h1>Вход в систему e-university</h1>
+<div class="container">
+    <!-- Заголовок -->
+    <div class="row justify-content-center">
+        <div class="header-h1 header-h1-left" style="margin-top: 6ex">
+            <h1>Вход в систему e-university</h1>
+        </div>
+    </div>
 
-        <input type="hidden" name="is_login_action"
-               value="${true}"> <%-- Для передачи student_id из studentDataForm в сервлет StudentEditPageServlet --%>
+    <div class="row justify-content-center" style="margin-top: 6ex">
+        <form action="" class="justify-content-center"
+              method="POST"> <%-- Запрос перехватит фильтр и если авторизация выполнится, он переотправит на /main сервелет MainPage --%>
 
-        <p>
-            <strong>Логин:</strong>
-            <br>
-            <input type="text" name="login" maxlength="30" size="40" placeholder="введите логин" required/>
-        </p>
-        <p>
-            <strong>Пароль:</strong>
-            <br>
-            <input type="password" name="password" maxlength="30" size="40" placeholder="введите пароль" required/>
-        </p>
-        <p>
-            <c:if test="${incorrectLoginPassword}">
-                Вы ввели неверный логин или пароль.
-            </c:if>
-        </p>
-        <p>
-            <input type="submit" value="Войти"/>
-        </p>
-        <p>
-            Для регистрации обратитесь к администратору.
-        </p>
 
-    </form>
+            <input type="hidden" name="is_login_action"
+                   value="${true}"> <%-- Для передачи student_id из studentDataForm в сервлет StudentEditPageServlet --%>
+
+            <%-- Секция логина --%>
+            <div class="form-group">
+                <label for="loginInput"><b>Введите логин:</b></label>
+                <input type="text" name="login" class="form-control" id="loginInput" size="50" required/>
+            </div>
+
+            <%-- Секция пароля --%>
+            <div class="form-group">
+                <label for="passwordInput"><b>Введите пароль:</b></label>
+                <input type="password" name="password" class="form-control" id="passwordInput" size="50" required/>
+            </div>
+
+            <%-- Секция ошибки (если пользователь введет неверные данные) --%>
+            <div class="errors" style="height: 20px; color: red; margin-bottom: 3ex">
+                <c:if test="${incorrectLoginPassword}">
+                    Вы ввели неверный логин или пароль.
+                </c:if>
+            </div>
+
+            <div class="form-group row justify-content-center">
+                <input type="submit" class="btn btn-primary col-8" value="Войти"/>
+            </div>
+
+            <div class="form-group row justify-content-center">
+                Для регистрации обратитесь к администратору.
+            </div>
+
+
+        </form>
+    </div>
 </div>
 </body>
 </html>

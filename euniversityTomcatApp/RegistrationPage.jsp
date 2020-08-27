@@ -101,7 +101,8 @@
                 <button type="submit" class="btn btn-primary col-10">Зарегистрировать</button>
             </div>
             <div class="form-group col-6 row justify-content-center">
-                <button type="button" name="cancel" class="btn btn-primary col-10" onclick="window.location = 'main';">Отмена
+                <button type="button" name="cancel" class="btn btn-primary col-10" onclick="window.location = 'main';">
+                    Отмена
                 </button>
                 <%-- history.back() - возрващает на предыдущую страницу --%>
             </div>
