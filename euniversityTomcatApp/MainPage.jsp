@@ -165,25 +165,59 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/static/scripts/sweetalert2.min.js"></script>
 
 <%-- Скрипт всплывающего окна об успешном переводе студентов --%>
+<script>
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: false,
+        onOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+</script>
+
+<%-- Выводит оповещение, если группа была успешно перемещена --%>
 <c:if test="${successfulMoveGroupNotification}">
     <script>
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: false,
-            onOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        })
-
         Toast.fire({
             icon: 'success',
             title: 'Студенты были успешно переведены в новую группу'
         })
     </script>
 </c:if>
+
+<%-- Выводит оповещение, если студент был успешно удален --%>
+<c:if test="${successfulStudentDeletionNotification}">
+    <script>
+        Toast.fire({
+            icon: 'success',
+            title: 'Студент был успешно удален'
+        })
+    </script>
+</c:if>
+
+<%-- Выводит оповещение, если студент был успешно добавлен --%>
+<c:if test="${successfulStudentInsertionNotification}">
+    <script>
+        Toast.fire({
+            icon: 'success',
+            title: 'Студент был успешно добавлен'
+        })
+    </script>
+</c:if>
+
+<%-- Выводит оповещение, если студент был успешно отредактирован --%>
+<c:if test="${successfulStudentUpdatingNotification}">
+    <script>
+        Toast.fire({
+            icon: 'success',
+            title: 'Информация о студенте была успешно обновлена'
+        })
+    </script>
+</c:if>
+
 </body>
 </html>

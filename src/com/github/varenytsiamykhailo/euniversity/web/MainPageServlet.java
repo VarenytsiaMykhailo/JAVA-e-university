@@ -88,6 +88,9 @@ public class MainPageServlet extends HttpServlet {
                     Student student = new Student();
                     student.setStudentId(Integer.parseInt(req.getParameter("student_id")));
                     managementSystemWebDAO.get().deleteStudent(student);
+
+                    // Посылаем в jsp инфу об успешном удалении студента. Нужно для вывода всплывающего окна об успешности.
+                    req.setAttribute("successfulStudentDeletionNotification", Boolean.TRUE);
                 }
             } catch (SQLException e) {
                 throw new IOException(e.getMessage());
