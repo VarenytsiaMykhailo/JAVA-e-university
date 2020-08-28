@@ -28,11 +28,11 @@
 
 </head>
 
-<body style="margin-top: 8ex">
+<body style="margin-top: 7vh">
 
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="height: 6ex">
-    <div class="container">
-        <a class="navbar-brand" href="#" style="font-size: 160%">
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="height: 6vh">
+    <div class="container" style="width: 60vw">
+        <a class="navbar-brand" href="#" style="font-size: 150%">
             e-university
         </a>
 
@@ -43,7 +43,7 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown" style="font-size: 115%">
+                <li class="nav-item dropdown" style="font-size: 110%">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Опции
@@ -81,14 +81,14 @@
 </nav>
 
 
-<div class="container">
+<div class="container" style="width: 60vw">
     <div class="row">
         <div class="col-7 row justify-content-center">
             <form action="<c:url value="/main" />" method="POST">
 
-                <div class="row" style="height: 10ex">
+                <div class="row" style="height: 10vh">
                     <%-- Год обучения --%>
-                    <div class="form-group col-5">
+                    <div class="form-group col-4">
                         <label for="yearOfStudyInput"><b>Год обучения:</b></label>
                         <input type="number" name="selected_year" class="form-control" id="yearOfStudyInput" min="1900"
                                value="${mainDataForm.selectedYear}"/>
@@ -116,15 +116,15 @@
                     </div>
 
                     <%-- Кнопка обновить --%>
-                    <div class="form-group col-2 row align-items-center justify-content-center">
+                    <div class="form-group col-3 row align-items-center justify-content-center">
                         <input type="submit" name="get_students_list" class="btn btn-primary"
-                               style="height: 6ex; width: 120%; margin-left: 4ex" value="Обновить"/>
+                               style="height: 5vh; width: 120%; margin-left: 2ex" value="Обновить"/>
                     </div>
                 </div>
 
 
                 <%-- Таблица --%>
-                <div class="row align-items-start" style="max-height: 78ex; overflow-y: auto; ">
+                <div class="row align-items-start" style="max-height: 65vh; overflow-y: auto; ">
                     <label for="studentsTable"><b>Список студентов для выбранных параметров:</b></label>
                     <table class="table table-hover" id="studentsTable">
                         <thead class="thead-light">
@@ -172,14 +172,14 @@
 
 
                 <nav class="navbar fixed-bottom navbar-expand-lg navbar-light"
-                     style="background-color: #979ba2; height: 21ex">
-                    <div class="container">
-                        <div class="col-7">
+                     style="background-color: #979ba2; height: 18vh">
+                    <div class="container" style="margin: 18vw; padding: 0; width: 60vw">
+                        <div class="row col-8">
                             <%-- Переместить студентов в другую группу --%>
-                            <label for="moveAllStudentsTorGroup"><b>Переместить студентов в другую группу:</b></label>
-                            <div class="row align-items-end " id="moveAllStudentsTorGroup" style="height: 10ex">
+
+                            <div class="row align-items-end" id="moveAllStudentsTorGroup" style="height: 9vh">
                                 <%-- Новый год обучения: --%>
-                                <div class="form-group col-4">
+                                <div class="form-group col-5">
                                     <label for="newYearOfStudyInput"><b>Новый год обучения:</b></label>
                                     <input type="number" name="new_year" class="form-control" id="newYearOfStudyInput"
                                            min="1900"
@@ -200,28 +200,28 @@
                                 </div>
 
                                 <%-- Кнопка переместить студентов --%>
-                                <div class="form-group col-4 row align-items-center justify-content-center">
+                                <div class="form-group col-3 row align-items-center">
                                     <input type="submit" name="move_group" class="btn btn-primary"
                                            value="Переместить студентов">
                                 </div>
                             </div>
 
                             <%-- Кнопки управления --%>
-                            <div class="row" style="height: 4ex">
+                            <div class="row align-items-end" style="height: 8vh">
                                 <%-- Кнопка добавить студента --%>
-                                <div class="form-group col-4 row align-items-center justify-content-center">
+                                <div class="form-group col-4 align-items-center">
                                     <input type="submit" name="insert_student" class="btn btn-primary"
                                            value="Добавить студента">
                                 </div>
 
                                 <%-- Кнопка редактировать студента --%>
-                                <div class="form-group col-4 row align-items-center justify-content-center">
+                                <div class="form-group col-4 align-items-center">
                                     <input type="submit" name="update_student" class="btn btn-primary"
                                            value="Редактировать студента">
                                 </div>
 
                                 <%-- Кнопка удалить студента --%>
-                                <div class="form-group col-4 row align-items-center justify-content-center">
+                                <div class="form-group col-4  align-items-center ">
                                     <input type="submit" name="delete_student" class="btn btn-primary"
                                            style="width: 120%; margin-left: 2ex" value="Удалить студента">
                                 </div>
@@ -236,7 +236,7 @@
 
         <div class="col-5 row align-items-center justify-content-center">
             <%-- Место для будущего контента --%>
-            <img src="static/images/content.jpg" style="height: 50%; width: 90%">
+
         </div>
     </div>
 </div>
