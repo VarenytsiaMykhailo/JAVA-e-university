@@ -12,15 +12,79 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/headerStyle.css">
     <%-- Стили всплывающего окна. Скрипты подключаются перед /body --%>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/sweetalert2.min.css">
+
+    <!-- Jquery -->
+    <script
+            src="https://code.jquery.com/jquery-2.2.4.js"
+            integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+            crossorigin="anonymous"></script>
+    <!-- Bootstrap js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <!-- Bootstrap js -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
 </head>
 
 <body>
 
-<div class="container">
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="height: 6vh">
+    <div class="container" style="width: 60vw">
+        <a class="navbar-brand" href="main" style="font-size: 150%">
+            e-university
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown" style="font-size: 110%">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Опции
+                    </a>
+                    <div class="dropdown-menu bg-dark bg-light:hover" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item hoverBlack" style="color: aliceblue" href="AccountSettingsPage.jsp">Настройки
+                            аккаунта</a>
+
+                        <c:if test="${role eq 'ADMIN'}">
+                            <a class="dropdown-item hoverBlack" style="color: aliceblue" href="RegistrationPage.jsp">Регистрация
+                                нового пользователя</a>
+                        </c:if>
+
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item hoverBlack" style="color: aliceblue" href="#">В реализации</a>
+                    </div>
+                </li>
+            </ul>
+
+            <span class="navbar-text" style="padding-right: 2ex; font-size: 120%">
+                <c:if test="${role eq 'ADMIN'}">
+                    <b>Администратор:</b> ${login}
+                </c:if>
+                <c:if test="${role eq 'USER'}">
+                    <b>Пользователь:</b> ${login}
+                </c:if>
+            </span>
+
+            <span>
+                <button class="btn btn-outline-info" type="button" onclick="window.location = 'logout';">Выход</button>
+            </span>
+
+        </div>
+    </div>
+</nav>
+
+<div class="container" style="margin-top: 9vh">
 
     <!-- Заголовок -->
     <div class="row justify-content-center">
-        <div class="header-h1 header-h1-left" style="margin-top: 4ex">
+        <div class="header-h1 header-h1-left">
             <h1>Регистрация пользователя</h1>
         </div>
     </div>
