@@ -11,28 +11,30 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bootstrap.min.css">
     <%-- Стили всплывающего окна. Используеюся библиотека sweetalert2. --%>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/sweetalert2.min.css">
-    <%-- Стили MainPage.css --%>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/MainPage.css">
+    <%-- Стили Pages.css --%>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/Pages.css">
 
-
+    <!-- Jquery -->
     <script
             src="https://code.jquery.com/jquery-2.2.4.js"
             integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
             crossorigin="anonymous"></script>
+    <!-- Bootstrap js popper-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
             crossorigin="anonymous"></script>
+    <!-- Bootstrap js -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
 
 </head>
 
-<body style="margin-top: 7vh">
+<body>
 
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="height: 6vh">
     <div class="container" style="width: 60vw">
-        <a class="navbar-brand" href="#" style="font-size: 150%">
+        <a class="navbar-brand" href="main" style="font-size: 150%">
             e-university
         </a>
 
@@ -81,7 +83,7 @@
 </nav>
 
 
-<div class="container" style="width: 60vw">
+<div class="container" style="width: 60vw; margin-top: 7vh">
     <div class="row">
         <div class="col-7 row justify-content-center">
             <form action="<c:url value="/main" />" method="POST">

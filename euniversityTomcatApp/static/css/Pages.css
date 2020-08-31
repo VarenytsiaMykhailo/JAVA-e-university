@@ -1,11 +1,11 @@
 @charset "utf-8";
 
 body {
-    background: linear-gradient(125deg, #ffffff, #e8f5f6);
-/ / background: #111010 url(images/background/5.jpg);
-    background-size: 100%; /* Цвет фона и путь к файлу */
-/ / font-family: Roboto;
-/ / font-size: large;
+//    background: linear-gradient(125deg, #b7d3f1, #e8f5f6);
+// background: #111010 url(images/background/5.jpg);
+ //   background-size: 100%; /* Цвет фона и путь к файлу */
+// font-family: Roboto;
+// font-size: large;
 }
 
 a.hoverBlack:hover {

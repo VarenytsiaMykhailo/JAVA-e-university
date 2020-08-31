@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/headerStyle.css">
     <%-- Стили всплывающего окна. Скрипты подключаются перед /body --%>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/sweetalert2.min.css">
+    <%-- Стили Pages.css --%>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/Pages.css">
 
     <!-- Jquery -->
     <script
