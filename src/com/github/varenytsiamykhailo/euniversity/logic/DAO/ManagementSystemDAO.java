@@ -363,23 +363,27 @@ public abstract class ManagementSystemDAO {
     }
 
     /**
-     * Добавляет (регистрирует) user в базу данных.
+     * Добавляет (регистрирует) user в базу данных. Если пользователь с таким же login уже существует, то бросается исключение SQLException
      */
     public void addUser(User user) throws SQLException {
-        PreparedStatement stmt = null;
-        try {
-            stmt = connection.prepareStatement("INSERT INTO all_users " +
-                    "(login, password, email, role_id) " +
-                    "VALUES (?, ?, ?, ?)"
-            );
-            stmt.setString(1, user.getLogin());
-            stmt.setString(2, user.getPassword());
-            stmt.setString(3, user.getEmail());
-            stmt.setInt(4, user.getRoleId());
-            stmt.executeUpdate();
-        } finally {
-            if (stmt != null)
-                stmt.close();
+        if (!userIsExistByLogin(user.getLogin())) {
+            PreparedStatement stmt = null;
+            try {
+                stmt = connection.prepareStatement("INSERT INTO all_users " +
+                        "(login, password, email, role_id) " +
+                        "VALUES (?, ?, ?, ?)"
+                );
+                stmt.setString(1, user.getLogin());
+                stmt.setString(2, user.getPassword());
+                stmt.setString(3, user.getEmail());
+                stmt.setInt(4, user.getRoleId());
+                stmt.executeUpdate();
+            } finally {
+                if (stmt != null)
+                    stmt.close();
+            }
+        } else {
+            throw new SQLException("User with this login is exist!");
         }
     }
 
