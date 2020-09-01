@@ -1,6 +1,7 @@
 package com.github.varenytsiamykhailo.euniversity.web;
 
 import com.github.varenytsiamykhailo.euniversity.logic.Role;
+import com.github.varenytsiamykhailo.euniversity.web.Exceptions.IllegalRequestException;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
