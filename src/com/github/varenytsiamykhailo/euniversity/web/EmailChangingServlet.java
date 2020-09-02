@@ -31,12 +31,12 @@ public class EmailChangingServlet extends HttpServlet {
             // Посылаем в jsp инфу об не одинаково введенных emailов
             req.setAttribute("emailsDontEqualsInput", Boolean.TRUE);
         } else if (result == 0) {
-            final String usersLogin = (String) req.getSession().getAttribute("login");
+            final String userLogin = (String) req.getSession().getAttribute("login");
 
             @SuppressWarnings("unchecked") final AtomicReference<ManagementSystemWebDAO> managementSystemWebDAO = (AtomicReference<ManagementSystemWebDAO>) req.getServletContext().getAttribute("managementSystemWebDAO");
 
             try {
-                managementSystemWebDAO.get().updateUsersEmail(usersLogin, newEmail);
+                managementSystemWebDAO.get().updateUserEmail(userLogin, newEmail);
 
                 // Посылаем в jsp инфу об успешном изменении email
                 req.setAttribute("successfulEmailChangingNotification", Boolean.TRUE);

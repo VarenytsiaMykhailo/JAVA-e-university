@@ -484,7 +484,7 @@ public abstract class ManagementSystemDAO {
     /**
      * Устанавливает новое значение email у user с переданным login
      */
-    public void updateUsersEmail(final String login, final String newEmail) throws SQLException {
+    public void updateUserEmail(final String login, final String newEmail) throws SQLException {
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement("UPDATE all_users " +
