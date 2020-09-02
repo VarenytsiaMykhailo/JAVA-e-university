@@ -480,4 +480,23 @@ public abstract class ManagementSystemDAO {
                 stmt.close();
         }
     }
+
+    /**
+     * Устанавливает новое значение email у user с переданным login
+     */
+    public void updateUsersEmail(final String login, final String newEmail) throws SQLException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement("UPDATE all_users " +
+                    "SET email = ? " +
+                    "WHERE login = ?"
+            );
+            stmt.setString(1, newEmail);
+            stmt.setString(2, login);
+            stmt.executeUpdate();
+        } finally {
+            if (stmt != null)
+                stmt.close();
+        }
+    }
 }
