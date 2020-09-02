@@ -99,14 +99,18 @@
                     <label for="passwordInput">Введите новый пароль:</label>
                     <input type="password" name="new_password" class="form-control" id="passwordInput"
                            required/>
-                    <div class="errors" style="height: 20px; color: red"></div>
+                    <c:if test="${invalidPasswordInput}">
+                        <div class="errors" style="height: 20px; color: red">Введите корректный пароль!</div>
+                    </c:if>
                 </div>
                 <%-- Секция повторения нового пароля --%>
                 <div class="form-group row col-12">
                     <label for="passwordRepeatInput">Повторите новый пароль:</label>
-                    <input type="password" name="new_password_repeat" class="form-controlt"
+                    <input type="password" name="new_password_repeat" class="form-control"
                            id="passwordRepeatInput" required/>
-                    <div class="errors" style="height: 20px; color: red"></div>
+                    <c:if test="${passwordsDontEqualsInput}">
+                        <div class="errors" style="height: 20px; color: red">Пароли не совпадают!</div>
+                    </c:if>
                 </div>
             </div>
 
@@ -116,7 +120,9 @@
                     <label for="currentPasswordInput">Введите текущий пароль:</label>
                     <input type="password" name="current_password" class="form-control" id="currentPasswordInput"
                            required/>
-                    <div class="errors" style="height: 20px; color: red"></div>
+                    <c:if test="${incorrectCurrentPasswordInput}">
+                        <div class="errors" style="height: 20px; color: red">Вы ввели неверный текущий пароль!</div>
+                    </c:if>
                 </div>
                 <%-- Кнопка --%>
                 <div class="form-group row col-12 justify-content-center align-items-center">
@@ -132,7 +138,7 @@
 <%-- Скрипты всплывающего окна. Используеюся библиотека sweetalert2 --%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/static/scripts/sweetalert2.min.js"></script>
 
-<%-- Скрипт всплывающего окна для успешной регистрации --%>
+<%-- Скрипт всплывающего окна для успешного изменения email --%>
 <c:if test="${successfulEmailChangingNotification}">
     <script>
         const swalWithBootstrapButtons = Swal.mixin({
@@ -158,6 +164,86 @@
             } else if (result.dismiss === Swal.DismissReason.cancel) { // No
                 window.location = 'AccountSettingsPage.jsp';
             }
+        })
+    </script>
+</c:if>
+
+<%-- Скрипт всплывающего окна для успешного изменения password --%>
+<c:if test="${successfulPasswordChangingNotification}">
+    <script>
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-success'
+            },
+            buttonsStyling: true
+        })
+
+        swalWithBootstrapButtons.fire({
+            icon: 'success',
+            title: 'Вы успешно изменили пароль!',
+            text: "Остаться или перейти на главную страницу?",
+            showCancelButton: true,
+            confirmButtonText: 'На главную',
+            cancelButtonText: 'Остаться',
+            reverseButtons: true,
+            backdrop: 'rgb(0, 255, 102, 0.1)'
+        }).then((result) => {
+            if (result.value) { // Yes
+                window.location = 'main';
+            } else if (result.dismiss === Swal.DismissReason.cancel) { // No
+                window.location = 'AccountSettingsPage.jsp';
+            }
+        })
+    </script>
+</c:if>
+
+<%-- Скрипт всплывающего окна-подсказки для email --%>
+<c:if test="${invalidEmailInput}">
+    <script>
+        // Конфигурация всплывающих подсказок
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: false,
+            onOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+
+        Toast.fire({ // Всплывающая подсказка
+            icon: 'info',
+            html: '<p align="center"><h5>Email должен иметь вид:</h5></p>' +
+                '<p align="left" style="margin-left: 3ex">example@example.com</p>' +
+                '<p align="left" style="margin-left: 3ex">и обязательно содержать символ "@"</p>',
+        })
+    </script>
+</c:if>
+
+<%-- Скрипт всплывающего окна-подсказки для password --%>
+<c:if test="${invalidPasswordInput}">
+    <script>
+        // Конфигурация всплывающих подсказок
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: false,
+            onOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+
+        Toast.fire({ // Всплывающая подсказка
+            icon: 'info',
+            html: '<p align="center"><h5>Пароль должен содержать:</h5></p>' +
+                '<p align="left" style="margin-left: 3ex">- Минимум 6 символов</p>' +
+                '<p align="left" style="margin-left: 3ex">- Допускаются строчные и заглавные <br> латинские буквы и цифры</p>',
         })
     </script>
 </c:if>
