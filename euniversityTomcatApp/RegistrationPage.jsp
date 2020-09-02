@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bootstrap.min.css">
     <!-- Подключаем стили заголовка -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/headerStyle.css">
-    <%-- Стили всплывающего окна. Скрипты подключаются перед /body --%>
+    <%-- Стили всплывающего окна. Скрипты подключаются перед. Используется библиотека sweetalert2 --%>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/sweetalert2.min.css">
     <%-- Стили Pages.css --%>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/Pages.css">

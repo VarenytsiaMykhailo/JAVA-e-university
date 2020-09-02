@@ -83,6 +83,11 @@
         <servlet-class>com.github.varenytsiamykhailo.euniversity.web.StudentEditPageServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>EmailChangingServlet</servlet-name>
+        <servlet-class>com.github.varenytsiamykhailo.euniversity.web.EmailChangingServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/logout</url-pattern>
@@ -103,6 +108,10 @@
         <url-pattern>/student-edit</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>EmailChangingServlet</servlet-name>
+        <url-pattern>/change-email</url-pattern>
+    </servlet-mapping>
 
     <resource-ref>
         <description>MySQL Connection</description>
