@@ -499,4 +499,25 @@ public abstract class ManagementSystemDAO {
                 stmt.close();
         }
     }
+
+    /**
+     * Устанавливает новое значение password у user с переданным login и currentPassword
+     */
+    public void updateUserPassword(final String login, final String currentPassword, final String newPassword) throws SQLException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement("UPDATE all_users " +
+                    "SET password = ? " +
+                    "WHERE login = ? AND password = ?"
+            );
+            stmt.setString(1, newPassword);
+            stmt.setString(2, login);
+            stmt.setString(3, currentPassword);
+            stmt.executeUpdate();
+        } finally {
+            if (stmt != null)
+                stmt.close();
+        }
+    }
+
 }
