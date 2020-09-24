@@ -1,6 +1,8 @@
 package com.github.varenytsiamykhailo.euniversity.web;
 
-import com.github.varenytsiamykhailo.euniversity.logic.Role;
+import com.github.varenytsiamykhailo.euniversity.logic.DAO.DAO;
+import com.github.varenytsiamykhailo.euniversity.logic.entities.Role;
+import com.github.varenytsiamykhailo.euniversity.logic.entities.User;
 import com.github.varenytsiamykhailo.euniversity.web.Exceptions.IllegalRequestException;
 
 import javax.servlet.*;
@@ -8,9 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.nonNull;
 
@@ -34,53 +34,52 @@ public class AuthFilter implements Filter {
         System.out.println("URI = " + req.getRequestURI());
         System.out.println("URL = " + req.getRequestURL());
 
-        @SuppressWarnings("unchecked")
-        final AtomicReference<ManagementSystemWebDAO> managementSystemWebDAO = (AtomicReference<ManagementSystemWebDAO>) req.getServletContext().getAttribute("managementSystemWebDAO");
+        DAO dao = new DAO();
 
         final HttpSession session = req.getSession();
 
 
-        if (nonNull(session) && nonNull(session.getAttribute("login")) && nonNull(session.getAttribute("password"))) { // Если пользователь уже вводил логин и пароль ранее (т.е. через куки пришла инфа с его активной сессией и введенными ранее данными), то мы его пропускаем
+        if (nonNull(session) && nonNull(session.getAttribute("user"))) { // Если пользователь уже вводил логин и пароль ранее (т.е. через куки пришла инфа с его активной сессией и введенными ранее данными), то мы его пропускаем
             System.out.println("Enter to the first validator block");
 
-            final Role role = (Role) session.getAttribute("role");
+            final User user = (User) session.getAttribute("user");
 
-            giveAccessToContent(req, res, filterChain, role);
+            giveAccessToContent(req, res, filterChain, user.getRole());
         } else {
-
             final String login = req.getParameter("login");
             final String password = req.getParameter("password");
             System.out.println("LOGIN = " + login);
             System.out.println("PASSWORD = " + password);
 
-            try {
-                if (nonNull(login) && nonNull(password) && managementSystemWebDAO.get().userIsExistByLoginPassword(login, password)) { // Если пользователь проходит проверку впервые (и он ввел корректные данные)
-                    System.out.println("Enter to the second validator block");
 
-                    final Role role = managementSystemWebDAO.get().getUserRoleByLoginPassword(login, password);
+            if (nonNull(login) && nonNull(password) && dao.userIsExistByLoginPassword(login, password)) { // Если пользователь проходит проверку впервые (и он ввел корректные данные)
+                System.out.println("Enter to the second validator block");
+
+                    /*final Role role = managementSystemWebDAO.get().getUserRoleByLoginPassword(login, password);
 
                     req.getSession().setAttribute("password", password);
                     req.getSession().setAttribute("login", login);
-                    req.getSession().setAttribute("role", role);
+                    req.getSession().setAttribute("role", role);*/
 
-                    giveAccessToContent(req, res, filterChain, role);
-                } else { // Если пользователь ввел некорректные данные
-                    System.out.println("Enter to the third validator block");
+                final User user = dao.getUserByLoginPassword(login, password);
+                req.getSession().setAttribute("user", user);
 
-                    if (nonNull(login) || nonNull(password)) {  // Логика вывода сообщения об неправильно введенных данных
-                        req.setAttribute("incorrectLoginPassword", Boolean.TRUE);
-                    }
+                giveAccessToContent(req, res, filterChain, user.getRole());
+            } else { // Если пользователь ввел некорректные данные
+                System.out.println("Enter to the third validator block");
 
-                    giveAccessToContent(req, res, filterChain, Role.UNKNOWN);
+                if (nonNull(login) || nonNull(password)) {  // Логика вывода сообщения об неправильно введенных данных
+                    req.setAttribute("incorrectLoginPassword", Boolean.TRUE);
                 }
-            } catch (SQLException e) {
-                throw new IOException(e.getMessage());
+
+                giveAccessToContent(req, res, filterChain, dao.getRole("UNKNOWN"));
             }
+
         }
     }
 
     private void giveAccessToContent(final HttpServletRequest req, final HttpServletResponse res, FilterChain filterChain, final Role role) throws ServletException, IOException {
-        if (role.equals(Role.USER)) {
+        if (role.getRole().equals("USER")) {
             System.out.println("giveAccessToContent USER");
 
             // В эту коллекцию добавляем страницы, которые недоступны User.
@@ -88,7 +87,7 @@ public class AuthFilter implements Filter {
             blockedContentForUsers.add("/RegistrationPage.jsp");
             blockedContentForUsers.add("/registration");
 
-            if (nonNull(req.getParameter("is_login_action"))) { // Если пользователь попал фильтр со страницы входа, перенаправляем его на главную страницу
+            if (nonNull(req.getParameter("is_login_action"))) { // Если пользователь попал в фильтр со страницы входа, перенаправляем его на главную страницу
                 System.out.println("isLoginAction = " + req.getParameter("is_login_action"));
                 req.getRequestDispatcher("/main").forward(req, res);
                 return;
@@ -103,7 +102,7 @@ public class AuthFilter implements Filter {
 
             filterChain.doFilter(req, res); // Передаем управление следующим фильтрам/сервлетам в цепочке
 
-        } else if (role.equals(Role.ADMIN)) {
+        } else if (role.getRole().equals("ADMIN")) {
             System.out.println("giveAccessToContent ADMIN");
 
             if (nonNull(req.getParameter("is_login_action"))) { // Если пользователь попал фильтр со страницы входа, перенаправляем его на главную страницу

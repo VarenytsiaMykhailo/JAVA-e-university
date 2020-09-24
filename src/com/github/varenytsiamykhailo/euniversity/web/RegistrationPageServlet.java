@@ -1,7 +1,8 @@
 package com.github.varenytsiamykhailo.euniversity.web;
 
-import com.github.varenytsiamykhailo.euniversity.logic.Role;
-import com.github.varenytsiamykhailo.euniversity.logic.User;
+import com.github.varenytsiamykhailo.euniversity.logic.DAO.DAO;
+import com.github.varenytsiamykhailo.euniversity.logic.entities.Role;
+import com.github.varenytsiamykhailo.euniversity.logic.entities.User;
 
 import com.github.varenytsiamykhailo.euniversity.web.Exceptions.IllegalRequestException;
 import com.github.varenytsiamykhailo.euniversity.web.Exceptions.validatorExceptions.*;
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.concurrent.atomic.AtomicReference;
+
 
 public class RegistrationPageServlet extends HttpServlet {
 
@@ -54,38 +55,27 @@ public class RegistrationPageServlet extends HttpServlet {
         // Валидатор введенных данных (на случай, если что-то случилось с js скриптом)
         validator(login, loginRepeat, email, emailRepeat, password, passwordRepeat);
 
-        @SuppressWarnings("unchecked") final AtomicReference<ManagementSystemWebDAO> managementSystemWebDAO = (AtomicReference<ManagementSystemWebDAO>) req.getServletContext().getAttribute("managementSystemWebDAO");
+        DAO dao = new DAO();
 
-        try {
-            if (managementSystemWebDAO.get().userIsExistByLogin(login)) {
+        if (dao.userIsExistByLogin(login)) {
 
                 /* Посылаем в jsp инфу об неудачной регистрации.
                 Нужно для вывода всплывающего окна об неудачной регистрации, с сообщением,
                 что пользователь с таким логином уже зарегистрирован*/
-                req.setAttribute("unsuccessfulRegistrationNotification", Boolean.TRUE);
-                req.setAttribute("unsuccessfulRegistrationLogin", login);
+            req.setAttribute("unsuccessfulRegistrationNotification", Boolean.TRUE);
+            req.setAttribute("unsuccessfulRegistrationLogin", login);
 
-            } else {
-                User newUser = new User();
-                newUser.setLogin(login);
-                newUser.setEmail(email);
-                newUser.setPassword(password);
-                Role roleTmp;
-                if (role.equals("ADMIN"))
-                    roleTmp = Role.ADMIN;
-                else if (role.equals("USER"))
-                    roleTmp = Role.USER;
-                else {
-                    roleTmp = Role.UNKNOWN;
-                }
-                newUser.setRoleId(managementSystemWebDAO.get().getRoleIdByUserRole(roleTmp));
-                managementSystemWebDAO.get().addUser(newUser);
+        } else {
+            User newUser = new User();
+            newUser.setLogin(login);
+            newUser.setEmail(email);
+            newUser.setPassword(password);
 
-                // Посылаем в jsp инфу об успешной регистрации. Нужно для вывода всплывающего окна об успешности.
-                req.setAttribute("successfulRegistrationNotification", Boolean.TRUE);
-            }
-        } catch (SQLException e) {
-            throw new IOException(e.getMessage());
+            newUser.setRole(dao.getRole(role));
+            dao.addUser(newUser);
+
+            // Посылаем в jsp инфу об успешной регистрации. Нужно для вывода всплывающего окна об успешности.
+            req.setAttribute("successfulRegistrationNotification", Boolean.TRUE);
         }
 
         System.out.println("Redirect from RegistrationPageServlet to RegistrationPage.jsp");

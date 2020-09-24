@@ -7,15 +7,17 @@ import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 
-public class DAOtest {
+public class DAO {
 
     /**
      * Поиск user по переданному id. Если user с таким id нет - возвращается null
      */
-    public User getUserById(Long userId) {
+    public User getUserById(final Long userId) {
         User user;
         Session session = null;
         try {
@@ -76,7 +78,7 @@ public class DAOtest {
      * Добавляет (регистрирует) user в базу данных. Если пользователь с таким же login уже существует, то возвращается null.
      * Если user добавился в базу данных - возвращается его сгенерированный id.
      */
-    public Long addUser(User user) {
+    public Long addUser(final User user) {
         Long id = null;
         if (!userIsExistByLogin(user.getLogin())) {
             Session session = null;
@@ -162,16 +164,40 @@ public class DAOtest {
         return role;
     }
 
+    /**
+     * Устанавливает новое значение email у user с переданным login
+     */
     public void updateUserEmail(final User user, final String newEmail) {
         Session session = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             Transaction transaction = session.beginTransaction();
-            id = (Long) session.save(user);
+            user.setEmail(newEmail);
+            session.update(user);
             transaction.commit();
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
+            }
+        }
+    }
+
+    /**
+     * Устанавливает новое значение password у user с переданным login и currentPassword
+     */
+    public void updateUserPassword(final User user, final String currentPassword, final String newPassword) {
+        if (user.getPassword().equals(currentPassword)) {
+            Session session = null;
+            try {
+                session = HibernateUtil.getSessionFactory().openSession();
+                Transaction transaction = session.beginTransaction();
+                user.setPassword(newPassword);
+                session.update(user);
+                transaction.commit();
+            } finally {
+                if (session != null && session.isOpen()) {
+                    session.close();
+                }
             }
         }
     }

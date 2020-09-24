@@ -1,12 +1,14 @@
 package com.github.varenytsiamykhailo.euniversity.web;
 
+import com.github.varenytsiamykhailo.euniversity.logic.DAO.DAO;
+import com.github.varenytsiamykhailo.euniversity.logic.entities.User;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.concurrent.atomic.AtomicReference;
+
 
 public class EmailChangingServlet extends HttpServlet {
     @Override
@@ -31,18 +33,15 @@ public class EmailChangingServlet extends HttpServlet {
             // Посылаем в jsp инфу об не одинаково введенных emailах
             req.setAttribute("emailsDontEqualsInput", Boolean.TRUE);
         } else if (result == 0) {
-            final String userLogin = (String) req.getSession().getAttribute("login");
+            final User user = (User) req.getSession().getAttribute("user");
 
-            @SuppressWarnings("unchecked") final AtomicReference<ManagementSystemWebDAO> managementSystemWebDAO = (AtomicReference<ManagementSystemWebDAO>) req.getServletContext().getAttribute("managementSystemWebDAO");
+            DAO dao = new DAO();
 
-            try {
-                managementSystemWebDAO.get().updateUserEmail(userLogin, newEmail);
+            dao.updateUserEmail(user, newEmail);
 
-                // Посылаем в jsp инфу об успешном изменении email
-                req.setAttribute("successfulEmailChangingNotification", Boolean.TRUE);
-            } catch (SQLException e) {
-                throw new IOException(e.getMessage());
-            }
+            // Посылаем в jsp инфу об успешном изменении email
+            req.setAttribute("successfulEmailChangingNotification", Boolean.TRUE);
+
         }
 
         getServletContext().getRequestDispatcher("/AccountSettingsPage.jsp").forward(req, resp);

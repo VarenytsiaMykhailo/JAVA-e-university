@@ -14,9 +14,9 @@ public class ContextListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        AtomicReference<ManagementSystemWebDAO> managementSystemWebDAO = new AtomicReference<ManagementSystemWebDAO>(ManagementSystemWebDAO.getInstance()); // ManagementSystemWebDAO нужно обернуть в объект-обертку atomic, который может безопасно работать с многопоточностью.
+        // AtomicReference<ManagementSystemWebDAO> managementSystemWebDAO = new AtomicReference<ManagementSystemWebDAO>(ManagementSystemWebDAO.getInstance()); // ManagementSystemWebDAO нужно обернуть в объект-обертку atomic, который может безопасно работать с многопоточностью.
         final ServletContext servletContext = sce.getServletContext();
-        servletContext.setAttribute("managementSystemWebDAO", managementSystemWebDAO);
+        // servletContext.setAttribute("managementSystemWebDAO", managementSystemWebDAO);
     }
 
     @Override

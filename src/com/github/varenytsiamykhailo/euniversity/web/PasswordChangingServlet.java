@@ -1,12 +1,13 @@
 package com.github.varenytsiamykhailo.euniversity.web;
 
+import com.github.varenytsiamykhailo.euniversity.logic.DAO.DAO;
+import com.github.varenytsiamykhailo.euniversity.logic.entities.User;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class PasswordChangingServlet extends HttpServlet {
     @Override
@@ -33,22 +34,20 @@ public class PasswordChangingServlet extends HttpServlet {
             // Посылаем в jsp инфу об не одинаково введенных passwords
             req.setAttribute("passwordsDontEqualsInput", Boolean.TRUE);
         } else if (result == 0) {
-            try {
-                final String userLogin = (String) req.getSession().getAttribute("login");
 
-                @SuppressWarnings("unchecked") final AtomicReference<ManagementSystemWebDAO> managementSystemWebDAO = (AtomicReference<ManagementSystemWebDAO>) req.getServletContext().getAttribute("managementSystemWebDAO");
+            final User user = (User) req.getSession().getAttribute("user");
 
-                if (!managementSystemWebDAO.get().userIsExistByLoginPassword(userLogin, currentPassword)) { // Если пользователь ввел неправильный currentPassword
-                     // Посылаем в jsp инфу об неправильно введенном currentPassword.
-                    req.setAttribute("incorrectCurrentPasswordInput", Boolean.TRUE);
-                } else {
-                    managementSystemWebDAO.get().updateUserPassword(userLogin, currentPassword, newPassword);
-                    // Посылаем в jsp инфу об успешном изменении email
-                    req.setAttribute("successfulPasswordChangingNotification", Boolean.TRUE);
-                }
-            } catch (SQLException e) {
-                throw new IOException(e.getMessage());
+            DAO dao = new DAO();
+
+            if (!dao.userIsExistByLoginPassword(user.getLogin(), currentPassword)) { // Если пользователь ввел неправильный currentPassword
+                // Посылаем в jsp инфу об неправильно введенном currentPassword.
+                req.setAttribute("incorrectCurrentPasswordInput", Boolean.TRUE);
+            } else {
+                dao.updateUserPassword(user, currentPassword, newPassword);
+                // Посылаем в jsp инфу об успешном изменении email
+                req.setAttribute("successfulPasswordChangingNotification", Boolean.TRUE);
             }
+
         }
 
         getServletContext().getRequestDispatcher("/AccountSettingsPage.jsp").forward(req, resp);
