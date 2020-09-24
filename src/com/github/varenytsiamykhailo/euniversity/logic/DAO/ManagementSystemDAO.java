@@ -1,6 +1,10 @@
 package com.github.varenytsiamykhailo.euniversity.logic.DAO;
 
 import com.github.varenytsiamykhailo.euniversity.logic.*;
+import com.github.varenytsiamykhailo.euniversity.logic.utils.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.sql.*;
 import java.sql.Date;
@@ -263,9 +267,12 @@ public abstract class ManagementSystemDAO {
         return allStudents;
     }
 
+    /*
+     */
+
     /**
      * Поиск user по переданному id. Если user с таким id нет - возвращается null
-     */
+     *//*
     public User getUserById(int id) throws SQLException {
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -287,7 +294,8 @@ public abstract class ManagementSystemDAO {
             if (stmt != null)
                 stmt.close();
         }
-    }
+    }*/
+
 
     /**
      * Возвращает представление роли, выраженное типом Role, в зависимости от его соответствующего числового представления id.
@@ -335,9 +343,10 @@ public abstract class ManagementSystemDAO {
         }
     }
 
-    /**
+/*
+    *//**
      * Поиск user по переданному логину и паролю. Если user с таким login и password не найден - возвращается null.
-     */
+     *//*
     public User getUserByLoginPassword(final String login, final String password) throws SQLException {
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -360,7 +369,7 @@ public abstract class ManagementSystemDAO {
             if (stmt != null)
                 stmt.close();
         }
-    }
+    }*/
 
     /**
      * Добавляет (регистрирует) user в базу данных. Если пользователь с таким же login уже существует, то бросается исключение SQLException

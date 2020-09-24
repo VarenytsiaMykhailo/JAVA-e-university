@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3307/e_university?serverTimezone=Europe/Moscow</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">root</property>
+
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">5</property>
+
+        <!-- Enable Hibernate's automatic session context management -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- Disable the second-level cache -->
+        <property name="cache.provider_class">org.hibernate.cache.internal.NoCachingRegionFactory</property>
+
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">true</property>
+
+        <!-- Pretty print the SQL in the log and console. -->
+        <property name="format_sql">false</property>
+
+        <!-- If turned on, Hibernate will generate comments inside the SQL, for easier debugging -->
+        <property name="use_sql_comments">true</property>
+
+        <!-- Mapping files -->
+        <mapping resource="com/github/varenytsiamykhailo/euniversity/logic/entities/Role.hbm.xml"/>
+        <mapping resource="com/github/varenytsiamykhailo/euniversity/logic/entities/User.hbm.xml"/>
+
+    </session-factory>
+</hibernate-configuration>

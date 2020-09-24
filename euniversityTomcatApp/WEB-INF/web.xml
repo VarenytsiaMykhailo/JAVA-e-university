@@ -123,10 +123,12 @@
         <url-pattern>/change-password</url-pattern>
     </servlet-mapping>
 
-    <resource-ref>
-        <description>MySQL Connection</description>
-        <res-ref-name>jdbc/mysqlconnector</res-ref-name>
-        <res-type>javax.sql.DataSource</res-type>
-        <res-auth>Container</res-auth>
-    </resource-ref>
-</web-app>
+    <!--
+        <resource-ref>
+            <description>MySQL Connection</description>
+            <res-ref-name>jdbc/mysqlconnector</res-ref-name>
+            <res-type>javax.sql.DataSource</res-type>
+            <res-auth>Container</res-auth>
+        </resource-ref>
+    -->
+    </web-app>

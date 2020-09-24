@@ -28,7 +28,7 @@ public class EmailChangingServlet extends HttpServlet {
             // Посылаем в jsp инфу об неправильно введенном email
             req.setAttribute("invalidEmailInput", Boolean.TRUE);
         } else if (result == 2) {
-            // Посылаем в jsp инфу об не одинаково введенных emailов
+            // Посылаем в jsp инфу об не одинаково введенных emailах
             req.setAttribute("emailsDontEqualsInput", Boolean.TRUE);
         } else if (result == 0) {
             final String userLogin = (String) req.getSession().getAttribute("login");
