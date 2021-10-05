@@ -22,16 +22,6 @@ CREATE TABLE all_users
   foreign key (role_id) references roles (role_id) ON DELETE SET NULL ON UPDATE SET NULL
 ) engine = InnoDB;
 
-CREATE TABLE all_groups
-(
-  group_id int unsigned not null auto_increment,
-  group_name varchar(255) not null,
-  curator_id int unsigned,
-  speciality varchar(255) not null,
-  primary key (group_id),
-   foreign key (curator_id) references all_curators (curator_id) ON DELETE SET NULL ON UPDATE SET NULL
-) engine = InnoDB;
-
 CREATE TABLE all_curators
 (
   curator_id int unsigned not null auto_increment,
@@ -42,6 +32,16 @@ CREATE TABLE all_curators
   sex char(1),
   year_of_teaching int not null,
   primary key (curator_id)
+) engine = InnoDB;
+
+CREATE TABLE all_groups
+(
+  group_id int unsigned not null auto_increment,
+  group_name varchar(255) not null,
+  curator_id int unsigned,
+  speciality varchar(255) not null,
+  primary key (group_id),
+   foreign key (curator_id) references all_curators (curator_id) ON DELETE SET NULL ON UPDATE SET NULL
 ) engine = InnoDB;
 
 CREATE TABLE all_students
@@ -69,6 +69,18 @@ VALUES ('UNKNOWN');
 
 INSERT INTO all_users (login, password, email, role_id)
 VALUES ('AdminAdmin', 'AdminAdmin', 'example@example.ru', 1);
+
+
+
+INSERT INTO all_curators (first_name, patronymic, last_name, sex, date_of_birth, year_of_teaching)
+VALUES ('Отсутствует', 'Отсутствует', 'Отсутствует', 'М', '1900-04-20', 1900);
+
+INSERT INTO all_curators (first_name, patronymic, last_name, sex, date_of_birth, year_of_teaching)
+VALUES ('Петр', 'Владимирович', 'Шапкин', 'М', '1980-04-29', 2020);
+
+INSERT INTO all_curators (first_name, patronymic, last_name, sex, date_of_birth, year_of_teaching)
+VALUES ('Николай', 'Владимирович', 'Безверхний', 'М', '1970-04-29', 2020);
+
 
 
 INSERT INTO all_groups (group_name, curator_id, speciality)
@@ -100,11 +112,3 @@ INSERT INTO all_students (first_name, patronymic, last_name, sex, date_of_birth,
 VALUES ('Ирина', 'Федоровна', 'Истомина', 'Ж', '2002-04-29', 3, 2020);
 
 
-INSERT INTO all_curators (first_name, patronymic, last_name, sex, date_of_birth, year_of_teaching)
-VALUES ('Отсутствует', 'Отсутствует', 'Отсутствует', 'М', '1900-04-20', 1900);
-
-INSERT INTO all_curators (first_name, patronymic, last_name, sex, date_of_birth, year_of_teaching)
-VALUES ('Петр', 'Владимирович', 'Шапкин', 'М', '1980-04-29', 2020);
-
-INSERT INTO all_curators (first_name, patronymic, last_name, sex, date_of_birth, year_of_teaching)
-VALUES ('Николай', 'Владимирович', 'Безверхний', 'М', '1970-04-29', 2020);

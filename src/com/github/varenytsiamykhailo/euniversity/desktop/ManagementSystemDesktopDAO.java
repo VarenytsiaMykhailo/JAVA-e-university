@@ -24,8 +24,8 @@ public class ManagementSystemDesktopDAO extends ManagementSystemDAO {
             try {
                 instance = new ManagementSystemDesktopDAO();
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                String url = "jdbc:mysql://localhost:3307/e_university?serverTimezone=Europe/Moscow";
-                instance.connection = DriverManager.getConnection(url, "root", "root");
+                String url = "jdbc:mysql://localhost:3306/e_university?serverTimezone=Europe/Moscow";
+                instance.connection = DriverManager.getConnection(url, "root", "admin");
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
             }
