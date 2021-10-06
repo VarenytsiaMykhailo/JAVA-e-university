@@ -13,12 +13,12 @@ CREATE TABLE roles
 
 CREATE TABLE department_staff
 (
-  person_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  person_contract INT UNSIGNED UNIQUE NOT NULL CHECK (person_contract >= 10000),
+  person_id INT UNSIGNED AUTO_INCREMENT,
+  person_contract INT UNSIGNED UNIQUE NOT NULL CHECK(person_contract >= 10000),
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
   middle_name VARCHAR(50) NOT NULL,
-  sex CHAR(1) NOT NULL CHECK (sex IN ('М', 'Ж', 'Н')),
+  sex CHAR(1) NOT NULL CHECK(sex IN ('М', 'Ж', 'Н')),
   date_of_birth DATE NOT NULL,
   PRIMARY KEY (person_id)
 ) engine = InnoDB;
