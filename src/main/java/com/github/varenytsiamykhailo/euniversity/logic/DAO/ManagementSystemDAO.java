@@ -72,7 +72,7 @@ public abstract class ManagementSystemDAO {
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement("UPDATE all_students " +
-                    "SET group_id = 0 " +
+                    "SET group_id = 1 " +
                     "WHERE group_id = ? AND education_year = ?"
             );
             stmt.setInt(1, group.getGroupId());
@@ -270,8 +270,8 @@ public abstract class ManagementSystemDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement("SELECT user_id, login, password, email, role_id " +
-                    "FROM all_users " +
+            stmt = connection.prepareStatement("SELECT user_id, login, password, email, role_id, person_id " +
+                    "FROM users " +
                     "WHERE user_id = ?"
             );
             stmt.setInt(1, id);
@@ -342,8 +342,8 @@ public abstract class ManagementSystemDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement("SELECT user_id, login, password, email, role_id " +
-                    "FROM all_users " +
+            stmt = connection.prepareStatement("SELECT user_id, login, password, email, role_id, person_id " +
+                    "FROM users " +
                     "WHERE login = ? AND password = ?"
             );
             stmt.setString(1, login);
@@ -369,14 +369,19 @@ public abstract class ManagementSystemDAO {
         if (!userIsExistByLogin(user.getLogin())) {
             PreparedStatement stmt = null;
             try {
-                stmt = connection.prepareStatement("INSERT INTO all_users " +
-                        "(login, password, email, role_id) " +
-                        "VALUES (?, ?, ?, ?)"
+                stmt = connection.prepareStatement("INSERT INTO users " +
+                        "(login, password, email, role_id, person_id) " +
+                        "VALUES (?, ?, ?, ?, ?)"
                 );
                 stmt.setString(1, user.getLogin());
                 stmt.setString(2, user.getPassword());
                 stmt.setString(3, user.getEmail());
                 stmt.setInt(4, user.getRoleId());
+                if (user.getPersonId() != 0) {
+                    stmt.setInt(5, user.getPersonId());
+                } else {
+                    stmt.setNull(5, 0);
+                }
                 stmt.executeUpdate();
             } finally {
                 if (stmt != null)
@@ -394,9 +399,9 @@ public abstract class ManagementSystemDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement("SELECT role FROM all_users " +
-                    "JOIN roles ON all_users.role_id = roles.role_id " +
-                    "WHERE all_users.login = ? AND all_users.password = ?"
+            stmt = connection.prepareStatement("SELECT role FROM users " +
+                    "JOIN roles ON users.role_id = roles.role_id " +
+                    "WHERE users.login = ? AND users.password = ?"
             );
             stmt.setString(1, login);
             stmt.setString(2, password);
@@ -428,7 +433,7 @@ public abstract class ManagementSystemDAO {
         ResultSet rs = null;
         try {
             stmt = connection.prepareStatement("SELECT EXISTS(" +
-                    "SELECT user_id FROM all_users " +
+                    "SELECT user_id FROM users " +
                     "WHERE login = ? && password = ?)"
             );
             stmt.setString(1, login);
@@ -459,7 +464,7 @@ public abstract class ManagementSystemDAO {
         ResultSet rs = null;
         try {
             stmt = connection.prepareStatement("SELECT EXISTS(" +
-                    "SELECT user_id FROM all_users " +
+                    "SELECT user_id FROM users " +
                     "WHERE login = ?)"
             );
             stmt.setString(1, login);
@@ -487,7 +492,7 @@ public abstract class ManagementSystemDAO {
     public void updateUserEmail(final String login, final String newEmail) throws SQLException {
         PreparedStatement stmt = null;
         try {
-            stmt = connection.prepareStatement("UPDATE all_users " +
+            stmt = connection.prepareStatement("UPDATE users " +
                     "SET email = ? " +
                     "WHERE login = ?"
             );
@@ -506,7 +511,7 @@ public abstract class ManagementSystemDAO {
     public void updateUserPassword(final String login, final String currentPassword, final String newPassword) throws SQLException {
         PreparedStatement stmt = null;
         try {
-            stmt = connection.prepareStatement("UPDATE all_users " +
+            stmt = connection.prepareStatement("UPDATE users " +
                     "SET password = ? " +
                     "WHERE login = ? AND password = ?"
             );
@@ -520,4 +525,58 @@ public abstract class ManagementSystemDAO {
         }
     }
 
+    /**
+     * Получить список людей из department_staff
+     */
+    public List<DepartmentPerson> getDepartmentStaff() throws SQLException {
+        List<DepartmentPerson> departmentStaff = new ArrayList<>();
+
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.createStatement();
+            rs = stmt.executeQuery("SELECT person_id, person_contract, first_name, last_name, middle_name, sex, date_of_birth " +
+                    "FROM department_staff " +
+                    "ORDER BY last_name, first_name, middle_name"
+            );
+
+            while (rs.next()) {
+                DepartmentPerson departmentPerson = new DepartmentPerson(rs);
+
+                departmentStaff.add(departmentPerson);
+            }
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (stmt != null)
+                stmt.close();
+        }
+        return departmentStaff;
+    }
+
+    /**
+     * Поиск DepartmentPerson из department_staff по переданному personId. Если DepartmentPerson с таким personId нет - возвращается null
+     */
+    public DepartmentPerson getDepartmentPersonById(int personId) throws SQLException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.prepareStatement("SELECT person_id, person_contract, first_name, last_name, middle_name, sex, date_of_birth " +
+                    "FROM department_staff " +
+                    "WHERE person_id = ?"
+            );
+            stmt.setInt(1, personId);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new DepartmentPerson(rs);
+            } else {
+                return null;
+            }
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (stmt != null)
+                stmt.close();
+        }
+    }
 }

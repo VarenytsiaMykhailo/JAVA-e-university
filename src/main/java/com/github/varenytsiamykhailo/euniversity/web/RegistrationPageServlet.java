@@ -1,5 +1,6 @@
 package com.github.varenytsiamykhailo.euniversity.web;
 
+import com.github.varenytsiamykhailo.euniversity.logic.DepartmentPerson;
 import com.github.varenytsiamykhailo.euniversity.logic.Role;
 import com.github.varenytsiamykhailo.euniversity.logic.User;
 
@@ -12,26 +13,43 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class RegistrationPageServlet extends HttpServlet {
 
     @Override
-    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        processRequest(req, resp);
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        System.out.println("Enter to RegistrationPageServlet doGet");
+
+        @SuppressWarnings("unchecked")
+        final AtomicReference<ManagementSystemWebDAO> managementSystemWebDAO = (AtomicReference<ManagementSystemWebDAO>) req.getServletContext().getAttribute("managementSystemWebDAO");
+
+        List<DepartmentPerson> departmentStaff;
+        try {
+            departmentStaff = managementSystemWebDAO.get().getDepartmentStaff();
+        } catch (SQLException e) {
+            throw new IOException(e);
+        }
+
+        // Посылаем в jsp список людей из department_staff.
+        req.setAttribute("departmentStaff", departmentStaff);
+        getServletContext().getRequestDispatcher("/RegistrationPage.jsp").forward(req, resp);
     }
 
-    private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-
+    @Override
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8"); // Установка кодировки для принятия параметров (запроса)
 
-        System.out.println("Enter to RegistrationPageServlet");
+        System.out.println("Enter to RegistrationPageServlet doPost");
 
-        // Мини защита, если пытаются попасть в сервелет RegistrationPageServelet не из RegistrationPage.jsp, обойдя валидацию js скрипта.
-        if (req.getHeader("Referer") == null || !req.getHeader("Referer").endsWith("RegistrationPage.jsp")
-                || req.getParameter("validatedByJSValidator") == null || !req.getParameter("validatedByJSValidator").equals("TRUE")) {
+        // Мини защита, если пытаются попасть в сервелет RegistrationPageServlet обойдя валидацию js скрипта.
+        if (req.getParameter("validatedByJSValidator") == null || !req.getParameter("validatedByJSValidator").equals("TRUE")) {
             throw new IOException(new IllegalRequestException());
         }
+
+
 
         final String login = req.getParameter("login");
         final String loginRepeat = req.getParameter("login_repeat");
@@ -40,6 +58,7 @@ public class RegistrationPageServlet extends HttpServlet {
         final String password = req.getParameter("password");
         final String passwordRepeat = req.getParameter("password_repeat");
         final String role = req.getParameter("role");
+        final String personId = req.getParameter("person_id");
 
         /* Отладка
         System.out.println(login);
@@ -49,12 +68,14 @@ public class RegistrationPageServlet extends HttpServlet {
         System.out.println(password);
         System.out.println(passwordRepeat);
         System.out.println(role);
+        System.out.println(personId);
         */
 
         // Валидатор введенных данных (на случай, если что-то случилось с js скриптом)
         validator(login, loginRepeat, email, emailRepeat, password, passwordRepeat);
 
-        @SuppressWarnings("unchecked") final AtomicReference<ManagementSystemWebDAO> managementSystemWebDAO = (AtomicReference<ManagementSystemWebDAO>) req.getServletContext().getAttribute("managementSystemWebDAO");
+        @SuppressWarnings("unchecked")
+        final AtomicReference<ManagementSystemWebDAO> managementSystemWebDAO = (AtomicReference<ManagementSystemWebDAO>) req.getServletContext().getAttribute("managementSystemWebDAO");
 
         try {
             if (managementSystemWebDAO.get().userIsExistByLogin(login)) {
@@ -79,13 +100,14 @@ public class RegistrationPageServlet extends HttpServlet {
                     roleTmp = Role.UNKNOWN;
                 }
                 newUser.setRoleId(managementSystemWebDAO.get().getRoleIdByUserRole(roleTmp));
+                newUser.setPersonId(Integer.parseInt(personId));
                 managementSystemWebDAO.get().addUser(newUser);
 
                 // Посылаем в jsp инфу об успешной регистрации. Нужно для вывода всплывающего окна об успешности.
                 req.setAttribute("successfulRegistrationNotification", Boolean.TRUE);
             }
         } catch (SQLException e) {
-            throw new IOException(e.getMessage());
+            throw new IOException(e);
         }
 
         System.out.println("Redirect from RegistrationPageServlet to RegistrationPage.jsp");
@@ -93,7 +115,6 @@ public class RegistrationPageServlet extends HttpServlet {
         /* На следующей jsp странице будет вызываться js скрипт-оповещение об успешной или неудачной регистраци
            с предложением перейти на главную страницу или зарегистрировать нового пользователя */
         getServletContext().getRequestDispatcher("/RegistrationPage.jsp").forward(req, resp);
-
     }
 
     void validator(String login, String loginRepeat, String email, String emailRepeat, String password, String passwordRepeat) throws IOException {

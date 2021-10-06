@@ -33,7 +33,7 @@
 <body>
 
 <%-- Подключение navBar. Требуется подключение соответствующих скриптов bootstrap: js, jquery, css --%>
-<jsp:include page="navBar.jsp" />
+<jsp:include page="navBar.jsp"/>
 
 <div class="container" style="margin-top: 9vh">
 
@@ -50,7 +50,7 @@
 
             <div>
                 <input type="hidden" name="validatedByJSValidator"
-                       value="FALSE"> <%-- Для передачи в js скрипт валидации и контроля прохождения валидации скриптом на сервелете  --%>
+                       value="FALSE"> <%-- Для передачи в js скрипт валидации и контроля прохождения валидации скриптом на сервлете  --%>
             </div>
 
             <%-- Секция логина --%>
@@ -121,6 +121,24 @@
 
             <div class="clearfix"></div>
             <%-- Скрытый блок. Следующий начнется с новой строки --%>
+            <div class="form-group col-12 row justify-content-center" style="margin-bottom: 6ex">
+                <label for="departmentStaffSelectInput" class="col-7"><b>Привязать аккаунт к сотруднику:</b></label>
+                <select name="person_id" class="form-control col-7"
+                        id="departmentStaffSelectInput"> <%-- Список групп--%>
+                    <option value="0">
+                        <c:out value="Не привязывать аккаунт к сотруднику"/>
+                    </option>
+                    <c:forEach var="person" items="${departmentStaff}">
+                        <option value="${person.personId}">
+                            <c:out value="${person}"/>
+                        </option>
+                    </c:forEach>
+                </select>
+                <div class="errors" style="height: 20px; color: red"></div>
+            </div>
+
+            <div class="clearfix"></div>
+            <%-- Скрытый блок. Следующий начнется с новой строки --%>
             <div class="form-group col-6 row justify-content-center">
                 <button type="submit" class="btn btn-primary col-10">Зарегистрировать</button>
             </div>
@@ -166,7 +184,7 @@
             if (result.value) { // Yes
                 window.location = 'main';
             } else if (result.dismiss === Swal.DismissReason.cancel) { // No
-                window.location = 'RegistrationPage.jsp';
+                window.location = 'registration';
             }
         })
     </script>
@@ -194,7 +212,7 @@
             backdrop: 'rgba(255, 0, 0, 0.1)'
         }).then((result) => {
             if (result.value) { // Yes
-                window.location = 'RegistrationPage.jsp';
+                window.location = 'registration';
             } else if (result.dismiss === Swal.DismissReason.cancel) { // No
                 window.location = 'main';
             }

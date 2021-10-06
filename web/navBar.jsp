@@ -26,7 +26,7 @@
                             аккаунта</a>
 
                         <c:if test="${role eq 'ADMIN'}">
-                            <a class="dropdown-item hoverBlack" style="color: aliceblue" href="RegistrationPage.jsp">Регистрация
+                            <a class="dropdown-item hoverBlack" style="color: aliceblue" href="registration">Регистрация
                                 нового пользователя</a>
                         </c:if>
 

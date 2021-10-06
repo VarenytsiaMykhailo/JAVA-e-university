@@ -15,14 +15,17 @@ public class User {
 
     private int roleId;
 
+    private int personId;
+
     public User() {
     }
 
-    public User(String login, String password, String email, int roleId) {
+    public User(String login, String password, String email, int roleId, int personId) {
         this.login = login;
         this.password = password;
         this.email = email;
         this.roleId = roleId;
+        this.personId = personId;
     }
 
     // Конструктор принимающий ResultSet из бд
@@ -32,6 +35,8 @@ public class User {
         this.password = rs.getString(3);
         this.email = rs.getString(4);
         this.roleId = rs.getInt(5);
+        this.personId = rs.getInt(6);
+
         // role = getRoleByRoleIdFromDB((Long) rs.getObject(5));
     }
 
@@ -75,6 +80,14 @@ public class User {
 
     public void setRoleId(int roleId) {
         this.roleId = roleId;
+    }
+
+    public int getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(int personId) {
+        this.personId = personId;
     }
 
     @Override

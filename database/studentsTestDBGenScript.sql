@@ -6,21 +6,37 @@ USE e_university;
 
 CREATE TABLE roles
 (
-  role_id int unsigned not null auto_increment,
-  role varchar(50) not null,
-  primary key (role_id)
+  role_id INT UNSIGNED AUTO_INCREMENT,
+  role VARCHAR(50) NOT NULL,
+  PRIMARY KEY (role_id)
 ) engine = InnoDB;
 
-CREATE TABLE all_users
+CREATE TABLE department_staff
 (
-  user_id int unsigned not null auto_increment,
-  login varchar(255) not null,
-  password varchar(255) not null,
-  email varchar(255) not null,
-  role_id int unsigned,
-  primary key (user_id),
-  foreign key (role_id) references roles (role_id) ON DELETE SET NULL ON UPDATE SET NULL
+  person_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  person_contract INT UNSIGNED UNIQUE NOT NULL CHECK (person_contract >= 10000),
+  first_name VARCHAR(50) NOT NULL,
+  last_name VARCHAR(50) NOT NULL,
+  middle_name VARCHAR(50) NOT NULL,
+  sex CHAR(1) NOT NULL CHECK (sex IN ('М', 'Ж', 'Н')),
+  date_of_birth DATE NOT NULL,
+  PRIMARY KEY (person_id)
 ) engine = InnoDB;
+
+
+CREATE TABLE users
+(
+  user_id INT UNSIGNED AUTO_INCREMENT,
+  login VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  role_id INT UNSIGNED,
+  person_id INT UNSIGNED,
+  PRIMARY KEY (user_id),
+  FOREIGN KEY (role_id) REFERENCES roles (role_id) ON DELETE SET NULL ON UPDATE SET NULL,
+  FOREIGN KEY (person_id) REFERENCES department_staff (person_id) ON DELETE CASCADE ON UPDATE CASCADE
+) engine = InnoDB;
+
 
 CREATE TABLE all_curators
 (
@@ -33,6 +49,8 @@ CREATE TABLE all_curators
   year_of_teaching int not null,
   primary key (curator_id)
 ) engine = InnoDB;
+
+
 
 CREATE TABLE all_groups
 (
@@ -66,11 +84,13 @@ VALUES ('USER');
 INSERT INTO roles (role)
 VALUES ('UNKNOWN');
 
-
-INSERT INTO all_users (login, password, email, role_id)
+INSERT INTO users (login, password, email, role_id)
 VALUES ('AdminAdmin', 'AdminAdmin', 'example@example.ru', 1);
 
-
+INSERT INTO department_staff (person_contract, first_name, last_name, middle_name, sex, date_of_birth)
+VALUES (10000, 'Светлана', 'Светкина', 'Светлановна', 'М', '1900-04-20');
+INSERT INTO department_staff (person_contract, first_name, last_name, middle_name, sex, date_of_birth)
+VALUES (10001, 'Наталья', 'Натальева', 'Натальевна', 'М', '1900-04-20');
 
 INSERT INTO all_curators (first_name, patronymic, last_name, sex, date_of_birth, year_of_teaching)
 VALUES ('Отсутствует', 'Отсутствует', 'Отсутствует', 'М', '1900-04-20', 1900);
