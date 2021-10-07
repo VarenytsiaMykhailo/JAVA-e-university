@@ -9,54 +9,60 @@ import java.util.Locale;
 
 public class Curator implements Comparable {
 
-    private int curatorId;
+    private int personId;
+
+    private int personContract;
 
     private String firstName;
 
     private String lastName;
 
-    private String patronymic;
-
-    private Date dateOfBirth;
-
-    //private Sex sex;
+    private String middleName;
 
     private char sex;
 
-    // private int groupId;
+    private Date dateOfBirth;
 
-    /**
-     * год преподавания
-     */
-    private int yearOfTeaching;
+    private boolean isActive;
+
 
     // Конструктор по умолчанию
     public Curator() {
+        this.personContract = 0;
         this.firstName = "NO_NAME";
         this.lastName = "NO_LAST_NAME";
-        this.patronymic = "NO_PATRONYMIC";
-        this.dateOfBirth = new Date();
+        this.middleName = "NO_MIDDLENAME";
         this.sex = 'Н';
-        this.yearOfTeaching = 0;
+        this.dateOfBirth = new Date();
+        this.isActive = false;
     }
 
     // Конструктор принимающий ResultSet из бд
     public Curator(ResultSet rs) throws SQLException {
-        this.curatorId = rs.getInt(1);
-        this.firstName = rs.getString(2);
-        this.lastName = rs.getString(3);
-        this.patronymic = rs.getString(4);
-        this.dateOfBirth = rs.getDate(5);
+        this.personId = rs.getInt(1);
+        this.personContract = rs.getInt(2);
+        this.firstName = rs.getString(3);
+        this.lastName = rs.getString(4);
+        this.middleName = rs.getString(5);
         this.sex = rs.getString(6).charAt(0);
-        this.yearOfTeaching = rs.getInt(7);
+        this.dateOfBirth = rs.getDate(7);
+        this.isActive = rs.getBoolean(8);
     }
 
-    public int getCuratorId() {
-        return curatorId;
+    public int getPersonId() {
+        return personId;
     }
 
-    public void setCuratorId(int curatorId) {
-        this.curatorId = curatorId;
+    public void setPersonId(int personId) {
+        this.personId = personId;
+    }
+
+    public int getPersonContract() {
+        return personContract;
+    }
+
+    public void setPersonContract(int personContract) {
+        this.personContract = personContract;
     }
 
     public String getFirstName() {
@@ -75,20 +81,12 @@ public class Curator implements Comparable {
         this.lastName = lastName;
     }
 
-    public String getPatronymic() {
-        return patronymic;
+    public String getMiddleName() {
+        return middleName;
     }
 
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 
     public char getSex() {
@@ -99,29 +97,29 @@ public class Curator implements Comparable {
         this.sex = sex;
     }
 
-/*  Старая версия
-    public int getGroupId() {
-        return groupId;
+    public Date getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setGroupId(int groupId) {
-        this.groupId = groupId;
-    }
-*/
-
-    public int getYearOfTeaching() {
-        return yearOfTeaching;
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
-    public void setYearOfTeaching(int yearOfTeaching) {
-        this.yearOfTeaching = yearOfTeaching;
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     @Override
     public String toString() {
-        return lastName + " " + firstName + " " + patronymic + ", "
-                + DateFormat.getDateInstance(DateFormat.SHORT).format(dateOfBirth)
-                + " Год преподавания: " + yearOfTeaching;
+        return lastName + " " + firstName + " " + middleName + ", " +
+                "Номер договора: " + personContract + ", " +
+                "Пол: " + sex + ", " +
+                "Дата рождения: " + DateFormat.getDateInstance(DateFormat.SHORT).format(dateOfBirth) + ", " +
+                "Готов курировать новую группу: " + (isActive ? "да" : "нет");
     }
 
     @Override

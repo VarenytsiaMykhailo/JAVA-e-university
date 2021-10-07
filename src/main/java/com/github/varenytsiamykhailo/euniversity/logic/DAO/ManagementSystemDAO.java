@@ -178,16 +178,17 @@ public abstract class ManagementSystemDAO {
     }
 
     /**
-     * Поиск куратора по переданному id. Если куратора с таким id нет - возвращается null
+     * Поиск куратора по переданному id из department_staff_curators_view. Если куратора с таким id нет - возвращается null
      */
+
     public Curator getCuratorById(int id) throws SQLException {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement("SELECT curator_id, first_name, last_name, patronymic, date_of_birth, sex, year_of_teaching " +
-                    "FROM all_curators " +
-                    "WHERE curator_id = ? " +
-                    "ORDER BY last_name, first_name, patronymic"
+            stmt = connection.prepareStatement("SELECT person_id, person_contract, first_name, last_name, middle_name, sex, date_of_birth, is_active " +
+                    "FROM department_staff_curators_view " +
+                    "WHERE person_id = ? " +
+                    "ORDER BY last_name, first_name, middle_name"
             );
             stmt.setInt(1, id);
             rs = stmt.executeQuery();
