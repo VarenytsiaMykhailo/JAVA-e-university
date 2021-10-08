@@ -22,6 +22,8 @@
                         Опции
                     </a>
                     <div class="dropdown-menu bg-dark bg-light:hover" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item hoverBlack" style="color: aliceblue" href="department-staff">Штат</a>
+
                         <a class="dropdown-item hoverBlack" style="color: aliceblue" href="AccountSettingsPage.jsp">Настройки
                             аккаунта</a>
 

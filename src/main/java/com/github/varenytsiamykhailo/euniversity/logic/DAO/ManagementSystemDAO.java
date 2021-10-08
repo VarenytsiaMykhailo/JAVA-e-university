@@ -556,6 +556,64 @@ public abstract class ManagementSystemDAO {
     }
 
     /**
+     * Получить список людей из department_staff_curators_view
+     */
+    public List<Curator> getCurators() throws SQLException {
+        List<Curator> curators = new ArrayList<>();
+
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.createStatement();
+            rs = stmt.executeQuery("SELECT person_id, person_contract, first_name, last_name, middle_name, sex, date_of_birth, is_active " +
+                    "FROM department_staff_curators_view " +
+                    "ORDER BY last_name, first_name, middle_name"
+            );
+
+            while (rs.next()) {
+                Curator curator = new Curator(rs);
+
+                curators.add(curator);
+            }
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (stmt != null)
+                stmt.close();
+        }
+        return curators;
+    }
+
+    /**
+     * Получить список людей из Department_staff_scientists_view
+     */
+    public List<Scientist> getScientists() throws SQLException {
+        List<Scientist> scientists = new ArrayList<>();
+
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.createStatement();
+            rs = stmt.executeQuery("SELECT person_id, person_contract, first_name, last_name, middle_name, sex, date_of_birth, research_directions " +
+                    "FROM Department_staff_scientists_view " +
+                    "ORDER BY last_name, first_name, middle_name"
+            );
+
+            while (rs.next()) {
+                Scientist scientist = new Scientist(rs);
+
+                scientists.add(scientist);
+            }
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (stmt != null)
+                stmt.close();
+        }
+        return scientists;
+    }
+
+    /**
      * Поиск DepartmentPerson из department_staff по переданному personId. Если DepartmentPerson с таким personId нет - возвращается null
      */
     public DepartmentPerson getDepartmentPersonById(int personId) throws SQLException {

@@ -7,8 +7,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Curator implements Comparable {
-
+public class Scientist implements Comparable {
     private int personId;
 
     private int personContract;
@@ -23,22 +22,22 @@ public class Curator implements Comparable {
 
     private Date dateOfBirth;
 
-    private boolean isActive;
+    private String researchDirections;
 
 
     // Конструктор по умолчанию
-    public Curator() {
+    public Scientist() {
         this.personContract = 0;
         this.firstName = "NO_NAME";
         this.lastName = "NO_LAST_NAME";
         this.middleName = "NO_MIDDLENAME";
         this.sex = 'Н';
         this.dateOfBirth = new Date();
-        this.isActive = false;
+        this.researchDirections = "NO_RESEARCH_DIRECTIONS";
     }
 
     // Конструктор принимающий ResultSet из бд
-    public Curator(ResultSet rs) throws SQLException {
+    public Scientist(ResultSet rs) throws SQLException {
         this.personId = rs.getInt(1);
         this.personContract = rs.getInt(2);
         this.firstName = rs.getString(3);
@@ -46,7 +45,7 @@ public class Curator implements Comparable {
         this.middleName = rs.getString(5);
         this.sex = rs.getString(6).charAt(0);
         this.dateOfBirth = rs.getDate(7);
-        this.isActive = rs.getBoolean(8);
+        this.researchDirections = rs.getString(8);
     }
 
     public int getPersonId() {
@@ -105,12 +104,12 @@ public class Curator implements Comparable {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public boolean getIsActive() {
-        return isActive;
+    public String getResearchDirections() {
+        return researchDirections;
     }
 
-    public void setIsActive(boolean active) {
-        isActive = active;
+    public void setResearchDirections(String researchDirections) {
+        this.researchDirections = researchDirections;
     }
 
     @Override
@@ -119,7 +118,7 @@ public class Curator implements Comparable {
                 "Номер договора: " + personContract + ", " +
                 "Пол: " + sex + ", " +
                 "Дата рождения: " + DateFormat.getDateInstance(DateFormat.SHORT).format(dateOfBirth) + ", " +
-                "Готов курировать новую группу: " + (isActive ? "да" : "нет");
+                "Направления исследований: " + researchDirections;
     }
 
     @Override

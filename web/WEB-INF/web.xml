@@ -77,6 +77,11 @@
     </servlet>
 
     <servlet>
+        <servlet-name>DepartmentStaffServlet</servlet-name>
+        <servlet-class>com.github.varenytsiamykhailo.euniversity.web.DepartmentStaffServlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>StudentEditPageServlet</servlet-name>
         <servlet-class>com.github.varenytsiamykhailo.euniversity.web.StudentEditPageServlet</servlet-class>
     </servlet>
@@ -104,6 +109,11 @@
     <servlet-mapping>
         <servlet-name>RegistrationPageServlet</servlet-name>
         <url-pattern>/registration</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>DepartmentStaffServlet</servlet-name>
+        <url-pattern>/department-staff</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
