@@ -76,8 +76,8 @@
 
             <%-- Секция отчества --%>
             <div class="form-group">
-                <label for="patronymicInput"><b>Отчество:</b></label>
-                <input type="text" name="middle_name" class="form-control" id="patronymicInput" size="50"
+                <label for="middleNameInput"><b>Отчество:</b></label>
+                <input type="text" name="middle_name" class="form-control" id="middleNameInput" size="50"
                        value="${departmentPerson.middleName}"/>
 
             </div>

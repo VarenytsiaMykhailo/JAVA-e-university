@@ -61,7 +61,7 @@ public class StudentsTableModel extends AbstractTableModel {
                 case 1:
                     return student.getFirstName();
                 case 2:
-                    return student.getPatronymic();
+                    return student.getMiddleName();
                 case 3:
                     return student.getDateOfBirth();
                 case 4:

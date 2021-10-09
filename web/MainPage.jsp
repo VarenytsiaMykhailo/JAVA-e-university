@@ -104,7 +104,7 @@
                                     <c:out value="${student.firstName}"/>
                                 </td>
                                 <td>
-                                    <c:out value="${student.patronymic}"/>
+                                    <c:out value="${student.middleName}"/>
                                 </td>
                                 <td>
                                     <fmt:formatDate value="${student.dateOfBirth}" pattern="dd-MM-yyyy"/>

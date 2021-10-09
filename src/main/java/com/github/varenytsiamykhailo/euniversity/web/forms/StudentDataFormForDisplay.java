@@ -16,7 +16,7 @@ public class StudentDataFormForDisplay {
 
     private String lastName;
 
-    private String patronymic;
+    private String middleName;
 
     private String dateOfBirth;
 
@@ -32,7 +32,7 @@ public class StudentDataFormForDisplay {
         this.studentId = student.getStudentId();
         this.firstName = student.getFirstName();
         this.lastName = student.getLastName();
-        this.patronymic = student.getPatronymic();
+        this.middleName = student.getMiddleName();
         this.dateOfBirth = simpleDateFormat.format(student.getDateOfBirth());
         if (student.getSex() == 'М') {
             this.sex = 0; // Мужчина
@@ -69,12 +69,12 @@ public class StudentDataFormForDisplay {
         this.lastName = lastName;
     }
 
-    public String getPatronymic() {
-        return patronymic;
+    public String getMiddleName() {
+        return middleName;
     }
 
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 
     public String getDateOfBirth() {

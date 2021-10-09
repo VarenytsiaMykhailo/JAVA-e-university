@@ -15,7 +15,7 @@ public class Student implements Comparable {
 
     private String lastName;
 
-    private String patronymic;
+    private String middleName;
 
     private Date dateOfBirth;
 
@@ -31,7 +31,7 @@ public class Student implements Comparable {
     public Student() {
         this.firstName = "NO_NAME";
         this.lastName = "NO_LAST_NAME";
-        this.patronymic = "NO_PATRONYMIC";
+        this.middleName = "NO_MIDDLE_NAME";
         this.dateOfBirth = new Date();
         this.sex = 'Н';
         this.groupId = 1;
@@ -43,7 +43,7 @@ public class Student implements Comparable {
         this.studentId = rs.getInt(1);
         this.firstName = rs.getString(2);
         this.lastName = rs.getString(3);
-        this.patronymic = rs.getString(4);
+        this.middleName = rs.getString(4);
         this.dateOfBirth = rs.getDate(5);
         this.sex = rs.getString(6).charAt(0);
         this.groupId = rs.getInt(7);
@@ -74,12 +74,12 @@ public class Student implements Comparable {
         this.lastName = lastName;
     }
 
-    public String getPatronymic() {
-        return patronymic;
+    public String getMiddleName() {
+        return middleName;
     }
 
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 
     public Date getDateOfBirth() {
@@ -116,7 +116,7 @@ public class Student implements Comparable {
 
     @Override
     public String toString() {
-        return lastName + " " + firstName + " " + patronymic + ", "
+        return lastName + " " + firstName + " " + middleName + ", "
                 + DateFormat.getDateInstance(DateFormat.SHORT).format(dateOfBirth)
                 + ", ИД группы = " + groupId + ", Год обучения: " + educationYear;
     }

@@ -1,9 +1,6 @@
 package com.github.varenytsiamykhailo.euniversity.web;
 
 import com.github.varenytsiamykhailo.euniversity.logic.DepartmentPerson;
-import com.github.varenytsiamykhailo.euniversity.logic.Group;
-import com.github.varenytsiamykhailo.euniversity.logic.Student;
-import com.github.varenytsiamykhailo.euniversity.web.forms.MainDataFormForDisplay;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,9 +10,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class DepartmentStaffEditServlet extends HttpServlet {

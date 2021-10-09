@@ -117,7 +117,7 @@ public class StudentEditPageServlet extends HttpServlet {
         student.setStudentId(Integer.parseInt(req.getParameter("student_id")));
         student.setFirstName(req.getParameter("first_name").trim()); // trim - удаляет пробелы вначале и в конце строки
         student.setLastName(req.getParameter("last_name").trim());
-        student.setPatronymic(req.getParameter("patronymic").trim());
+        student.setMiddleName(req.getParameter("middle_name").trim());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         student.setDateOfBirth(simpleDateFormat.parse(req.getParameter("date_of_birth").trim()));
         if (req.getParameter("sex").equals("0")) {

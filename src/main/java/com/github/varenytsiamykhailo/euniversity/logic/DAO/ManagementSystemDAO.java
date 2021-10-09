@@ -22,10 +22,10 @@ public abstract class ManagementSystemDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement("SELECT student_id, first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year " +
+            stmt = connection.prepareStatement("SELECT student_id, first_name, last_name, middle_name, date_of_birth, sex, group_id, education_year " +
                     "FROM all_students " +
                     "WHERE group_id = ? AND education_year = ? " +
-                    "ORDER BY last_name, first_name, patronymic"
+                    "ORDER BY last_name, first_name, middle_name"
             );
             stmt.setInt(1, group.getGroupId());
             stmt.setInt(2, year);
@@ -91,12 +91,12 @@ public abstract class ManagementSystemDAO {
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement("INSERT INTO all_students " +
-                    "(first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year) " +
+                    "(first_name, last_name, middle_name, date_of_birth, sex, group_id, education_year) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)"
             );
             stmt.setString(1, student.getFirstName());
             stmt.setString(2, student.getLastName());
-            stmt.setString(3, student.getPatronymic());
+            stmt.setString(3, student.getMiddleName());
             stmt.setDate(4, new Date(student.getDateOfBirth().getTime()));
             stmt.setString(5, Character.toString(student.getSex()));
             stmt.setInt(6, student.getGroupId());
@@ -115,12 +115,12 @@ public abstract class ManagementSystemDAO {
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement("UPDATE all_students " +
-                    "SET first_name = ?, last_name = ?, patronymic = ?, date_of_birth = ?, sex = ?, group_id = ?, education_year= ? " +
+                    "SET first_name = ?, last_name = ?, middle_name = ?, date_of_birth = ?, sex = ?, group_id = ?, education_year= ? " +
                     "WHERE student_id = ?"
             );
             stmt.setString(1, newStudentData.getFirstName());
             stmt.setString(2, newStudentData.getLastName());
-            stmt.setString(3, newStudentData.getPatronymic());
+            stmt.setString(3, newStudentData.getMiddleName());
             stmt.setDate(4, new Date(newStudentData.getDateOfBirth().getTime()));
             stmt.setString(5, Character.toString(newStudentData.getSex()));
             stmt.setInt(6, newStudentData.getGroupId());
@@ -157,10 +157,10 @@ public abstract class ManagementSystemDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement("SELECT student_id, first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year " +
+            stmt = connection.prepareStatement("SELECT student_id, first_name, last_name, middle_name, date_of_birth, sex, group_id, education_year " +
                     "FROM all_students " +
                     "WHERE student_id = ? " +
-                    "ORDER BY last_name, first_name, patronymic"
+                    "ORDER BY last_name, first_name, middle_name"
             );
             stmt.setInt(1, id);
             rs = stmt.executeQuery();
@@ -215,7 +215,7 @@ public abstract class ManagementSystemDAO {
         ResultSet rs = null;
         try {
             stmt = connection.createStatement();
-            rs = stmt.executeQuery("SELECT * FROM all_groups");
+            rs = stmt.executeQuery("SELECT group_id, group_name, curator_id, speciality FROM all_groups");
             while (rs.next()) {
                 Group group = new Group();
                 group.setGroupId(rs.getInt(1));
@@ -245,9 +245,9 @@ public abstract class ManagementSystemDAO {
         ResultSet rs = null;
         try {
             stmt = connection.createStatement();
-            rs = stmt.executeQuery("SELECT student_id, first_name, last_name, patronymic, date_of_birth, sex, group_id, education_year " +
+            rs = stmt.executeQuery("SELECT student_id, first_name, last_name, middle_name, date_of_birth, sex, group_id, education_year " +
                     "FROM all_students " +
-                    "ORDER BY last_name, first_name, patronymic"
+                    "ORDER BY last_name, first_name, middle_name"
             );
             while (rs.next()) {
                 Student student = new Student(rs); // Класс Student сам обрабатывает переданный ему ResultSet

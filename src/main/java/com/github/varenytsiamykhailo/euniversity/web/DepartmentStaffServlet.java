@@ -1,8 +1,6 @@
 package com.github.varenytsiamykhailo.euniversity.web;
 
 import com.github.varenytsiamykhailo.euniversity.logic.*;
-import com.github.varenytsiamykhailo.euniversity.web.forms.MainDataFormForDisplay;
-import com.github.varenytsiamykhailo.euniversity.web.forms.StudentDataFormForDisplay;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
