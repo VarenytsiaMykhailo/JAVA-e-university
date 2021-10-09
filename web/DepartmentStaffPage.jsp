@@ -37,7 +37,7 @@
 
 <div class="container" style="width: 60vw; margin-top: 7vh">
     <div class="row">
-        <div class="col-7 row justify-content-center">
+        <div class="col-10 row justify-content-center">
             <form action="<c:url value="/department-staff" />" method="POST">
 
 
@@ -113,6 +113,7 @@
                             </table>
                         </div>
                     </c:when>
+
                     <c:when test="${not empty curators}">
                         <%-- Таблица curators --%>
                         <div class="row align-items-start" style="max-height: 65vh; overflow-y: auto; ">
@@ -170,10 +171,11 @@
                             </table>
                         </div>
                     </c:when>
+
                     <c:when test="${not empty scientists}">
                         <%-- Таблица scientists --%>
                         <div class="row align-items-start" style="max-height: 65vh; overflow-y: auto; ">
-                            <label for="scientistsTable"><b>Кураторы:</b></label>
+                            <label for="scientistsTable"><b>Ученые:</b></label>
                             <table class="table table-hover" id="scientistsTable">
                                 <thead class="thead-light">
                                 <tr>
@@ -232,57 +234,63 @@
 
                 <nav class="navbar fixed-bottom navbar-expand-lg navbar-light"
                      style="background-color: #979ba2; height: 18vh">
-                    <div class="container" style="margin: 18vw; padding: 0; width: 60vw">
-                        <div class="row col-8">
-                            <%-- Переместить студентов в другую группу --%>
-
-                            <div class="row align-items-end" id="moveAllStudentsTorGroup" style="height: 9vh">
-                                <%-- Новый год обучения: --%>
-                                <div class="form-group col-5">
-                                    <label for="newYearOfStudyInput"><b>Новый год обучения:</b></label>
-                                    <input type="number" name="new_year" class="form-control" id="newYearOfStudyInput"
-                                           min="1900"
-                                           value="${mainDataForm.selectedYear}"/>
-                                </div>
-
-                                <%-- Список групп --%>
-                                <div class="form-group col-4">
-                                    <label for="newGroupSelectInput"><b>Новая группа:</b></label>
-                                    <select name="new_group_id" class="form-control"
-                                            id="newGroupSelectInput"> <%-- Список групп --%>
-                                        <c:forEach var="group" items="${mainDataForm.allGroups}">
-                                            <option value="${group.groupId}">
-                                                <c:out value="${group.groupName}"/>
-                                            </option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-
-                                <%-- Кнопка переместить студентов --%>
-                                <div class="form-group col-3 row align-items-center">
-                                    <input type="submit" name="move_group" class="btn btn-primary"
-                                           value="Переместить студентов">
-                                </div>
-                            </div>
+                    <div class="container" style="margin: 22vw; padding: 0; width: 70vw">
+                        <div class="row col-10">
 
                             <%-- Кнопки управления --%>
                             <div class="row align-items-end" style="height: 8vh">
-                                <%-- Кнопка добавить студента --%>
+                                <%-- Кнопка добавить сотрудника --%>
                                 <div class="form-group col-4 align-items-center">
-                                    <input type="submit" name="insert_student" class="btn btn-primary"
-                                           value="Добавить студента">
+                                    <c:choose>
+                                        <c:when test="${not empty departmentStaff}">
+                                            <input type="submit" name="insert_department_person" class="btn btn-primary"
+                                                   value="Добавить сотрудника">
+                                        </c:when>
+                                        <c:when test="${not empty curators}">
+                                            <input type="submit" name="insert_curator" class="btn btn-primary"
+                                                   value="Добавить куратора">
+                                        </c:when>
+                                        <c:when test="${not empty scientists}">
+                                            <input type="submit" name="insert_scientist" class="btn btn-primary"
+                                                   value="Добавить ученого">
+                                        </c:when>
+                                    </c:choose>
                                 </div>
 
-                                <%-- Кнопка редактировать студента --%>
+                                <%-- Кнопка редактировать сотрудника --%>
                                 <div class="form-group col-4 align-items-center">
-                                    <input type="submit" name="update_student" class="btn btn-primary"
-                                           value="Редактировать студента">
+                                    <c:choose>
+                                        <c:when test="${not empty departmentStaff}">
+                                            <input type="submit" name="update_department_person" class="btn btn-primary"
+                                                   value="Редактировать сотрудника">
+                                        </c:when>
+                                        <c:when test="${not empty curators}">
+                                            <input type="submit" name="update_curator" class="btn btn-primary"
+                                                   value="Редактировать куратора">
+                                        </c:when>
+                                        <c:when test="${not empty scientists}">
+                                            <input type="submit" name="update_scientist" class="btn btn-primary"
+                                                   value="Редактировать ученого">
+                                        </c:when>
+                                    </c:choose>
                                 </div>
 
-                                <%-- Кнопка удалить студента --%>
+                                <%-- Кнопка удалить сотрудника --%>
                                 <div class="form-group col-4  align-items-center ">
-                                    <input type="submit" name="delete_student" class="btn btn-primary"
-                                           style="width: 120%; margin-left: 2ex" value="Удалить студента">
+                                    <c:choose>
+                                        <c:when test="${not empty departmentStaff}">
+                                            <input type="submit" name="delete_department_person" class="btn btn-primary"
+                                                   style="width: 120%; margin-left: 2ex" value="Удалить сотрудника">
+                                        </c:when>
+                                        <c:when test="${not empty curators}">
+                                            <input type="submit" name="delete_curator" class="btn btn-primary"
+                                                   style="width: 120%; margin-left: 2ex" value="Удалить куратора">
+                                        </c:when>
+                                        <c:when test="${not empty scientists}">
+                                            <input type="submit" name="delete_scientist" class="btn btn-primary"
+                                                   style="width: 120%; margin-left: 2ex" value="Удалить ученого">
+                                        </c:when>
+                                    </c:choose>
                                 </div>
                             </div>
                         </div>

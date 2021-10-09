@@ -638,4 +638,113 @@ public abstract class ManagementSystemDAO {
                 stmt.close();
         }
     }
+
+    /**
+     * Добавить сотрудника
+     */
+    public void insertDepartmentPerson(DepartmentPerson departmentPerson) throws SQLException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement("INSERT INTO department_staff " +
+                    "(person_contract, first_name, last_name, middle_name, sex, date_of_birth) " +
+                    "VALUES (?, ?, ?, ?, ?, ?)"
+            );
+            stmt.setInt(1, departmentPerson.getPersonContract());
+            stmt.setString(2, departmentPerson.getFirstName());
+            stmt.setString(3, departmentPerson.getLastName());
+            stmt.setString(4, departmentPerson.getMiddleName());
+            stmt.setNString(5, Character.toString(departmentPerson.getSex()));
+            stmt.setDate(6, new Date(departmentPerson.getDateOfBirth().getTime()));
+
+            stmt.executeUpdate();
+        } finally {
+            if (stmt != null)
+                stmt.close();
+        }
+    }
+
+    /**
+     * Обновить данные о сотруднике
+     */
+    public void updateDepartmentPerson(DepartmentPerson newDepartmentPersonData) throws SQLException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement("UPDATE department_staff " +
+                    "SET person_contract = ?, first_name = ?, last_name = ?, middle_name = ?, sex = ?, date_of_birth = ? " +
+                    "WHERE person_id = ?"
+            );
+            stmt.setInt(1, newDepartmentPersonData.getPersonContract());
+            stmt.setString(2, newDepartmentPersonData.getFirstName());
+            stmt.setString(3, newDepartmentPersonData.getLastName());
+            stmt.setString(4, newDepartmentPersonData.getMiddleName());
+            stmt.setString(5, Character.toString(newDepartmentPersonData.getSex()));
+            stmt.setDate(6, new Date(newDepartmentPersonData.getDateOfBirth().getTime()));
+            stmt.setInt(7, newDepartmentPersonData.getPersonId());
+            stmt.executeUpdate();
+        } finally {
+            if (stmt != null)
+                stmt.close();
+        }
+    }
+
+    /**
+     * Возвращает true, если переданный personContract существует в таблице department_staff, иначе - false.
+     */
+    public boolean isExistPersonContractInDepartmentStaff(final int personContract) throws SQLException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.prepareStatement("SELECT EXISTS(" +
+                    "SELECT person_contract FROM department_staff " +
+                    "WHERE person_contract = ?)"
+            );
+            stmt.setInt(1, personContract);
+
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                int result = rs.getInt(1);
+                if (result == 1)
+                    return true;
+                else
+                    return false;
+            } else {
+                return false;
+            }
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (stmt != null)
+                stmt.close();
+        }
+    }
+
+    /**
+     * Возвращает true, если переданный personContract может использоваться для обновления у сотрудника в таблице department_staff, иначе - false.
+     */
+    public boolean checkPersonContractInDepartmentStaffForUpdate(final int personId, final int personContract) throws SQLException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.prepareStatement("SELECT person_id FROM department_staff " +
+                    "WHERE person_contract = ?"
+            );
+            stmt.setInt(1, personContract);
+
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                int resultId = rs.getInt(1);
+                if (resultId == personId)
+                    return true;
+                else
+                    return false;
+            } else {
+                return true;
+            }
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (stmt != null)
+                stmt.close();
+        }
+    }
 }

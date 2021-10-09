@@ -27,7 +27,7 @@ public class Scientist implements Comparable {
 
     // Конструктор по умолчанию
     public Scientist() {
-        this.personContract = 0;
+        this.personContract = 10000;
         this.firstName = "NO_NAME";
         this.lastName = "NO_LAST_NAME";
         this.middleName = "NO_MIDDLENAME";

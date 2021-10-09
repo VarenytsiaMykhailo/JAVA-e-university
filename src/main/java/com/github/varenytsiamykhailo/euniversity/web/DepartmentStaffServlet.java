@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -27,9 +28,7 @@ public class DepartmentStaffServlet extends HttpServlet {
         }
 
 
-
-        @SuppressWarnings("unchecked")
-        final AtomicReference<ManagementSystemWebDAO> managementSystemWebDAO = (AtomicReference<ManagementSystemWebDAO>) req.getServletContext().getAttribute("managementSystemWebDAO");
+        @SuppressWarnings("unchecked") final AtomicReference<ManagementSystemWebDAO> managementSystemWebDAO = (AtomicReference<ManagementSystemWebDAO>) req.getServletContext().getAttribute("managementSystemWebDAO");
 
         if (selectedTable.equals("departmentStaff")) {
             List<DepartmentPerson> departmentStaff;
@@ -57,16 +56,35 @@ public class DepartmentStaffServlet extends HttpServlet {
             }
         }
 
-
-
-
         System.out.println("Redirect from DepartmentStaffServlet to /DepartmentStaffPage.jsp");
         getServletContext().getRequestDispatcher("/DepartmentStaffPage.jsp").forward(req, resp);
     }
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
+        if (req.getParameter("get_selected_table") != null) {
+            doGet(req, resp);
+        } else if (req.getParameter("insert_department_person") != null) {
+            DepartmentPerson departmentPerson = new DepartmentPerson();
+            req.setAttribute("departmentPerson", departmentPerson);
+            System.out.println("Redirect from DepartmentStaffServlet to /DepartmentPersonEditPage.jsp");
+            getServletContext().getRequestDispatcher("/DepartmentPersonEditPage.jsp").forward(req, resp);
+        } else if (req.getParameter("update_department_person") != null) {
+            @SuppressWarnings("unchecked") final AtomicReference<ManagementSystemWebDAO> managementSystemWebDAO = (AtomicReference<ManagementSystemWebDAO>) req.getServletContext().getAttribute("managementSystemWebDAO");
+
+            DepartmentPerson departmentPerson;
+            int personId = Integer.parseInt(req.getParameter("person_id"));
+            try {
+                departmentPerson = managementSystemWebDAO.get().getDepartmentPersonById(personId);
+            } catch (SQLException e) {
+                throw new IOException(e);
+            }
+            req.setAttribute("departmentPerson", departmentPerson);
+            System.out.println("Redirect from DepartmentStaffServlet to /DepartmentPersonEditPage.jsp");
+            getServletContext().getRequestDispatcher("/DepartmentPersonEditPage.jsp").forward(req, resp);
+        }
+
+
     }
 
 }

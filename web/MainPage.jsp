@@ -131,7 +131,7 @@
                         <div class="row col-8">
                             <%-- Переместить студентов в другую группу --%>
 
-                            <div class="row align-items-end" id="moveAllStudentsTorGroup" style="height: 9vh">
+                            <div class="row align-items-end" id="moveAllStudentsToGroup" style="height: 9vh">
                                 <%-- Новый год обучения: --%>
                                 <div class="form-group col-5">
                                     <label for="newYearOfStudyInput"><b>Новый год обучения:</b></label>

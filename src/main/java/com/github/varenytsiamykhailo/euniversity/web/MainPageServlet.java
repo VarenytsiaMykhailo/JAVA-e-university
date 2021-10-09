@@ -56,7 +56,7 @@ public class MainPageServlet extends HttpServlet {
                 return;
 
             } catch (SQLException e) {
-                throw new IOException(e.getMessage());
+                throw new IOException(e);
             }
         }
 
@@ -78,7 +78,7 @@ public class MainPageServlet extends HttpServlet {
 
                 }
             } catch (SQLException e) {
-                throw new IOException(e.getMessage());
+                throw new IOException(e);
             }
         }
 
@@ -121,7 +121,7 @@ public class MainPageServlet extends HttpServlet {
                 req.setAttribute("successfulMoveGroupNotification", Boolean.TRUE);
 
             } catch (SQLException e) {
-                throw new IOException(e.getMessage());
+                throw new IOException(e);
             }
         }
 
@@ -151,7 +151,7 @@ public class MainPageServlet extends HttpServlet {
             mainDataFormForDisplay.setAllGroups(allGroups);
             mainDataFormForDisplay.setStudentsForSelectedGroup(studentsForSelectedGroup);
         } catch (SQLException e) {
-            throw new IOException(e.getMessage());
+            throw new IOException(e);
         }
 
         // Отладка:
