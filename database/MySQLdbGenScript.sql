@@ -27,6 +27,17 @@ CREATE TABLE department_staff
 ) engine = InnoDB;
 
 
+CREATE TABLE department_staff_notes
+(
+    note_id INT AUTO_INCREMENT,
+    person_id INT NOT NULL,
+    note_text VARCHAR(1000) NOT NULL 	DEFAULT '',
+
+    PRIMARY KEY (note_id),
+    FOREIGN KEY (person_id) REFERENCES department_staff (person_id) ON DELETE CASCADE ON UPDATE CASCADE
+) engine = InnoDB;
+
+
 CREATE TABLE users
 (
     user_id INT AUTO_INCREMENT,
@@ -104,6 +115,17 @@ CREATE TABLE all_groups
 ) engine = InnoDB;
 
 
+CREATE TABLE all_groups_notes
+(
+    note_id INT AUTO_INCREMENT,
+    group_id INT NOT NULL,
+    note_text VARCHAR(1000) NOT NULL 	DEFAULT '',
+
+    PRIMARY KEY (note_id),
+    FOREIGN KEY (group_id) REFERENCES all_groups (group_id) ON DELETE CASCADE ON UPDATE CASCADE
+) engine = InnoDB;
+
+
 CREATE TABLE all_students
 (
     student_id INT NOT NULL AUTO_INCREMENT,
@@ -118,6 +140,17 @@ CREATE TABLE all_students
 
     FOREIGN KEY (group_id) REFERENCES all_groups (group_id) ON DELETE NO ACTION ON UPDATE CASCADE,
     PRIMARY KEY (student_id)
+) engine = InnoDB;
+
+
+CREATE TABLE all_students_notes
+(
+    note_id INT AUTO_INCREMENT,
+    student_id INT NOT NULL,
+    note_text VARCHAR(1000) NOT NULL 	DEFAULT '',
+
+    PRIMARY KEY (note_id),
+    FOREIGN KEY (student_id) REFERENCES all_students (student_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) engine = InnoDB;
 
 
