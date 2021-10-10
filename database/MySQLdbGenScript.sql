@@ -215,7 +215,7 @@ BEGIN
 END $$
 DELIMITER ;
 
--- Конец вставки стандартных значений и объявлений пользовательских функций и процедур
+-- -------------------- Окончание вставки стандартных значений и объявлений пользовательских функций и процедур
 
 
 CREATE TABLE student_group_history
@@ -235,9 +235,110 @@ CREATE TABLE student_group_history
 ) engine = InnoDB;
 
 
+-- -------------------- Объявление триггеров
 
 
+-- Триггер запрещающий удаление записей из student_group_history
+DELIMITER $$
+CREATE TRIGGER student_group_history_DELETE
+    BEFORE DELETE
+    ON student_group_history
+    FOR EACH ROW
+BEGIN
+    DECLARE error_message VARCHAR(128);
+    SET error_message = 'You can not delete rows in student_group_history table.';
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_message;
+END $$
+DELIMITER ;
 
+
+-- Триггер запрещающий обновление полей student_id или group_id в student_group_history
+DELIMITER $$
+CREATE TRIGGER student_group_history_UPDATE
+    BEFORE UPDATE
+    ON student_group_history
+    FOR EACH ROW
+BEGIN
+    IF (NEW.student_id != OLD.student_id OR NEW.group_id != OLD.group_id) THEN
+        BEGIN
+            DECLARE error_message VARCHAR(128);
+            SET error_message = 'You can not update student_id or group_id columns in student_group_history table.';
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_message;
+        END;
+    END IF;
+END $$
+DELIMITER ;
+
+
+-- Триггер создающий запись в student_group_history, при добавлении студента в систему и его зачислении в группу
+DELIMITER $$
+CREATE TRIGGER all_students_INSERT
+    AFTER INSERT
+    ON all_students
+    FOR EACH ROW
+BEGIN
+    INSERT INTO student_group_history (student_id, group_id, date_of_enrollment, date_of_expulsion)
+    VALUES (NEW.student_id, NEW.group_id, DATE(CURRENT_TIMESTAMP), NULL);
+END $$
+DELIMITER ;
+
+
+-- Триггер создающий запись в student_group_history, при переводе студента в другую группу
+-- Триггер отчисляющий студента из предыдущей группы (если существует запись в student_group_history), заполняя поле date_of_expulsion, при его добавлении в другую группу
+DELIMITER $$
+CREATE TRIGGER all_students_UPDATE
+    AFTER UPDATE
+    ON all_students
+    FOR EACH ROW
+BEGIN
+    IF (NEW.group_id != OLD.group_id) THEN
+        BEGIN
+            UPDATE student_group_history SET date_of_expulsion = DATE(CURRENT_TIMESTAMP) WHERE (student_id = NEW.student_id) AND (group_id = OLD.group_id) AND date_of_expulsion IS NULL;
+
+            INSERT INTO student_group_history (student_id, group_id, date_of_enrollment, date_of_expulsion)
+            VALUES (NEW.student_id, NEW.group_id, DATE(CURRENT_TIMESTAMP), NULL);
+        END;
+    END IF;
+END $$
+DELIMITER ;
+
+
+-- Тригегр запрещающий добавить новую группу, если для нее указан куратор с is_active = 0
+DELIMITER $$
+CREATE TRIGGER all_groups_INSERT
+    BEFORE INSERT
+    ON all_groups
+    FOR EACH ROW
+BEGIN
+    IF EXISTS(SELECT is_active FROM curators WHERE (person_id = NEW.curator_id) AND (is_active = 0)) THEN
+        BEGIN
+            DECLARE error_message VARCHAR(128);
+            SET error_message = 'You can not add the group because you selected a curator which is not active. Try to use other curator.';
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_message;
+        END;
+    END IF;
+END $$
+DELIMITER ;
+
+
+-- Тригегр запрещающий обновлять группу, если для нее указан куратор с is_active = 0
+DELIMITER $$
+CREATE TRIGGER all_groups_UPDATE
+    BEFORE UPDATE
+    ON all_groups
+    FOR EACH ROW
+BEGIN
+    IF EXISTS(SELECT is_active FROM curators WHERE (person_id = NEW.curator_id) AND (is_active = 0)) THEN
+        BEGIN
+            DECLARE error_message VARCHAR(128);
+            SET error_message = 'You can not update the group because you selected a curator which is not active. Try to use other curator.';
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_message;
+        END;
+    END IF;
+END $$
+DELIMITER ;
+
+-- -------------------- Окончание создания триггеров
 
 
 
