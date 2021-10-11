@@ -4,6 +4,7 @@ CREATE DATABASE e_university;
 
 USE e_university;
 
+-- Типы учетных записей
 CREATE TABLE roles
 (
     role_id INT AUTO_INCREMENT,
@@ -13,6 +14,7 @@ CREATE TABLE roles
 ) engine = InnoDB;
 
 
+-- Штат сотрудников
 CREATE TABLE department_staff
 (
     person_id INT AUTO_INCREMENT,
@@ -26,45 +28,55 @@ CREATE TABLE department_staff
     PRIMARY KEY (person_id)
 ) engine = InnoDB;
 
+-- CREATE INDEX IX_department_staff_person_contract ON department_staff(person_contract); -- Не требуется. Такой индекс для UNIQUE полей MySQL создает автоматически.
 
+
+-- Заметки для сотрудников
 CREATE TABLE department_staff_notes
 (
     note_id INT AUTO_INCREMENT,
     person_id INT NOT NULL,
+    date_time_added DATETIME NOT NULL 	DEFAULT CURRENT_TIMESTAMP(),
     note_text VARCHAR(1000) NOT NULL 	DEFAULT '',
 
     PRIMARY KEY (note_id),
     FOREIGN KEY (person_id) REFERENCES department_staff (person_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) engine = InnoDB;
 
+CREATE INDEX IX_department_staff_notes_person_id ON department_staff_notes(person_id);
 
+
+-- Аккаунты пользователей
 CREATE TABLE users
 (
     user_id INT AUTO_INCREMENT,
     login VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
-    role_id INT,
-    person_id INT,
+    role_id INT NOT NULL,
+    person_id INT NOT NULL,
 
     PRIMARY KEY (user_id),
-    FOREIGN KEY (role_id) REFERENCES roles (role_id) ON DELETE SET NULL ON UPDATE SET NULL,
+    FOREIGN KEY (role_id) REFERENCES roles (role_id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (person_id) REFERENCES department_staff (person_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) engine = InnoDB;
 
+CREATE INDEX IX_users_password ON users(password); -- Для login не требуется. Такой индекс для UNIQUE полей MySQL создает автоматически.
 
+
+-- Ученые (подтип department_staff)
 CREATE TABLE scientists
 (
     person_id INT AUTO_INCREMENT,
     research_directions VARCHAR(1000) NOT NULL,
 
     PRIMARY KEY (person_id),
-    FOREIGN KEY (person_id) REFERENCES department_staff (person_id) ON DELETE NO ACTION ON UPDATE CASCADE
+    FOREIGN KEY (person_id) REFERENCES department_staff (person_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) engine = InnoDB;
 
 
 -- Представление для ученых Department_staff_scientists_view
-CREATE VIEW Department_staff_scientists_view (person_id, person_contract, first_name, last_name, middle_name, sex, date_of_birth, research_directions) AS
+CREATE VIEW department_staff_scientists_view (person_id, person_contract, first_name, last_name, middle_name, sex, date_of_birth, research_directions) AS
 SELECT DS.person_id,
        DS.person_contract,
        DS.first_name,
@@ -76,13 +88,14 @@ SELECT DS.person_id,
 FROM department_staff AS DS JOIN scientists AS S ON DS.person_id = S.person_id;
 
 
+-- Кураторы (подтип depatment_staff)
 CREATE TABLE curators
 (
     person_id INT AUTO_INCREMENT,
-    is_active BOOLEAN NOT NULL, -- false - не работает куратором в настоящее время, давать ему новые группы нельзя, true - куратору можно выдавать новые группы для курирования.
+    is_active BOOLEAN NOT NULL, -- false - не работает куратором в настоящее время, давать ему новые группы нельзя, true - куратору можно выдавать новые группы для курирования
 
     PRIMARY KEY (person_id),
-    FOREIGN KEY (person_id) REFERENCES department_staff (person_id) ON DELETE NO ACTION ON UPDATE CASCADE
+    FOREIGN KEY (person_id) REFERENCES department_staff (person_id) ON DELETE NO ACTION ON UPDATE CASCADE -- На ON DELETE NO ACTION чтобы не терять информацию о кураторах для групп
 ) engine = InnoDB;
 
 
@@ -99,6 +112,7 @@ SELECT DS.person_id,
 FROM department_staff AS DS JOIN curators AS C ON DS.person_id = C.person_id;
 
 
+-- Группы
 CREATE TABLE all_groups
 (
     group_id INT NOT NULL AUTO_INCREMENT,
@@ -114,18 +128,25 @@ CREATE TABLE all_groups
     CONSTRAINT UQ_all_groups_group_name_education_year UNIQUE (group_name, education_year)
 ) engine = InnoDB;
 
+CREATE INDEX IX_all_groups_group_name ON all_groups(group_name);
 
+
+-- Заметки для групп
 CREATE TABLE all_groups_notes
 (
     note_id INT AUTO_INCREMENT,
     group_id INT NOT NULL,
+    date_time_added DATETIME NOT NULL 	DEFAULT CURRENT_TIMESTAMP(),
     note_text VARCHAR(1000) NOT NULL 	DEFAULT '',
 
     PRIMARY KEY (note_id),
     FOREIGN KEY (group_id) REFERENCES all_groups (group_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) engine = InnoDB;
 
+CREATE INDEX IX_all_groups_notes_group_id ON all_groups_notes(group_id);
 
+
+-- Студенты
 CREATE TABLE all_students
 (
     student_id INT NOT NULL AUTO_INCREMENT,
@@ -143,16 +164,23 @@ CREATE TABLE all_students
     PRIMARY KEY (student_id)
 ) engine = InnoDB;
 
+CREATE INDEX IX_all_students_last_name_first_name ON all_students(last_name, first_name);
+-- CREATE INDEX IX_all_students_student_number ON all_students(student_number); -- Не требуется. Такой индекс для UNIQUE полей MySQL создает автоматически.
 
+
+-- Заметки для студентов
 CREATE TABLE all_students_notes
 (
     note_id INT AUTO_INCREMENT,
     student_id INT NOT NULL,
+    date_time_added DATETIME NOT NULL 	DEFAULT CURRENT_TIMESTAMP(),
     note_text VARCHAR(1000) NOT NULL 	DEFAULT '',
 
     PRIMARY KEY (note_id),
     FOREIGN KEY (student_id) REFERENCES all_students (student_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) engine = InnoDB;
+
+CREATE INDEX IX_all_students_notes_student_id ON all_students_notes(student_id);
 
 
 -- -------------------- Объявление пользовательских функций, процедур (вставка встроенных строк в таблицы)
@@ -206,16 +234,16 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE USP_insert_default_values()
 BEGIN
+    INSERT INTO department_staff (person_contract, first_name, last_name, middle_name, sex, date_of_birth)
+    VALUES (USF_get_default_person_contract(), 'Университет', 'Университет', 'Университет', 'Н', CURRENT_DATE());
+
     INSERT INTO roles (role)
     VALUES ('ADMIN'),
            ('USER'),
            ('UNKNOWN');
 
-    INSERT INTO users (login, password, email, role_id)
-    VALUES ('AdminAdmin', 'AdminAdmin', 'example@example.ru', 1);
-
-    INSERT INTO department_staff (person_contract, first_name, last_name, middle_name, sex, date_of_birth)
-    VALUES (USF_get_default_person_contract(), 'Университет', 'Университет', 'Университет', 'Н', CURRENT_DATE());
+    INSERT INTO users (login, password, email, role_id, person_id)
+    VALUES ('AdminAdmin', 'AdminAdmin', 'example@example.ru', 1, USF_get_person_id_by_person_contract(USF_get_default_person_contract()));
 
     INSERT INTO curators (person_id, is_active)
     VALUES ((SELECT person_id FROM department_staff WHERE person_contract = USF_get_default_person_contract()), 1);
@@ -252,6 +280,7 @@ DELIMITER ;
 -- -------------------- Окончание вставки стандартных значений и объявлений пользовательских функций и процедур
 
 
+-- История о состоянии студента в конкретной группе
 CREATE TABLE student_group_history
 (
     history_id INT AUTO_INCREMENT,
@@ -337,7 +366,7 @@ END $$
 DELIMITER ;
 
 
--- Тригегр запрещающий добавить новую группу, если для нее указан куратор с is_active = 0
+-- Триггер запрещающий добавить новую группу, если для нее указан куратор с is_active = 0
 DELIMITER $$
 CREATE TRIGGER all_groups_INSERT
     BEFORE INSERT
@@ -355,7 +384,7 @@ END $$
 DELIMITER ;
 
 
--- Тригегр запрещающий обновлять группу, если для нее указан куратор с is_active = 0
+-- Триггер запрещающий обновлять группу, если для нее указан куратор с is_active = 0
 DELIMITER $$
 CREATE TRIGGER all_groups_UPDATE
     BEFORE UPDATE
