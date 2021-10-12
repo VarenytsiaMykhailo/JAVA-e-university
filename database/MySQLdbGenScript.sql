@@ -408,7 +408,7 @@ CREATE TRIGGER all_groups_UPDATE
     ON all_groups
     FOR EACH ROW
 BEGIN
-    IF EXISTS(SELECT is_active FROM curators WHERE (person_id = NEW.curator_id) AND (is_active = 0)) THEN
+    IF EXISTS(SELECT is_active FROM curators WHERE (person_id = NEW.curator_id) AND (is_active = false)) THEN
         BEGIN
             DECLARE error_message VARCHAR(128);
             SET error_message =
@@ -457,9 +457,16 @@ VALUES (10000, 'Иван', 'Сергеевич', 'Степанов', 'М', '1999
 
 INSERT INTO student_group_history (student_id, group_id, date_of_enrollment, date_of_expulsion)
 VALUES (1, 2, DATE(CURRENT_TIMESTAMP), NULL);
-
+USE e_university;
 SELECT *
 FROM student_group_history;
-
+SELECT *
+FROM all_students;
+UPDATE student_group_history
+SET student_id = 3
+WHERE history_id = 1;
+UPDATE all_students
+SET student_id = 33
+WHERE student_id = 1;
 INSERT INTO student_group_history (student_id, date_of_expulsion)
 VALUES (1, NULL);

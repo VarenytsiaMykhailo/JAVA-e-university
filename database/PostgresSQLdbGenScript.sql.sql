@@ -1,8 +1,3 @@
-DROP DATABASE IF EXISTS e_university;
-
-CREATE DATABASE e_university;
-
-
 -- Типы учетных записей
 CREATE TABLE roles
 (
@@ -307,3 +302,209 @@ CREATE TABLE student_group_history
     UNIQUE (student_id, group_id, date_of_enrollment, date_of_expulsion),
     CHECK (date_of_enrollment <= date_of_expulsion)
 );
+
+
+-- -------------------- Объявление триггеров
+
+
+-- Триггер запрещающий удаление записей из student_group_history
+CREATE FUNCTION USF_TRIGGER_student_group_history_DELETE() RETURNS TRIGGER AS
+$$
+BEGIN
+    RAISE EXCEPTION 'You can not delete rows in student_group_history table.';
+    RETURN NULL;
+END
+$$ LANGUAGE plpgSQL;
+
+CREATE TRIGGER student_group_history_DELETE
+    BEFORE DELETE
+    ON student_group_history
+    FOR EACH ROW
+EXECUTE PROCEDURE USF_TRIGGER_student_group_history_DELETE();
+
+
+-- Триггер запрещающий обновление полей student_id или group_id в student_group_history
+CREATE FUNCTION USF_TRIGGER_student_group_history_UPDATE() RETURNS TRIGGER AS
+$$
+BEGIN
+    IF (NEW.student_id != OLD.student_id OR NEW.group_id != OLD.group_id) THEN
+        RAISE EXCEPTION 'You can not update student_id or group_id columns in student_group_history table.';
+    END IF;
+    RETURN NEW;
+END
+$$ LANGUAGE plpgSQL;
+
+CREATE TRIGGER student_group_history_UPDATE
+    BEFORE UPDATE
+    ON student_group_history
+    FOR EACH ROW
+EXECUTE PROCEDURE USF_TRIGGER_student_group_history_UPDATE();
+
+
+-- Триггер создающий запись в student_group_history, при добавлении студента в систему и его зачислении в группу
+CREATE FUNCTION USF_TRIGGER_all_students_INSERT() RETURNS TRIGGER AS
+$$
+BEGIN
+    INSERT INTO student_group_history (student_id, group_id, date_of_enrollment, date_of_expulsion)
+    VALUES (NEW.student_id, NEW.group_id, CURRENT_DATE, NULL);
+    RETURN NULL;
+END
+$$ LANGUAGE plpgSQL;
+
+CREATE TRIGGER all_students_INSERT
+    AFTER INSERT
+    ON all_students
+    FOR EACH ROW
+EXECUTE PROCEDURE USF_TRIGGER_all_students_INSERT();
+
+
+-- Триггер создающий запись в student_group_history, при переводе студента в другую группу
+-- Триггер отчисляющий студента из предыдущей группы (если существует запись в student_group_history), заполняя поле date_of_expulsion, при его добавлении в другую группуCREATE FUNCTION USF_TRIGGER_all_students_INSERT() RETURNS TRIGGER AS $$
+CREATE FUNCTION USF_TRIGGER_all_students_UPDATE() RETURNS TRIGGER AS
+$$
+BEGIN
+    IF (NEW.group_id != OLD.group_id) THEN
+        BEGIN
+            UPDATE student_group_history
+            SET date_of_expulsion = CURRENT_DATE
+            WHERE (student_id = NEW.student_id)
+              AND (group_id = OLD.group_id)
+              AND date_of_expulsion IS NULL;
+
+            INSERT INTO student_group_history (student_id, group_id, date_of_enrollment, date_of_expulsion)
+            VALUES (NEW.student_id, NEW.group_id, CURRENT_DATE, NULL);
+        END;
+    END IF;
+    RETURN NULL;
+END
+$$ LANGUAGE plpgSQL;
+
+CREATE TRIGGER all_students_UPDATE
+    AFTER UPDATE
+    ON all_students
+    FOR EACH ROW
+EXECUTE PROCEDURE USF_TRIGGER_all_students_UPDATE();
+
+
+-- Триггер запрещающий добавить новую группу или обновить существующую, если для нее указан куратор с is_active = 0
+CREATE FUNCTION USF_TRIGGER_all_students_INSERT_UPDATE() RETURNS TRIGGER AS
+$$
+BEGIN
+    IF EXISTS(SELECT is_active FROM curators WHERE (person_id = NEW.curator_id) AND (is_active = false)) THEN
+        BEGIN
+            RAISE EXCEPTION 'You can not add or update the group because you selected a curator which is not active. Try to use other curator.';
+        END;
+    END IF;
+    RETURN NEW;
+END
+$$ LANGUAGE plpgSQL;
+
+CREATE TRIGGER all_students_INSERT_UPDATE
+    BEFORE INSERT OR UPDATE
+    ON all_groups
+    FOR EACH ROW
+EXECUTE PROCEDURE USF_TRIGGER_all_students_INSERT_UPDATE();
+
+-- -------------------- Окончание создания триггеров
+
+
+DROP FUNCTION USF_TRIGGER_all_students_INSERT_UPDATE CASCADE;
+INSERT INTO department_staff (person_contract, first_name, last_name, middle_name, sex, date_of_birth)
+VALUES (10001, 'Светлана', 'Светкина', 'Светлановна', 'М', '1900-04-20'),
+       (10002, 'Наталья', 'Натальева', 'Натальевна', 'М', '1900-04-20'),
+       (10003, 'Ирина', 'Иринина', 'Ириновна', 'Ж', '1900-04-20'),
+       (10004, 'Мишка', 'Мишкин', 'Мишкинин', 'Ж', '1900-04-20');
+
+INSERT INTO curators
+VALUES (2, true),
+       (3, false);
+
+INSERT INTO scientists (person_id, research_directions)
+VALUES (3, 'физика'),
+       (4, 'паттерны проектирования');
+
+
+
+INSERT INTO all_groups (group_name, speciality, education_year, number_of_semester, curator_id)
+VALUES ('Первая группа', 'Программная инженерия', 2019, 1, 2),
+       ('Вторая группа', 'Информационная безопасность', 2020, 2, 2);
+
+
+
+INSERT INTO all_students (student_number, first_name, middle_name, last_name, sex, date_of_birth, group_id,
+                          education_year, number_of_semester)
+VALUES (10000, 'Иван', 'Сергеевич', 'Степанов', 'М', '1999-03-20', 2, 2019, 1),
+       (10001, 'Наталья', 'Андреевна', 'Чичикова', 'Ж', '2000-06-10', 1, 2019, 1),
+       (10002, 'Виктор', 'Сидорович', 'Белов', 'М', '1999-01-10', 2, 2020, 2),
+       (10003, 'Петр', 'Викторович', 'Сушкин', 'М', '2000-03-12', 3, 2020, 1),
+       (10004, 'Вероника', 'Сергеевна', 'Ковалева', 'Ж', '1999-07-19', 3, 2020, 2),
+       (10005, 'Ирина', 'Федоровна', 'Истомина', 'Ж', '2002-04-29', 3, 2020, 1);
+
+INSERT INTO all_students (student_number, first_name, middle_name, last_name, sex, date_of_birth, group_id,
+                          education_year, number_of_semester)
+VALUES (10006, 'Макарон', 'Макарон', 'Макарон', 'М', '1999-03-20', 2, 2019, 1);
+
+INSERT INTO all_students (student_number, first_name, middle_name, last_name, sex, date_of_birth, group_id,
+                          education_year, number_of_semester)
+VALUES (10007, 'SADASS', 'ASDASD', 'Макарон', 'М', '1999-03-20', 2, 2019, 1);
+
+INSERT INTO student_group_history (student_id, group_id, date_of_enrollment, date_of_expulsion)
+VALUES (1, 2, DATE(CURRENT_TIMESTAMP), NULL);
+
+SELECT *
+FROM student_group_history;
+SELECT *
+FROM all_students;
+
+DELETE
+FROM student_group_history
+WHERE history_id = 2;
+UPDATE student_group_history
+SET student_id = 2
+WHERE history_id = 2;
+UPDATE student_group_history
+SET group_id = 3
+WHERE history_id = 2;
+
+UPDATE all_students
+SET student_id = 33
+WHERE student_id = 7;
+UPDATE all_students
+SET group_id = 3
+WHERE student_id = 1;
+UPDATE student_group_history
+SET date_of_expulsion = CURRENT_DATE
+WHERE (student_id = 1)
+  AND (group_id = 2)
+  AND date_of_expulsion IS NULL;
+SELECT *
+FROM student_group_history
+WHERE (student_id = 1)
+  AND (group_id = 2)
+  AND date_of_expulsion IS NULL;
+
+UPDATE student_group_history
+SET date_of_expulsion = '2021-10-12'
+WHERE date_of_expulsion IS NULL;
+UPDATE student_group_history
+SET date_of_expulsion = CURRENT_DATE
+WHERE student_id = 8;
+
+
+INSERT INTO student_group_history (student_id, date_of_expulsion)
+VALUES (1, NULL);
+SELECT CURRENT_DATE;
+SELECT DATE(CURRENT_TIMESTAMP);
+
+SELECT *
+FROM all_groups;
+SELECT *
+FROM curators;
+UPDATE all_groups
+SET curator_id = 2
+WHERE group_id = 1;
+
+
+
+
+
