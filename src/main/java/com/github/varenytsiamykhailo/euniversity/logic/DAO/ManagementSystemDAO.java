@@ -22,9 +22,11 @@ public abstract class ManagementSystemDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement("SELECT student_id, first_name, last_name, middle_name, date_of_birth, sex, group_id, education_year " +
+            stmt = connection.prepareStatement("SELECT student_id, first_name, last_name, middle_name, date_of_birth, sex, all_students.group_id, education_year " +
                     "FROM all_students " +
-                    "WHERE group_id = ? AND education_year = ? " +
+                    "JOIN all_groups " +
+                    "ON all_students.group_id = all_groups.group_id "+
+                    "WHERE all_students.group_id = ? AND all_groups.education_year = ? " +
                     "ORDER BY last_name, first_name, middle_name"
             );
             stmt.setInt(1, group.getGroupId());

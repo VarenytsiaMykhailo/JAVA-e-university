@@ -145,16 +145,14 @@ CREATE TABLE all_groups_notes
 -- Студенты
 CREATE TABLE all_students
 (
-    student_id         SERIAL,
-    student_number     INT         NOT NULL UNIQUE CHECK (student_number >= 10000), -- Номер зачетной книжки или другого документа, позволяющего уникально идентифицировать студента. Пример: 10001
-    first_name         VARCHAR(50) NOT NULL,
-    last_name          VARCHAR(50) NOT NULL,
-    middle_name        VARCHAR(50) NOT NULL,
-    sex                CHAR(1)     NOT NULL CHECK (sex IN ('М', 'Ж', 'Н')),
-    date_of_birth      DATE        NOT NULL,
-    group_id           INT         NOT NULL,
-    education_year     INT         NOT NULL CHECK (education_year >= 2000),         -- Пример: 2020
-    number_of_semester INT         NOT NULL CHECK (number_of_semester IN (1, 2)),
+    student_id     SERIAL,
+    student_number INT         NOT NULL UNIQUE CHECK (student_number >= 10000), -- Номер зачетной книжки или другого документа, позволяющего уникально идентифицировать студента. Пример: 10001
+    first_name     VARCHAR(50) NOT NULL,
+    last_name      VARCHAR(50) NOT NULL,
+    middle_name    VARCHAR(50) NOT NULL,
+    sex            CHAR(1)     NOT NULL CHECK (sex IN ('М', 'Ж', 'Н')),
+    date_of_birth  DATE        NOT NULL,
+    group_id       INT         NOT NULL,
 
     FOREIGN KEY (group_id) REFERENCES all_groups (group_id) ON DELETE NO ACTION ON UPDATE CASCADE,
     PRIMARY KEY (student_id)
@@ -408,14 +406,13 @@ EXECUTE PROCEDURE USF_TRIGGER_all_students_INSERT_UPDATE();
 -- -------------------- Окончание создания триггеров
 
 
-DROP FUNCTION USF_TRIGGER_all_students_INSERT_UPDATE CASCADE;
 INSERT INTO department_staff (person_contract, first_name, last_name, middle_name, sex, date_of_birth)
-VALUES (10001, 'Светлана', 'Светкина', 'Светлановна', 'М', '1900-04-20'),
-       (10002, 'Наталья', 'Натальева', 'Натальевна', 'М', '1900-04-20'),
-       (10003, 'Ирина', 'Иринина', 'Ириновна', 'Ж', '1900-04-20'),
-       (10004, 'Мишка', 'Мишкин', 'Мишкинин', 'Ж', '1900-04-20');
+VALUES (10001, 'Светлана', 'Светкина', 'Светлановна', 'М', '1977-04-20'),
+       (10002, 'Наталья', 'Натальева', 'Натальевна', 'М', '1977-04-20'),
+       (10003, 'Ирина', 'Иринина', 'Ириновна', 'Ж', '1977-04-20'),
+       (10004, 'Мишка', 'Мишкин', 'Мишкинин', 'Ж', '1977-04-20');
 
-INSERT INTO curators
+INSERT INTO curators (person_id, is_active)
 VALUES (2, true),
        (3, false);
 
@@ -426,85 +423,50 @@ VALUES (3, 'физика'),
 
 
 INSERT INTO all_groups (group_name, speciality, education_year, number_of_semester, curator_id)
-VALUES ('Первая группа', 'Программная инженерия', 2019, 1, 2),
-       ('Вторая группа', 'Информационная безопасность', 2020, 2, 2);
+VALUES ('ИУ9-11Б', 'Программная инженерия', 2019, 1, 2),
+       ('ИУ9-12Б', 'Информационная безопасность', 2019, 2, 2),
+       ('ИУ9-21Б', 'Программная инженерия', 2019, 1, 2),
+       ('ИУ9-22Б', 'Информационная безопасность', 2019, 2, 2),
+       ('ИУ9-31Б', 'Программная инженерия', 2019, 1, 2),
+       ('ИУ9-32Б', 'Информационная безопасность', 2019, 1, 2),
+       ('ИУ9-41Б', 'Программная инженерия', 2019, 2, 2),
+       ('ИУ9-42Б', 'Информационная безопасность', 2019, 2, 2),
 
+       ('ИУ9-11Б', 'Программная инженерия', 2020, 1, 2),
+       ('ИУ9-12Б', 'Информационная безопасность', 2020, 2, 2),
+       ('ИУ9-21Б', 'Программная инженерия', 2020, 1, 2),
+       ('ИУ9-22Б', 'Информационная безопасность', 2020, 2, 2),
+       ('ИУ9-31Б', 'Программная инженерия', 2020, 1, 2),
+       ('ИУ9-32Б', 'Информационная безопасность', 2020, 1, 2),
+       ('ИУ9-41Б', 'Программная инженерия', 2020, 2, 2),
+       ('ИУ9-42Б', 'Информационная безопасность', 2020, 2, 2);
 
+INSERT INTO all_students (student_number, first_name, middle_name, last_name, sex, date_of_birth, group_id)
+VALUES (10000, 'Иван', 'Сергеевич', 'Степанов', 'М', '1999-03-20', 1),
+       (10001, 'Наталья', 'Андреевна', 'Чичикова', 'Ж', '2000-06-10', 1),
+       (10002, 'Виктор', 'Сидорович', 'Белов', 'М', '1999-01-10', 1),
+       (10003, 'Петр', 'Викторович', 'Сушкин', 'М', '2000-03-12', 1),
+       (10004, 'Вероника', 'Сергеевна', 'Ковалева', 'Ж', '1999-07-19', 2),
+       (10005, 'Ирина', 'Федоровна', 'Истомина', 'Ж', '2002-04-29', 2),
+       (10006, 'Вероника', 'Афсона', 'Нотовна', 'Ж', '1999-07-19', 2),
+       (10007, 'Ирина', 'Маня', 'Филотовна', 'Ж', '2002-04-29', 2),
 
-INSERT INTO all_students (student_number, first_name, middle_name, last_name, sex, date_of_birth, group_id,
-                          education_year, number_of_semester)
-VALUES (10000, 'Иван', 'Сергеевич', 'Степанов', 'М', '1999-03-20', 2, 2019, 1),
-       (10001, 'Наталья', 'Андреевна', 'Чичикова', 'Ж', '2000-06-10', 1, 2019, 1),
-       (10002, 'Виктор', 'Сидорович', 'Белов', 'М', '1999-01-10', 2, 2020, 2),
-       (10003, 'Петр', 'Викторович', 'Сушкин', 'М', '2000-03-12', 3, 2020, 1),
-       (10004, 'Вероника', 'Сергеевна', 'Ковалева', 'Ж', '1999-07-19', 3, 2020, 2),
-       (10005, 'Ирина', 'Федоровна', 'Истомина', 'Ж', '2002-04-29', 3, 2020, 1);
-
-INSERT INTO all_students (student_number, first_name, middle_name, last_name, sex, date_of_birth, group_id,
-                          education_year, number_of_semester)
-VALUES (10006, 'Макарон', 'Макарон', 'Макарон', 'М', '1999-03-20', 2, 2019, 1);
-
-INSERT INTO all_students (student_number, first_name, middle_name, last_name, sex, date_of_birth, group_id,
-                          education_year, number_of_semester)
-VALUES (10007, 'SADASS', 'ASDASD', 'Макарон', 'М', '1999-03-20', 2, 2019, 1);
-
-INSERT INTO student_group_history (student_id, group_id, date_of_enrollment, date_of_expulsion)
-VALUES (1, 2, DATE(CURRENT_TIMESTAMP), NULL);
+       (10008, 'Адексей', 'Сергеевич', 'Степанов', 'М', '1999-03-20', 3),
+       (10009, 'Владимир', 'Андреевна', 'Чичикова', 'Ж', '2000-06-10', 3),
+       (10010, 'Михаил', 'Сидорович', 'Белов', 'М', '1999-01-10', 3),
+       (10011, 'Анатолий', 'Викторович', 'Сушкин', 'М', '2000-03-12', 3),
+       (10012, 'Юлия', 'Сергеевна', 'Ковалева', 'Ж', '1999-07-19', 4),
+       (10013, 'Светлана', 'Федоровна', 'Истомина', 'Ж', '2002-04-29', 4),
+       (10014, 'Ксения', 'Афсона', 'Нотовна', 'Ж', '1999-07-19', 4),
+       (10015, 'Татьяна', 'Маня', 'Филотовна', 'Ж', '2002-04-29', 4);
 
 SELECT *
-FROM student_group_history;
+FROM department_staff;
 SELECT *
-FROM all_students;
-
-DELETE
-FROM student_group_history
-WHERE history_id = 2;
-UPDATE student_group_history
-SET student_id = 2
-WHERE history_id = 2;
-UPDATE student_group_history
-SET group_id = 3
-WHERE history_id = 2;
-
-UPDATE all_students
-SET student_id = 33
-WHERE student_id = 7;
-UPDATE all_students
-SET group_id = 3
-WHERE student_id = 1;
-UPDATE student_group_history
-SET date_of_expulsion = CURRENT_DATE
-WHERE (student_id = 1)
-  AND (group_id = 2)
-  AND date_of_expulsion IS NULL;
-SELECT *
-FROM student_group_history
-WHERE (student_id = 1)
-  AND (group_id = 2)
-  AND date_of_expulsion IS NULL;
-
-UPDATE student_group_history
-SET date_of_expulsion = '2021-10-12'
-WHERE date_of_expulsion IS NULL;
-UPDATE student_group_history
-SET date_of_expulsion = CURRENT_DATE
-WHERE student_id = 8;
-
-
-INSERT INTO student_group_history (student_id, date_of_expulsion)
-VALUES (1, NULL);
-SELECT CURRENT_DATE;
-SELECT DATE(CURRENT_TIMESTAMP);
-
+FROM curators;
 SELECT *
 FROM all_groups;
 SELECT *
-FROM curators;
-UPDATE all_groups
-SET curator_id = 2
-WHERE group_id = 1;
-
-
-
+FROM all_students;
 
 
