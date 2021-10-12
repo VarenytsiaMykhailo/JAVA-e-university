@@ -44,7 +44,6 @@ public class MainPageServlet extends HttpServlet {
                 Student student = new Student();
                 student.setStudentId(0);
                 student.setDateOfBirth(new Date());
-                student.setEducationYear(Calendar.getInstance().get(Calendar.YEAR)); // Дефолтное значение - текущий год
                 ArrayList<Group> allGroups = managementSystemWebDAO.get().getAllGroups();
                 StudentDataFormForDisplay studentDataFormForDisplay = new StudentDataFormForDisplay();
                 studentDataFormForDisplay.initFromStudent(student);
@@ -98,12 +97,10 @@ public class MainPageServlet extends HttpServlet {
         }
 
         String groupIdString = req.getParameter("selected_group_id");
-        String yearString = req.getParameter("selected_year");
 
         if (req.getParameter("move_group") != null) {
             // Перемещаем всех студентов в другую группу
             String newGroupIdString = req.getParameter("new_group_id");
-            String newYearString = req.getParameter("new_year");
             try {
                 Group group = new Group();
                 group.setGroupId(Integer.parseInt(groupIdString));
@@ -111,11 +108,10 @@ public class MainPageServlet extends HttpServlet {
                 Group newGroup = new Group();
                 newGroup.setGroupId(Integer.parseInt(newGroupIdString));
 
-                managementSystemWebDAO.get().moveStudentsFromGroupToNewGroup(group, Integer.parseInt(yearString), newGroup, Integer.parseInt(newYearString));
+                managementSystemWebDAO.get().moveStudentsFromGroupToNewGroup(group, newGroup);
 
                 // Устанавливаем новые значения. Нужно для показа группы, в которую мы переместили студентов
                 groupIdString = newGroupIdString;
-                yearString = newYearString;
 
                 // Посылаем в jsp инфу об успешном добавлении группы. Нужно для вывода всплывающего окна об успешности.
                 req.setAttribute("successfulMoveGroupNotification", Boolean.TRUE);
@@ -130,11 +126,6 @@ public class MainPageServlet extends HttpServlet {
             selectedGroupId = Integer.parseInt(groupIdString);
         }
 
-        int selectedYear = Calendar.getInstance().get(Calendar.YEAR); // Дефолтное значение - текущий год
-        if (yearString != null) {
-            selectedYear = Integer.parseInt(yearString);
-        }
-
         MainDataFormForDisplay mainDataFormForDisplay = new MainDataFormForDisplay();
         try {
             ArrayList<Group> allGroups = managementSystemWebDAO.get().getAllGroups();
@@ -145,9 +136,8 @@ public class MainPageServlet extends HttpServlet {
                 group = (Group) it.next();
             }
 
-            ArrayList<Student> studentsForSelectedGroup = managementSystemWebDAO.get().getStudentsFromGroup(group, selectedYear);
+            ArrayList<Student> studentsForSelectedGroup = managementSystemWebDAO.get().getStudentsFromGroup(group);
             mainDataFormForDisplay.setSelectedGroupId(group.getGroupId());
-            mainDataFormForDisplay.setSelectedYear(selectedYear);
             mainDataFormForDisplay.setAllGroups(allGroups);
             mainDataFormForDisplay.setStudentsForSelectedGroup(studentsForSelectedGroup);
         } catch (SQLException e) {
@@ -158,7 +148,6 @@ public class MainPageServlet extends HttpServlet {
         System.out.println();
         System.out.println(">>>>>>>>>>> Prepared mainDataFormForDisplay:");
         System.out.println(mainDataFormForDisplay);
-        System.out.println("selected year = " + mainDataFormForDisplay.getSelectedYear());
         System.out.println("selected groupId = " + mainDataFormForDisplay.getSelectedGroupId());
         System.out.println("allGroups = " + mainDataFormForDisplay.getAllGroups());
         System.out.println("StudentsForSelectedGroup = " + mainDataFormForDisplay.getStudentsForSelectedGroup());

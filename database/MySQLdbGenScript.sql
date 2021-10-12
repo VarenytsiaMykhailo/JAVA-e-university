@@ -455,7 +455,7 @@ VALUES ('ИУ9-11Б', 'Программная инженерия', 2019, 1, 2),
        ('ИУ9-41Б', 'Программная инженерия', 2020, 2, 2),
        ('ИУ9-42Б', 'Информационная безопасность', 2020, 2, 2);
 
-INSERT INTO all_students (student_number, first_name, middle_name, last_name, sex, date_of_birth, group_id)
+INSERT INTO all_students (student_number, first_name, last_name, middle_name, sex, date_of_birth, group_id)
 VALUES (10000, 'Иван', 'Сергеевич', 'Степанов', 'М', '1999-03-20', 1),
        (10001, 'Наталья', 'Андреевна', 'Чичикова', 'Ж', '2000-06-10', 1),
        (10002, 'Виктор', 'Сидорович', 'Белов', 'М', '1999-01-10', 1),

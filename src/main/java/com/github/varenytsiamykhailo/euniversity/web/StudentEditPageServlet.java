@@ -82,9 +82,8 @@ public class StudentEditPageServlet extends HttpServlet {
                 group = (Group) it.next();
             }
 
-            ArrayList<Student> studentsForSelectedGroup = managementSystemWebDAO.get().getStudentsFromGroup(group, year);
+            ArrayList<Student> studentsForSelectedGroup = managementSystemWebDAO.get().getStudentsFromGroup(group);
             mainDataFormForDisplay.setSelectedGroupId(group.getGroupId());
-            mainDataFormForDisplay.setSelectedYear(year);
             mainDataFormForDisplay.setAllGroups(allGroups);
             mainDataFormForDisplay.setStudentsForSelectedGroup(studentsForSelectedGroup);
         } catch (SQLException e) {
@@ -128,7 +127,6 @@ public class StudentEditPageServlet extends HttpServlet {
             student.setSex('Н');
         }
         student.setGroupId(Integer.parseInt(req.getParameter("group_id").trim()));
-        student.setEducationYear(Integer.parseInt(req.getParameter("education_year")));
         return student;
     }
 }

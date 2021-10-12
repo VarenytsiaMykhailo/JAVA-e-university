@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" buffer="8192kb" autoFlush="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
@@ -41,27 +41,21 @@
             <form action="<c:url value="/main" />" method="POST">
 
                 <div class="row" style="height: 10vh">
-                    <%-- Год обучения --%>
-                    <div class="form-group col-4">
-                        <label for="yearOfStudyInput"><b>Год обучения:</b></label>
-                        <input type="number" name="selected_year" class="form-control" id="yearOfStudyInput" min="1900"
-                               value="${mainDataForm.selectedYear}"/>
-                    </div>
 
                     <%-- Список групп --%>
-                    <div class="form-group col-5">
+                    <div class="form-group col-7">
                         <label for="groupSelectInput"><b>Список групп:</b></label>
                         <select name="selected_group_id" class="form-control" id="groupSelectInput">
                             <c:forEach var="group" items="${mainDataForm.allGroups}">
                                 <c:choose>
                                     <c:when test="${group.groupId == mainDataForm.selectedGroupId}">
                                         <option value="${group.groupId}" selected>
-                                            <c:out value="${group.groupName}"/>
+                                            <c:out value="${group}"/>
                                         </option>
                                     </c:when>
                                     <c:otherwise>
                                         <option value="${group.groupId}">
-                                            <c:out value="${group.groupName}"/>
+                                            <c:out value="${group}"/>
                                         </option>
                                     </c:otherwise>
                                 </c:choose>
@@ -132,22 +126,15 @@
                             <%-- Переместить студентов в другую группу --%>
 
                             <div class="row align-items-end" id="moveAllStudentsToGroup" style="height: 9vh">
-                                <%-- Новый год обучения: --%>
-                                <div class="form-group col-5">
-                                    <label for="newYearOfStudyInput"><b>Новый год обучения:</b></label>
-                                    <input type="number" name="new_year" class="form-control" id="newYearOfStudyInput"
-                                           min="1900"
-                                           value="${mainDataForm.selectedYear}"/>
-                                </div>
 
                                 <%-- Список групп --%>
-                                <div class="form-group col-4">
+                                <div class="form-group col-5">
                                     <label for="newGroupSelectInput"><b>Новая группа:</b></label>
                                     <select name="new_group_id" class="form-control"
                                             id="newGroupSelectInput"> <%-- Список групп --%>
                                         <c:forEach var="group" items="${mainDataForm.allGroups}">
                                             <option value="${group.groupId}">
-                                                <c:out value="${group.groupName}"/>
+                                                <c:out value="${group}"/>
                                             </option>
                                         </c:forEach>
                                     </select>

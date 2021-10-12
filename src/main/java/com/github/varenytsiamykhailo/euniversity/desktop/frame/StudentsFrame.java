@@ -309,7 +309,7 @@ public class StudentsFrame extends JFrame implements ActionListener, ListSelecti
                     SpinnerNumberModel spinnerNumberModel = (SpinnerNumberModel) yearJSpinner.getModel();
                     int spinnerNumber = spinnerNumberModel.getNumber().intValue();
                     try {
-                        ArrayList<Student> students = ms.getStudentsFromGroup(g, spinnerNumber);
+                        ArrayList<Student> students = ms.getStudentsFromGroup(g);
                         studentsJTable.setModel(new StudentsTableModel(new Vector<Student>(students))); // Устанавливаем модель для таблицы с новыми данными
                     } catch (SQLException e) {
                         JOptionPane.showMessageDialog(StudentsFrame.this, e.getMessage());

@@ -28,7 +28,8 @@ public class ManagementSystemWebDAO extends ManagementSystemDAO {
             try {
                 instance = new ManagementSystemWebDAO();
                 Context context = new InitialContext();
-                DataSource dataSource = (DataSource) context.lookup("java:comp/env/jdbc/mysqlconnector");
+                DataSource dataSource = (DataSource) context.lookup("java:comp/env/jdbc/postgressqlconnector");
+                System.out.println();
                 instance.connection = dataSource.getConnection();
             } catch (NamingException | SQLException e) {
                 e.printStackTrace();

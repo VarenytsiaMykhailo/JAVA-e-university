@@ -7,21 +7,11 @@ import java.util.ArrayList;
 
 public class MainDataFormForDisplay {
 
-    private int selectedYear;
-
     private int selectedGroupId;
 
     private ArrayList<Group> allGroups;
 
     private ArrayList<Student> studentsForSelectedGroup;
-
-    public int getSelectedYear() {
-        return selectedYear;
-    }
-
-    public void setSelectedYear(int selectedYear) {
-        this.selectedYear = selectedYear;
-    }
 
     public int getSelectedGroupId() {
         return selectedGroupId;

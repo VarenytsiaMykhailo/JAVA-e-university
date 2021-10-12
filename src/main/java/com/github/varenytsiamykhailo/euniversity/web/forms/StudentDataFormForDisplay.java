@@ -12,28 +12,28 @@ public class StudentDataFormForDisplay {
 
     private int studentId;
 
+    private int studentNumber;
+
     private String firstName;
 
     private String lastName;
 
     private String middleName;
 
-    private String dateOfBirth;
-
     private int sex;
 
-    private int groupId;
+    private String dateOfBirth;
 
-    private int educationYear;
+    private int groupId;
 
     private ArrayList<Group> allGroups;
 
     public void initFromStudent(Student student) {
         this.studentId = student.getStudentId();
+        this.studentNumber = student.getStudentNumber();
         this.firstName = student.getFirstName();
         this.lastName = student.getLastName();
         this.middleName = student.getMiddleName();
-        this.dateOfBirth = simpleDateFormat.format(student.getDateOfBirth());
         if (student.getSex() == 'М') {
             this.sex = 0; // Мужчина
         } else if (student.getSex() == 'Ж') {
@@ -41,8 +41,8 @@ public class StudentDataFormForDisplay {
         } else {
             this.sex = 3; // Неопределенный пол
         }
+        this.dateOfBirth = simpleDateFormat.format(student.getDateOfBirth());
         this.groupId = student.getGroupId();
-        this.educationYear = student.getEducationYear();
     }
 
     public int getStudentId() {
@@ -77,14 +77,6 @@ public class StudentDataFormForDisplay {
         this.middleName = middleName;
     }
 
-    public String getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
     public int getSex() {
         return sex;
     }
@@ -93,20 +85,20 @@ public class StudentDataFormForDisplay {
         this.sex = sex;
     }
 
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
     public int getGroupId() {
         return groupId;
     }
 
     public void setGroupId(int groupId) {
         this.groupId = groupId;
-    }
-
-    public int getEducationYear() {
-        return educationYear;
-    }
-
-    public void setEducationYear(int educationYear) {
-        this.educationYear = educationYear;
     }
 
     public ArrayList<Group> getAllGroups() {

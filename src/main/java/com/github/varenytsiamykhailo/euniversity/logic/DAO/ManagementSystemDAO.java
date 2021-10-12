@@ -14,23 +14,22 @@ public abstract class ManagementSystemDAO {
     public Connection connection;
 
     /**
-     * Получить список студентов для опеределенной группы, определенного года обучения.
+     * Получить список студентов для опеределенной группы.
      */
-    public ArrayList<Student> getStudentsFromGroup(Group group, int year) throws SQLException {
+    public ArrayList<Student> getStudentsFromGroup(Group group) throws SQLException {
         ArrayList<Student> students = new ArrayList<Student>();
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement("SELECT student_id, first_name, last_name, middle_name, date_of_birth, sex, all_students.group_id, education_year " +
+            stmt = connection.prepareStatement("SELECT student_id, student_number, first_name, last_name, middle_name, sex, date_of_birth, all_students.group_id " +
                     "FROM all_students " +
                     "JOIN all_groups " +
                     "ON all_students.group_id = all_groups.group_id "+
-                    "WHERE all_students.group_id = ? AND all_groups.education_year = ? " +
+                    "WHERE all_students.group_id = ? " +
                     "ORDER BY last_name, first_name, middle_name"
             );
             stmt.setInt(1, group.getGroupId());
-            stmt.setInt(2, year);
             rs = stmt.executeQuery();
             while (rs.next()) {
                 Student student = new Student(rs);
@@ -47,19 +46,17 @@ public abstract class ManagementSystemDAO {
     }
 
     /**
-     * Перевести студентов из одной группы с одним годом обучения в другую группу с другим годом обучения
+     * Перевести студентов из одной группы в другую группу.
      */
-    public void moveStudentsFromGroupToNewGroup(Group oldGroup, int oldYear, Group newGroup, int newYear) throws SQLException {
+    public void moveStudentsFromGroupToNewGroup(Group oldGroup, Group newGroup) throws SQLException {
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement("UPDATE all_students " +
-                    "SET group_id = ?, education_year = ? " +
-                    "WHERE group_id = ? AND education_year = ?"
+                    "SET group_id = ? " +
+                    "WHERE group_id = ?"
             );
             stmt.setInt(1, newGroup.getGroupId());
-            stmt.setInt(2, newYear);
-            stmt.setInt(3, oldGroup.getGroupId());
-            stmt.setInt(4, oldYear);
+            stmt.setInt(2, oldGroup.getGroupId());
             stmt.executeUpdate();
         } finally {
             if (stmt != null)
@@ -70,15 +67,14 @@ public abstract class ManagementSystemDAO {
     /**
      * Удаляет всех студентов из определенной группы, определенного года обучения
      */
-    public void removeStudentsFromGroup(Group group, int year) throws SQLException {
+    public void removeStudentsFromGroup(Group group) throws SQLException {
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement("UPDATE all_students " +
                     "SET group_id = 1 " +
-                    "WHERE group_id = ? AND education_year = ?"
+                    "WHERE group_id = ?"
             );
             stmt.setInt(1, group.getGroupId());
-            stmt.setInt(2, year);
             stmt.executeUpdate();
         } finally {
             if (stmt != null)
@@ -93,16 +89,16 @@ public abstract class ManagementSystemDAO {
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement("INSERT INTO all_students " +
-                    "(first_name, last_name, middle_name, date_of_birth, sex, group_id, education_year) " +
+                    "(student_number, first_name, last_name, middle_name, sex, date_of_birth, group_id) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)"
             );
-            stmt.setString(1, student.getFirstName());
-            stmt.setString(2, student.getLastName());
-            stmt.setString(3, student.getMiddleName());
-            stmt.setDate(4, new Date(student.getDateOfBirth().getTime()));
+            stmt.setInt(1, student.getStudentNumber());
+            stmt.setString(2, student.getFirstName());
+            stmt.setString(3, student.getLastName());
+            stmt.setString(4, student.getMiddleName());
             stmt.setString(5, Character.toString(student.getSex()));
-            stmt.setInt(6, student.getGroupId());
-            stmt.setInt(7, student.getEducationYear());
+            stmt.setDate(6, new Date(student.getDateOfBirth().getTime()));
+            stmt.setInt(7, student.getGroupId());
             stmt.executeUpdate();
         } finally {
             if (stmt != null)
@@ -117,17 +113,17 @@ public abstract class ManagementSystemDAO {
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement("UPDATE all_students " +
-                    "SET first_name = ?, last_name = ?, middle_name = ?, date_of_birth = ?, sex = ?, group_id = ?, education_year= ? " +
+                    "SET student_number = ?, first_name = ?,  last_name = ?, middle_name = ?, sex = ?, date_of_birth = ?, group_id = ? " +
                     "WHERE student_id = ?"
             );
-            stmt.setString(1, newStudentData.getFirstName());
-            stmt.setString(2, newStudentData.getLastName());
-            stmt.setString(3, newStudentData.getMiddleName());
-            stmt.setDate(4, new Date(newStudentData.getDateOfBirth().getTime()));
+            stmt.setInt(1, newStudentData.getStudentNumber());
+            stmt.setString(2, newStudentData.getFirstName());
+            stmt.setString(3, newStudentData.getLastName());
+            stmt.setString(4, newStudentData.getMiddleName());
             stmt.setString(5, Character.toString(newStudentData.getSex()));
-            stmt.setInt(6, newStudentData.getGroupId());
-            stmt.setInt(7, newStudentData.getEducationYear());
-            stmt.setInt(8, newStudentData.getStudentId());
+            stmt.setDate(6, new Date(newStudentData.getDateOfBirth().getTime()));
+            stmt.setInt(7, newStudentData.getGroupId());
+            stmt.setInt(7, newStudentData.getStudentId());
             stmt.executeUpdate();
         } finally {
             if (stmt != null)
@@ -136,7 +132,7 @@ public abstract class ManagementSystemDAO {
     }
 
     /**
-     * Удаляет студента. Ищет нужного студента по его ИД и удаляет его
+     * Удаляет студента.
      */
     public void deleteStudent(Student delStudentData) throws SQLException {
         PreparedStatement stmt = null;
@@ -159,7 +155,7 @@ public abstract class ManagementSystemDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement("SELECT student_id, first_name, last_name, middle_name, date_of_birth, sex, group_id, education_year " +
+            stmt = connection.prepareStatement("SELECT student_number, student_id, first_name, last_name, middle_name, sex, date_of_birth, group_id " +
                     "FROM all_students " +
                     "WHERE student_id = ? " +
                     "ORDER BY last_name, first_name, middle_name"
@@ -179,33 +175,6 @@ public abstract class ManagementSystemDAO {
         }
     }
 
-    /**
-     * Поиск куратора по переданному id из department_staff_curators_view. Если куратора с таким id нет - возвращается null
-     */
-
-    public Curator getCuratorById(int id) throws SQLException {
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        try {
-            stmt = connection.prepareStatement("SELECT person_id, person_contract, first_name, last_name, middle_name, sex, date_of_birth, is_active " +
-                    "FROM department_staff_curators_view " +
-                    "WHERE person_id = ? " +
-                    "ORDER BY last_name, first_name, middle_name"
-            );
-            stmt.setInt(1, id);
-            rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Curator(rs);
-            } else {
-                return null;
-            }
-        } finally {
-            if (rs != null)
-                rs.close();
-            if (stmt != null)
-                stmt.close();
-        }
-    }
 
     /**
      * Возвращает коллекцию всех групп из базы данных в виде ArrayList<Group>
@@ -217,14 +186,9 @@ public abstract class ManagementSystemDAO {
         ResultSet rs = null;
         try {
             stmt = connection.createStatement();
-            rs = stmt.executeQuery("SELECT group_id, group_name, curator_id, speciality FROM all_groups");
+            rs = stmt.executeQuery("SELECT group_id, group_name, speciality, education_year, number_of_semester, curator_id  FROM all_groups");
             while (rs.next()) {
-                Group group = new Group();
-                group.setGroupId(rs.getInt(1));
-                group.setGroupName(rs.getString(2));
-                group.setCuratorId(rs.getInt(3));
-                group.setSpeciality(rs.getString(4));
-
+                Group group = new Group(rs);
                 allGroups.add(group);
             }
         } finally {
@@ -238,7 +202,7 @@ public abstract class ManagementSystemDAO {
     }
 
     /**
-     * Возвращает коллекцию всех студентов из базы данных в виде ArrayList<Student>
+     * Возвращает коллекцию всех студентов в виде ArrayList<Student>
      */
     public ArrayList<Student> getAllStudents() throws SQLException {
         ArrayList<Student> allStudents = new ArrayList<Student>();
@@ -247,13 +211,12 @@ public abstract class ManagementSystemDAO {
         ResultSet rs = null;
         try {
             stmt = connection.createStatement();
-            rs = stmt.executeQuery("SELECT student_id, first_name, last_name, middle_name, date_of_birth, sex, group_id, education_year " +
+            rs = stmt.executeQuery("SELECT student_id, student_number, first_name, last_name, middle_name, sex, date_of_birth, group_id " +
                     "FROM all_students " +
                     "ORDER BY last_name, first_name, middle_name"
             );
             while (rs.next()) {
-                Student student = new Student(rs); // Класс Student сам обрабатывает переданный ему ResultSet
-
+                Student student = new Student(rs);
                 allStudents.add(student);
             }
         } finally {
@@ -437,17 +400,13 @@ public abstract class ManagementSystemDAO {
         try {
             stmt = connection.prepareStatement("SELECT EXISTS(" +
                     "SELECT user_id FROM users " +
-                    "WHERE login = ? && password = ?)"
+                    "WHERE login = ? AND password = ?)"
             );
             stmt.setString(1, login);
             stmt.setString(2, password);
             rs = stmt.executeQuery();
             if (rs.next()) {
-                int result = rs.getInt(1);
-                if (result == 1)
-                    return true;
-                else
-                    return false;
+                return rs.getBoolean(1);
             } else {
                 return false;
             }
@@ -473,11 +432,7 @@ public abstract class ManagementSystemDAO {
             stmt.setString(1, login);
             rs = stmt.executeQuery();
             if (rs.next()) {
-                int result = rs.getInt(1);
-                if (result == 1)
-                    return true;
-                else
-                    return false;
+                return rs.getBoolean(1);
             } else {
                 return false;
             }
@@ -584,6 +539,34 @@ public abstract class ManagementSystemDAO {
                 stmt.close();
         }
         return curators;
+    }
+
+    /**
+     * Поиск куратора по переданному id из department_staff_curators_view. Если куратора с таким id нет - возвращается null
+     */
+
+    public Curator getCuratorById(int id) throws SQLException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.prepareStatement("SELECT person_id, person_contract, first_name, last_name, middle_name, sex, date_of_birth, is_active " +
+                    "FROM department_staff_curators_view " +
+                    "WHERE person_id = ? " +
+                    "ORDER BY last_name, first_name, middle_name"
+            );
+            stmt.setInt(1, id);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Curator(rs);
+            } else {
+                return null;
+            }
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (stmt != null)
+                stmt.close();
+        }
     }
 
     /**

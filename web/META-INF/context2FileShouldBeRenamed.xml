@@ -5,15 +5,15 @@
 >
     <Resource
             validationQuery="SELECT 1"
-            url="jdbc:postgresql://localhost/e_university"
+            url="jdbc:mysql://localhost:3306/e_university?serverTimezone=Europe/Moscow"
             type="javax.sql.DataSource"
             password="admin"
-            username="postgres"
-            name="jdbc/postgressqlconnector"
+            username="root"
+            name="jdbc/mysqlconnector"
             maxWait="5000"
             maxIdle="2"
             maxActive="4"
-            driverClassName="org.postgresql.Driver"
+            driverClassName="com.mysql.cj.jdbc.Driver"
             testOnBorrow="true"
             validationInterval="60000"
     >

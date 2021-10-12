@@ -11,43 +11,42 @@ public class Student implements Comparable {
 
     private int studentId;
 
+    private int studentNumber;
+
     private String firstName;
 
     private String lastName;
 
     private String middleName;
 
-    private Date dateOfBirth;
-
-    //private Sex sex;
-
     private char sex;
+
+    private Date dateOfBirth;
 
     private int groupId;
 
-    private int educationYear;
 
     // Конструктор по умолчанию
     public Student() {
+        this.studentNumber = 10000;
         this.firstName = "NO_NAME";
         this.lastName = "NO_LAST_NAME";
         this.middleName = "NO_MIDDLE_NAME";
-        this.dateOfBirth = new Date();
         this.sex = 'Н';
+        this.dateOfBirth = new Date();
         this.groupId = 1;
-        this.educationYear = 0;
     }
 
     // Конструктор принимающий ResultSet из бд
     public Student(ResultSet rs) throws SQLException {
         this.studentId = rs.getInt(1);
-        this.firstName = rs.getString(2);
-        this.lastName = rs.getString(3);
-        this.middleName = rs.getString(4);
-        this.dateOfBirth = rs.getDate(5);
+        this.studentNumber = rs.getInt(2);
+        this.firstName = rs.getString(3);
+        this.lastName = rs.getString(4);
+        this.middleName = rs.getString(5);
         this.sex = rs.getString(6).charAt(0);
-        this.groupId = rs.getInt(7);
-        this.educationYear = rs.getInt(8);
+        this.dateOfBirth = rs.getDate(7);
+        this.groupId = rs.getInt(8);
     }
 
     public int getStudentId() {
@@ -56,6 +55,14 @@ public class Student implements Comparable {
 
     public void setStudentId(int studentId) {
         this.studentId = studentId;
+    }
+
+    public int getStudentNumber() {
+        return studentNumber;
+    }
+
+    public void setStudentNumber(int studentNumber) {
+        this.studentNumber = studentNumber;
     }
 
     public String getFirstName() {
@@ -82,20 +89,20 @@ public class Student implements Comparable {
         this.middleName = middleName;
     }
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
     public char getSex() {
         return sex;
     }
 
     public void setSex(char sex) {
         this.sex = sex;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public int getGroupId() {
@@ -106,19 +113,12 @@ public class Student implements Comparable {
         this.groupId = groupId;
     }
 
-    public int getEducationYear() {
-        return educationYear;
-    }
-
-    public void setEducationYear(int educationYear) {
-        this.educationYear = educationYear;
-    }
-
     @Override
     public String toString() {
         return lastName + " " + firstName + " " + middleName + ", "
+                + "Пол = " + sex
                 + DateFormat.getDateInstance(DateFormat.SHORT).format(dateOfBirth)
-                + ", ИД группы = " + groupId + ", Год обучения: " + educationYear;
+                + ", ИД группы = " + groupId;
     }
 
     @Override

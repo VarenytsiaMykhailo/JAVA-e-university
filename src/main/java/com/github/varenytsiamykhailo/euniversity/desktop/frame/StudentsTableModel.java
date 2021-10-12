@@ -66,8 +66,7 @@ public class StudentsTableModel extends AbstractTableModel {
                     return student.getDateOfBirth();
                 case 4:
                     return student.getSex();
-                case 5:
-                    return student.getEducationYear();
+
             }
         }
         return null;
