@@ -460,13 +460,6 @@ VALUES (10000, 'Иван', 'Сергеевич', 'Степанов', 'М', '1999
        (10014, 'Ксения', 'Афсона', 'Нотовна', 'Ж', '1999-07-19', 4),
        (10015, 'Татьяна', 'Маня', 'Филотовна', 'Ж', '2002-04-29', 4);
 
-SELECT *
-FROM department_staff;
-SELECT *
-FROM curators;
-SELECT *
-FROM all_groups;
-SELECT *
-FROM all_students;
+
 
 
